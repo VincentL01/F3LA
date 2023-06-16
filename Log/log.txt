@@ -1,0 +1,2 @@
+2023-06-16 11:34:47,732 DEBUG    [main.py] Refresh projects
+2023-06-16 11:35:03,169 DEBUG    [main.py] New UI appearance mode: Dark
