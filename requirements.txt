@@ -11,3 +11,5 @@ shutil
 pathlib
 customtkinter
 colorlog
+scikit-learn
+scipy

@@ -1,0 +1,251 @@
+{
+    "NoName": {
+        "Batch 1": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "DIRECTORY": "D:\\TestSave\\NoName",
+        "Batch 2": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        }
+    },
+    "NoName1H": {
+        "Batch 1": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "DIRECTORY": "D:\\TestSave\\NoName1H",
+        "Batch 2": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "Batch 3": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        }
+    },
+    "UnamputatedC1": {
+        "Batch 1": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "DIRECTORY": "D:\\TestSave\\UnamputatedC1",
+        "Batch 2": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "Batch 3": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        }
+    },
+    "UnamputatedC2": {
+        "Batch 1": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "DIRECTORY": "D:\\TestSave\\UnamputatedC2",
+        "Batch 2": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        },
+        "Batch 3": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "Treatment B",
+                1.0,
+                "ppm",
+                ""
+            ],
+            "Treatment C": [
+                "Treatment C",
+                1.0,
+                "ppm",
+                ""
+            ]
+        }
+    },
+    "fdgsdfg": {
+        "Batch 1": {
+            "Treatment A": [
+                "Control",
+                0,
+                "",
+                ""
+            ],
+            "Treatment B": [
+                "fdgsdfg",
+                2.0,
+                "ppm",
+                ""
+            ]
+        },
+        "DIRECTORY": "D:\\TestSave\\fdgsdfg"
+    }
+}

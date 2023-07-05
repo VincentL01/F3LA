@@ -1,18 +1,17 @@
-import tkinter as tk
-from tkinter import filedialog
-import cv2
 from pathlib import Path
+import glob
 import math
-import random
 import json
 import pandas as pd
-import os
-import openpyxl
 import re
+import os
 from tqdm import tqdm
+from scipy.spatial import ConvexHull
 import numpy as np
+import openpyxl
+import subprocess
+
 import logging
-from collections import OrderedDict
 
 logger = logging.getLogger(__name__)
 
@@ -47,3 +46,575 @@ def char_to_index(input_char): # turn A to 0
         return [ord(i)-65 for i in input_char]
     elif isinstance(input_char, str):
         return ord(input_char)-65
+
+def hyploader(hyp_path):
+
+    with open(hyp_path, 'r') as file:
+        data = json.load(file)
+        
+    # convert values to int or float
+    for key, value in data.items():
+        if key == "CONVERSION RATE":
+            data[key] = float(value)
+        elif key in ["FRAME RATE", "DURATION", "SEGMENT DURATION", "ZONE WIDTH"]:
+            data[key] = int(float(value))
+        else:
+            for fish_num, fish_data in value.items():
+                if isinstance(fish_data, list):
+                    for i, item in enumerate(fish_data):
+                        fish_data[i] = int(float(item))
+                else:
+                    data[key][fish_num] = int(float(fish_data))
+
+    def zone_calculator(target_name, target_data, reverse=False):
+        zone_name = target_name + " ZONE"
+        target_data[zone_name] = {}
+        n = 1 if reverse == False else -1
+        for fish_num, fish_data in target_data[target_name].items():
+            m = -1 if fish_data[1] == 0 else 1
+            target_data[zone_name][fish_num] = [fish_data[0] + m * n * target_data["ZONE WIDTH"] *  target_data["CONVERSION RATE"], fish_data[1]]
+
+        return target_data
+
+    if "MIRROR" in data.keys():
+        data = zone_calculator("MIRROR", data, reverse=True)
+    elif "SEPARATOR" in data.keys():
+        data = zone_calculator("SEPARATOR", data)
+
+    return data
+
+def calculate_distance(start_point, end_point):
+    return math.sqrt((start_point[0]-end_point[0])**2 + (start_point[1]-end_point[1])**2)
+
+
+def pearson_corr(list1, list2):
+    arr1 = np.array(list1)
+    arr2 = np.array(list2)
+    if len(arr1) == len(arr2):
+        return np.corrcoef(arr1, arr2)[0, 1]
+    else:
+        return "The lists have different lengths!"
+    
+
+def compute_turning_angle(x1, y1, x2, y2, x3, y3):
+    """
+    Compute the turning angle (in degrees) at point B=(x2, y2) for a path defined by points A=(x1, y1), B=(x2, y2), and C=(x3, y3).
+    The turning angle is the angle between vectors AB and BC.
+    Positive values represent right turns, negative values represent left turns.
+    """
+    dx1 = x2 - x1
+    dy1 = y2 - y1
+    dx2 = x3 - x2
+    dy2 = y3 - y2
+
+    angle1 = np.arctan2(dy1, dx1)
+    angle2 = np.arctan2(dy2, dx2)
+
+    return np.degrees((angle1 - angle2 + np.pi) % (2*np.pi) - np.pi)
+
+# def index_filler(index_number, digits=2):
+#     index_number = str(index_number)
+#     if len(index_number) < digits:
+#         return "0"*(digits-len(index_number)) + index_number
+#     else:
+#         return index_number
+    
+def event_extractor(binary_list, positive_token = None):
+
+    # find unique values in the binary list
+    # binary_list is a list
+    unique_values = list(set(binary_list))
+
+    if len(unique_values) == 2:
+        if positive_token is None:
+            # positive_token = non zero value in unique_values
+            positive_token = [i for i in unique_values if i != 0][0]
+        else:
+            if positive_token not in unique_values:
+                raise ValueError("The specified positive token is not in the binary list.")
+    elif len(unique_values) > 2:
+        if positive_token is None:
+            raise ValueError("The binary list has more than two unique values. Please specify the positive token.")
+        else:
+            if positive_token not in unique_values:
+                raise ValueError("The specified positive token is not in the binary list.")
+    
+    binary_list = [1 if i == positive_token else 0 for i in binary_list]
+
+    result = {}
+    start, end = None, None
+
+    for i in range(len(binary_list)):
+        if binary_list[i] == 1:
+            if start is None:
+                start = i
+            end = i
+        elif start is not None:
+            result[(start, end)] = end - start + 1
+            start, end = None, None
+
+    if start is not None:
+        result[(start, end)] = end - start + 1
+
+    return result
+
+def has_csv_file(directory_path):
+    directory = Path(directory_path)
+    csv_files = directory.glob('*.csv')
+
+    if len(list(csv_files)) > 0:
+        return True
+    else:
+        return False
+
+############################################# FD and Entropy Calculator #############################################
+
+def FD_Entropy_Calculator(input_df):
+
+    def countif(input_list, threshold, less=True):
+        count = 0
+        for value in input_list:
+            if less and value < threshold:
+                count+=1
+            elif not less and value > threshold:
+                count+=1
+            
+        return count
+
+    x_list = input_df['X']
+    y_list = input_df['Y']
+    z_list = input_df['Z']
+
+    FRAMES = len(x_list)
+    
+    times = [i/50 for i in range(FRAMES)] # D
+
+    delta_x = {} #E
+    delta_y = {} #F
+    delta_z = {} #G
+    delta_r = {} #H
+    thetas = {}  #I  
+
+    for i in range(FRAMES):
+        if i==0:
+            continue
+        temp_x = x_list[i] - x_list[i-1]
+        temp_y = y_list[i] - y_list[i-1]
+        temp_z = z_list[i] - z_list[i-1]
+        temp_r = math.sqrt(temp_x**2+temp_y**2+temp_z**2)
+
+        delta_x[i] = temp_x
+        delta_y[i] = temp_y
+        delta_z[i] = temp_z
+        delta_r[i] = temp_r
+
+        if i>1:
+            dot_product = (delta_x[i]*delta_x[i-1] + delta_y[i]*delta_y[i-1] + delta_z[i]*delta_z[i-1])
+            product_of_magnitudes = (delta_r[i]*delta_r[i-1])
+            value = dot_product / product_of_magnitudes
+            value = max(-1, min(1, value))
+            temp_theta = math.acos(value)*180/math.pi
+            thetas[i] = temp_theta
+
+    # r          #J
+    N1 = {}      #K
+    # N2 = {       #L
+    Cr = {}      #M
+    sigma = {}   #N
+    logr = {}    #O
+    logCr = {}   #P
+    
+    thresholds = [(i+1)/10 for i in range(FRAMES)]
+    index_1 = thresholds.index(1)
+    thresholds = thresholds[:index_1] + [1.01] + thresholds[(index_1+1):]
+    thresholds[:20]
+
+    for i in range(FRAMES):
+        N1[i] = countif(list(delta_r.values()), thresholds[i])
+        Cr[i] = N1[i] / (FRAMES - 1)
+        try:
+            sigma[i] = math.log10(Cr[i])/math.log10(thresholds[i])
+        except:
+            print(f"i = {i}, N1[i] = {N1[i]}, C[i] = {Cr[i]}, thresholds[i] = {thresholds[i]}")
+        logr[i] = math.log10(thresholds[i])
+        logCr[i] = math.log10(Cr[i])
+
+    APPROCH = 0.000
+    neg_close = math.inf*(-1)
+    neg_close_pos = -1
+    for i, value in enumerate(list(logr.values())):
+        if value < APPROCH and value > neg_close:
+            neg_close = value
+            neg_close_pos = i
+
+    table_index = list(range(-5, 6))
+    table_index.reverse()
+    table_index
+
+    FD_df = pd.DataFrame(columns = ['number', 'logari', 'logariC', 'x-xbar', 'y-ybar', 
+                            '(x-xbar)(y-ybar)', '(x-xbar)2', '(y-ybar)2', '[yi-(a+bxi)]2'])
+
+    FD_df['number'] = table_index
+    LEN = len(table_index)
+
+    # row, col
+    for row in range(LEN):
+        num = table_index[row]
+        num = num + neg_close_pos
+        FD_df.iloc[row,1] = logr[num]                             # R
+        FD_df.iloc[row,2] = logCr[num]                            # S
+
+    col1 = np.array(list(FD_df['logari']))
+    col2 = np.array(list(FD_df['logariC']))
+    col1_avg = np.average(col1)                                     # average of R
+    col2_avg = np.average(col2)                                     # average of S
+
+    for row in range(LEN):
+        FD_df.iloc[row,3] = FD_df.iloc[row,1] - col1_avg             # T
+        FD_df.iloc[row,4] = FD_df.iloc[row,2] - col2_avg             # U
+        FD_df.iloc[row,5] = FD_df.iloc[row,3] * FD_df.iloc[row,4]    # V
+        FD_df.iloc[row,6] = FD_df.iloc[row,3]**2                     # W
+        FD_df.iloc[row,7] = FD_df.iloc[row,4]**2                     # X
+
+    #P4 =SUM(U16:U26)/SUM(V16:V26)
+    #P5 =AVERAGE(Q16:Q26)-P4*AVERAGE(P16:P26)
+
+    variable_b = np.sum(np.array(list(FD_df['(x-xbar)(y-ybar)']))) / np.sum(np.array(list(FD_df['(x-xbar)2'])))     # P4
+    variable_a = col2_avg - col1_avg*variable_b                                                                     # P5
+
+    # '[yi-(a+bxi)]2' =(Q16-($P$5+$P$4*P16))^2
+    for row in range(LEN):
+            FD_df.iloc[row,8] = (FD_df.iloc[row,2]-(variable_a+variable_b*FD_df.iloc[row,1]))**2     # Y
+        
+    #P6 =SQRT(SUM(X16:X26)/(COUNT(X16:X26)-2))
+    variable_s = np.sqrt( np.sum(np.array(list(FD_df['[yi-(a+bxi)]2']))) / (LEN-2) )
+
+    #R4 =P6/SQRT(SUM(V16:V26))
+    variable_bErr = variable_s / np.sqrt(np.sum(np.array(list(FD_df['(x-xbar)2'])))) 
+
+    #R5 =P6*SQRT((1/COUNT(X16:X26))+(AVERAGE(P16:P26)^2)/SUM(V16:V26))
+    variable_aErr = variable_s*np.sqrt((1/LEN)+col1_avg**2/np.sum(np.array(list(FD_df['(x-xbar)2']))))
+
+    #RR = =(SUM(U16:U26)^2)/(SUM(V16:V26)*SUM(W16:W26))
+    variable_RR = np.sum(np.array(list(FD_df['(x-xbar)(y-ybar)'])))**2 / (np.sum(np.array(list(FD_df['(x-xbar)2']))) * np.sum(np.array(list(FD_df['(y-ybar)2']))))
+
+    def get_entropy():
+        G_array = np.array(list(thetas.values()))
+        G_count = (G_array >= 90).sum()
+        G_count2 = (G_array < 90).sum()
+        G_len = G_array.size
+
+        result = (-1) * G_count/G_len * np.log2(G_count/G_len) - G_count2/G_len * np.log2(G_count2/G_len)
+
+        return result
+
+    #H (Entropy)
+    variable_Entropy = get_entropy()
+
+    FractalDimension = variable_b
+    Entropy = variable_Entropy
+
+    return FractalDimension, Entropy
+
+
+############################################## SHOALING AREA / VOLUME ##############################################
+
+
+def HullVolumeCalculator(fishes_coords, surface = ['X', 'Y', 'Z']):
+    volumes = []
+
+    # Assuming that each fish dataframe has the same number of frames
+    num_frames = list(fishes_coords.values())[0].shape[0]
+
+    for frame in range(num_frames):
+        frame_coords = pd.concat([df.iloc[[frame]] for df in fishes_coords.values()])
+        coords_array = frame_coords[surface].to_numpy()
+        
+        # Calculate the convex hull
+        hull = ConvexHull(coords_array)
+        volumes.append(hull.volume)
+
+    # Create a dataframe with the calculated volumes
+    df_volumes = pd.DataFrame(volumes, columns=['ConvexHullVolume'])
+    df_volumes.index.name = 'Frame'
+
+    return df_volumes
+
+
+############################################## INHERITED FROM OLD CODE ##############################################
+
+def load_raw_df(txt_path, sep = "\t"):
+    # Read the .txt file into a dataframe
+    raw_df = pd.read_csv(txt_path, sep = sep)
+    
+    # partial_path = Path(*Path(txt_path).parts[-3:]) if len(Path(txt_path).parts) > 3 else Path(txt_path) 
+    
+    # if len(raw_df) > 0:
+    #     print(f'Loaded raw data from ".\{partial_path}"')
+    # else:
+    #     print(f'No data loaded from ".\{partial_path}"')
+
+    # Remove unnecessary columns
+    tanks_list = []
+    for col in raw_df.columns:
+        if "unnamed" in col.lower() or "prob" in col.lower():
+            raw_df.drop(col, axis=1, inplace=True)
+        if "x" in col.lower():
+            # find the number in the column name
+            tank_num = re.findall(r'\d+', col)
+            tank_num = int(tank_num[0])
+            tanks_list.append(tank_num)
+    # print('Tanks found: ', tanks_list)
+
+    return raw_df, tanks_list
+
+def remove_first_row_if_nan(input_df, limitation):
+    # if the first row of the dataframe has nan values, remove the entire first row
+    while len(input_df) > limitation:
+        row_0 = input_df.iloc[0, :]
+        if row_0.isnull().values.any():
+            input_df = input_df.iloc[1:, :]
+            # reset index
+            input_df = input_df.reset_index(drop=True)
+        else:
+            break
+    return input_df
+
+def clean_df(input_df, fill = False, frames = 0, DEBUG = False, remove_nan = True, limitation = 15000): 
+
+    # Remove the initial rows with nan values
+    if remove_nan:
+        input_df = remove_first_row_if_nan(input_df, limitation)
+
+    # Only take the first frames rows
+    if frames == 0:
+        pass
+    else:
+        input_df = input_df.iloc[:frames, :]
+
+    if fill == False:
+        return input_df
+    
+    # Fill the nan values using forward fill and backward fill
+    output_df = input_df.fillna(method='ffill')
+    output_df = output_df.fillna(method='bfill')
+
+    return output_df
+
+def append_df_to_excel(filename, df, sheet_name='Sheet1', startcol=None, startrow=None, col_sep = 0, row_sep = 0,
+                       truncate_sheet=False, DISPLAY = False,
+                       **to_excel_kwargs):
+    # Excel file doesn't exist - saving and exiting
+    if not os.path.isfile(filename):
+        try:
+            df.to_excel(
+                filename,
+                sheet_name=sheet_name, 
+                startcol=startcol if startcol is not None else 0, 
+                startrow=startrow if startrow is not None else 0,
+                **to_excel_kwargs)
+            logger.info(f"Successful write to {filename}/{sheet_name} at column = {startcol}, row = {startrow}")
+        except:
+            logger.warning(f"UNSUCCESS write to {filename}/{sheet_name} at column = {startcol}, row = {startrow}")
+
+        # wb = openpyxl.load_workbook(filename)
+        # ws = wb[sheet_name]
+        # row_0 = ws[1]
+        return
+    
+
+    if 'engine' in to_excel_kwargs:
+        to_excel_kwargs.pop('engine')
+
+    writer = pd.ExcelWriter(filename, engine='openpyxl', mode='a', if_sheet_exists='overlay')
+
+    # try to open an existing workbook
+    writer.workbook = openpyxl.load_workbook(filename)
+
+    # get the last col in the existing Excel sheet
+    # if it was not specified explicitly
+    if startcol is None and sheet_name in writer.workbook.sheetnames:
+        startcol = writer.workbook[sheet_name].max_column + col_sep
+
+    if startrow is None and sheet_name in writer.workbook.sheetnames:
+        startrow = writer.workbook[sheet_name].max_row + row_sep
+    
+    if startcol is None:
+        startcol = 0
+
+    if startrow is None:
+        startrow = 0
+    
+    # row_0 = writer.workbook[sheet_name][1]
+    # logger.debug(f"Header: {row_0}")
+    
+    # remove df headers if they exist
+    if startrow != 0:
+        # take the first row
+        first_row = df.iloc[0].astype(str)
+        # check if any cell in the first row contains a letter
+        has_letter = first_row.str.contains('[a-zA-Z]').any()
+        if has_letter:
+            df = df.iloc[1:, :]
+
+    # write the dataframe to the existing sheet
+    try:
+        df.to_excel(writer, sheet_name, startcol=startcol, startrow=startrow, **to_excel_kwargs)
+        logger.info(f"Successful write to {filename}/{sheet_name} at column = {startcol}, row = {startrow}")
+    except:
+        logger.warning(f"UNSUCCESS write to {filename}/{sheet_name} at column = {startcol}, row = {startrow}")
+
+    # close workbook
+    writer.close()
+
+
+def merge_cells(file_path, input_sheet_name = None, input_column_name = 'Shoaling Area', cell_step=3, inplace = True):
+    # Load the Excel workbook
+    workbook = openpyxl.load_workbook(filename=file_path)
+
+    if input_sheet_name == None:
+        sheet_names = workbook.worksheets
+    elif isinstance(input_sheet_name, list):
+        sheet_names = input_sheet_name
+    elif isinstance(input_sheet_name, str):
+        sheet_names = [input_sheet_name]
+    elif isinstance(input_sheet_name, int):
+        sheet_names = [workbook.worksheets[input_sheet_name]]
+
+    if isinstance(input_column_name, str):
+        column_names = [input_column_name]
+    elif isinstance(input_column_name, list):
+        column_names = input_column_name
+
+    logger.debug(f"Merging {cell_step} rows of {column_names} in {sheet_names}")
+
+    for worksheet in workbook.worksheets:
+        if worksheet not in sheet_names:
+            continue
+        # Find the column index for the "Shoaling Area" header
+        for colume_name in column_names:
+            shoaling_area_col = None
+            for col_idx in range(1, worksheet.max_column+1):
+                header = worksheet.cell(row=1, column=col_idx).value
+                if header and colume_name in header:
+                    shoaling_area_col = col_idx
+                    break
+
+            if shoaling_area_col is None:
+                print("Column not found.")
+            else:
+                # Merge every next 3 rows of the Shoaling Area column
+                for row_idx in range(2, worksheet.max_row+1, cell_step):
+                    value = worksheet.cell(row=row_idx, column=shoaling_area_col).value
+                    # print(value)
+                    if value is not None:
+                        # Merge the current row with the next 2 rows
+                        worksheet.merge_cells(start_row=row_idx, start_column=shoaling_area_col, end_row=row_idx+2, end_column=shoaling_area_col)
+                    
+                    # align the merged cell, horizontal and vertical center
+                    worksheet.cell(row=row_idx, column=shoaling_area_col).alignment = openpyxl.styles.Alignment(horizontal='center', vertical='center')
+            
+    # define output_path
+    if inplace == False:
+        output_path = file_path[:-5] + '_merged.xlsx'        
+    else:
+        output_path = file_path    
+
+    # Save the modified workbook
+    try:
+        workbook.save(filename=output_path)
+        logger.debug(f"Merged {cell_step} rows of {column_names} in {sheet_names}")
+    except:
+        logger.warning(f"UNSUCCESS merge for {file_path}")
+
+
+def excel_polish(file_path, batch_num=1, inplace=True):
+
+    logger.debug("Polishing excel file...")
+
+    # Load the Excel workbook
+    workbook = openpyxl.load_workbook(filename=file_path)
+
+
+    # Adjust the column widths
+    # Loop through each sheet in the workbook
+    for sheet_name in workbook.sheetnames:
+
+        logger.debug(f"In sheet name: {sheet_name}")
+
+        if "analysis" in sheet_name.lower():
+            continue
+        # Select the sheet
+        sheet = workbook[sheet_name]
+        
+        # Loop through each column in the sheet
+        for col in sheet.columns:
+            # Set the width of the column to 17.00 (160 pixels)
+            sheet.column_dimensions[col[0].column_letter].width = 17.00
+
+            logger.debug(f"Set column {col[0].column_letter} width to 17.00")
+        
+        # Enable text wrapping for the header row
+        for cell in sheet[1]:
+            cell.alignment = openpyxl.styles.Alignment(wrapText=True, horizontal='center', vertical='center')
+
+
+    # Save the modified workbook
+    try:
+        workbook.save(filename=file_path)
+        logger.info(f"Polished completely for {file_path}")
+    except:
+        logger.info(f"UNSUCCESS polish for {file_path}")
+
+
+def open_explorer(path):
+    # Check if the given path exists
+    if os.path.exists(path):
+        # Open the file explorer
+        subprocess.run(['explorer', os.path.realpath(path)])
+    else:
+        print("The provided path does not exist.")
+
+
+
+##################################### CONSTANT GENERATOR #####################################
+
+def get_working_dir(project_dir, batch_num):
+    return Path(project_dir) / f"Batch {batch_num}"
+
+def get_treatment_dir(project_dir, batch_num, treatment_char):
+    working_dir = get_working_dir(project_dir, batch_num)
+
+    treatment_pattern = f"{treatment_char} - "
+
+    FOUND = False
+
+    for child_dir in os.listdir(working_dir):
+        if treatment_pattern in child_dir:
+            FOUND = True
+            return working_dir / child_dir
+
+    if FOUND == False:
+        raise FileNotFoundError(f"Couldn't find treatment directory with pattern [{treatment_char} -]")
+    
+
+def get_static_dir(project_dir, batch_num, treatment_char):
+    working_dir = get_working_dir(project_dir, batch_num)
+    return working_dir / "static" / treatment_char
+
+def get_trajectories_dir(project_dir, batch_num, treatment_char):
+    static_dir = get_static_dir(project_dir, batch_num, treatment_char)
+    return static_dir / "trajectories"
+
+def get_normalized_trajectories_dir(project_dir, batch_num, treatment_char, unit):
+    static_dir = get_static_dir(project_dir, batch_num, treatment_char)
+    return static_dir / f"trajectories_normalized_{unit}"
+
+def get_sideview_trajectory_path(project_dir, batch_num, treatment_char):
+    treatment_dir = get_treatment_dir(project_dir, batch_num, treatment_char)
+    return treatment_dir / "Side View" / "trajectories_nogaps.txt"
+
+def get_topview_trajectory_path(project_dir, batch_num, treatment_char):
+    treatment_dir = get_treatment_dir(project_dir, batch_num, treatment_char)
+    return treatment_dir / "Top View" / "trajectories_nogaps.txt"
+

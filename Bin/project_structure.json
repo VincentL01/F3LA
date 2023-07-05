@@ -1,0 +1,19 @@
+{
+    "A - Control" : {
+        "Side View": 0,
+        "Top View" : 0
+    },
+    "B - Treatment 01" : {
+        "Side View": 0,
+        "Top View" : 0
+    },
+    "C - Treatment 02" : {
+        "Side View": 0,
+        "Top View" : 0
+    },
+    "static" : {
+        "A": 0, 
+        "B": 0, 
+        "C": 0
+    }
+}
