@@ -237,15 +237,18 @@ class Executor():
 
         logger.info("Loading fish data...")
 
-        ERROR = self.excel_path_check()
+        if self.EPA:
 
-        if ERROR == "File Existed" and not OVERWRITE:
-            return ERROR, None
-        
-        if ERROR == "File Existed" and OVERWRITE:
-            logger.info("Overwriting existing file...")
-            # remove existing file
-            self.excel_path.unlink()
+            ERROR = self.excel_path_check()
+
+            if ERROR == "File Existed" and not OVERWRITE:
+                return ERROR, None
+            
+            if ERROR == "File Existed" and OVERWRITE:
+                logger.info("Overwriting existing file...")
+                # remove existing file
+                self.excel_path.unlink()
+
 
         # FishQuantities = count the number of .csv file in self.trajectories_dir
         self.FishQuantities = len(list(self.trajectories_dir.glob("*.csv")))

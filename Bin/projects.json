@@ -230,22 +230,5 @@
                 ""
             ]
         }
-    },
-    "fdgsdfg": {
-        "Batch 1": {
-            "Treatment A": [
-                "Control",
-                0,
-                "",
-                ""
-            ],
-            "Treatment B": [
-                "fdgsdfg",
-                2.0,
-                "ppm",
-                ""
-            ]
-        },
-        "DIRECTORY": "D:\\TestSave\\fdgsdfg"
     }
 }
