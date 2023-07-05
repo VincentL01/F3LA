@@ -28,7 +28,6 @@ class GeneralAnalysis(Loader):
     
     def BasicCalculation(self):
 
-        distance_list = []
         for i in range(len(self.TJ_df)-1):
             # Distance = (SQRT((A4-A3)^2+(B4-B3)^2+(D4-D3)^2)/$E$3)
             dist_X = self.TJ_df['X'].iloc[i+1] - self.TJ_df['X'].iloc[i]
