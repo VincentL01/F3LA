@@ -1,11 +1,10 @@
 from pathlib import Path
-import glob
 import math
 import json
 import pandas as pd
 import re
 import os
-from tqdm import tqdm
+import shutil
 from scipy.spatial import ConvexHull
 import numpy as np
 import openpyxl
@@ -618,3 +617,143 @@ def get_topview_trajectory_path(project_dir, batch_num, treatment_char):
     treatment_dir = get_treatment_dir(project_dir, batch_num, treatment_char)
     return treatment_dir / "Top View" / "trajectories_nogaps.txt"
 
+
+################################################# SORTER ##########################################################
+
+def find_the_whole_num(given_string, end_index):
+
+    num_in_string = ""
+
+    i = end_index
+
+    while True:
+        num_in_string = given_string[i] + num_in_string
+        try:
+            previous_char = given_string[i - 1]
+        except IndexError:
+            break
+
+        if previous_char.isdigit():
+            i -= 1
+        else:
+            break
+            
+    return int(num_in_string)
+
+
+def find_batch_num(given_string):
+    # find "st", "nd", "rd", "th" in a string
+    # if found, check if the previous character is a number
+    # if yes, return the number
+    # if no, return None
+
+    # find all occurrences of "st", "nd", "rd", "th"
+    occurrences = [m.start() for m in re.finditer('st|nd|rd|th', given_string)]
+
+    num_occurrence = [occ - 1 for occ in occurrences if given_string[occ - 1].isdigit()]
+
+    if len(num_occurrence) != 1:
+        return None
+    
+    num_occurrence = num_occurrence[0]
+
+    return find_the_whole_num(given_string, num_occurrence)
+
+
+def find_treatment_num(given_string):
+
+    indicator = given_string.split("-")[0].strip()
+
+    # Check if indicator is number of char
+    try:
+        indicator = int(indicator)
+    except ValueError:
+        # change A -> 1, B -> 2, C -> 3, etc.
+        try:
+            indicator = char_to_index(indicator)
+        except Exception as e:
+            message = f"[STRUCTURE ERROR] The indicator before the dash char ( - ) in Treatment folder name is unusual!\n{e}"
+            raise Exception(message)
+
+    return indicator
+
+
+class Importer():
+
+    def __init__(self, import_project_dir, target_project_dir, trajectories_format="trajectories_nogap.txt"):
+                 
+        self.import_project_dir = Path(import_project_dir)
+        self.target_project_dir = Path(target_project_dir)
+        self.trajectories_format = trajectories_format
+
+        self.new_treatments = []
+
+
+    def import_trajectories(self):
+        import_data = self.data_sorter()
+        self.data_distributor(import_data)
+
+
+    def data_sorter(self):
+        # find all directories inside
+        treatment_dirs = [x for x in self.import_project_dir.iterdir() if x.is_dir()]
+
+        import_data = {}
+
+        self.import_treatment_names = {}
+
+        for treatment_dir in treatment_dirs:
+            treatment_char = index_to_char(find_treatment_num(treatment_dir.name)-1)
+            import_data[treatment_char] = {}
+            self.import_treatment_names[treatment_char] = treatment_dir.name.split("-")[1].split("(")[0].strip()
+
+            batch_dirs = [x for x in treatment_dir.iterdir() if x.is_dir()]
+
+            for batch_dir in batch_dirs:
+                batch_name = batch_dir.name
+                batch_num = find_batch_num(batch_name)
+                if batch_num not in import_data[treatment_char]:
+                    import_data[treatment_char][batch_num] = {}
+                if "side view" in batch_name.lower():
+                    import_data[treatment_char][batch_num]["Side View"] = batch_dir / self.trajectories_format
+                elif "top view" in batch_name.lower():
+                    import_data[treatment_char][batch_num]["Top View"] = batch_dir / self.trajectories_format
+
+        return import_data
+
+
+    def data_distributor(self, import_data):
+        for treatment_char in import_data:
+            for batch_num in import_data[treatment_char]:
+                for view in import_data[treatment_char][batch_num]:
+                    logger.debug(f"Working with {treatment_char} - Batch {batch_num} - {view}")
+                    target_path = self.get_project_path(treatment_char, batch_num, view)
+                    if target_path.exists():
+                        logger.debug(f"[WARNING] {target_path} already exists!")
+                    # copy the file from import_data to target_path
+                    shutil.copy(import_data[treatment_char][batch_num][view], target_path)
+                    logger.debug(f"Copied {import_data[treatment_char][batch_num][view]} to {target_path}")
+
+
+    def get_project_path(self, treatment_char, batch_num, view):
+        batch_dir = self.target_project_dir / f"Batch {batch_num}"
+        # find within batch_dir, folder with f"{treatmentchar} -"
+        try:
+            treatment_dir = [x for x in batch_dir.iterdir() if x.is_dir() and f"{treatment_char} -" in x.name][0]
+        except:
+            batch_dir.mkdir(exist_ok=True)
+            treatment_dir = batch_dir / f"{treatment_char} - {self.import_treatment_names[treatment_char]}"
+            treatment_dir.mkdir(exist_ok=True)
+            logger.warning("Treatment folder not found! Creating new folder based on import data...")
+            new_info = {
+                "char": treatment_char,
+                "name": self.import_treatment_names[treatment_char],
+                "batch_num": batch_num
+            }
+            self.new_treatments.append(new_info)
+
+        view_dir = treatment_dir / view
+        view_dir.mkdir(exist_ok=True)
+        view_path = view_dir / self.trajectories_format
+
+        return view_path

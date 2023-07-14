@@ -183,12 +183,12 @@ class App(customtkinter.CTk):
         self.sidebar_button_3.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
 
 
-        self.ImportVideoButton = customtkinter.CTkButton(self.sidebar_frame, 
-                                                         text="Import Video",
-                                                         command=self.import_video
+        self.ImportButton = customtkinter.CTkButton(self.sidebar_frame, 
+                                                         text="Import Trajectories",
+                                                         command=self.import_trajectories
                                                          )
-        self.ImportVideoButton.configure(**PANEL_BUTTON_CONFIG)
-        self.ImportVideoButton.grid(row=4, column=0, columnspan = 2, padx=20, pady=20)
+        self.ImportButton.configure(**PANEL_BUTTON_CONFIG)
+        self.ImportButton.grid(row=4, column=0, columnspan = 2, padx=20, pady=20)
 
 
         self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, 
@@ -828,8 +828,31 @@ class App(customtkinter.CTk):
         for project_name in projects_data.keys():
             self.scrollable_frame.add_project(project_name)
 
-    def import_video(self):
-        pass
+
+    def import_trajectories(self):
+        logger.debug("Start importing trajectories")
+
+        import_project_dir = tkinter.filedialog.askdirectory()
+        if not import_project_dir:
+            logger.debug("No directory selected")
+            return
+        
+        importer = Importer(import_project_dir = import_project_dir,
+                            target_project_dir=THE_HISTORY.get_project_dir(self.CURRENT_PROJECT),
+                            trajectories_format="trajectories_nogap.txt")
+        
+        importer.import_trajectories()
+
+        treatments_to_be_added = importer.new_treatments
+        
+        for treatment_info in treatments_to_be_added:
+            #update the projects.json
+            THE_HISTORY.add_treament(project_name = self.CURRENT_PROJECT,
+                                    batch_name = self.BatchOptions.get(),
+                                    treatment_name = self.TreatmentOptions.get(),
+
+
+        
 
     def pre_analyze_check(self):
         logger.debug("Start pre-analyze check")

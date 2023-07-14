@@ -620,6 +620,42 @@ class HISTORY():
                 return None
 
         return project_dir
+    
+
+    def add_treament(self, project_name, batch_name, treatment_name, dose, dose_unit, note):
+
+        if project_name == "":
+            logger.warning("Tried to add treatment to an empty project name")
+            return
+
+        if treatment_name == "":
+            logger.warning("Tried to add treatment with empty treatment name")
+            return
+
+        if batch_name == "":
+            logger.warning("Tried to add treatment with empty batch name")
+            return
+
+        if project_name not in self.projects_data:
+            logger.warning(f"Project name {project_name} not found in history file")
+            return
+
+        if batch_name not in self.projects_data[project_name]:
+            logger.warning(f"Batch name {batch_name} not found in history file")
+            return
+
+        if treatment_name in self.projects_data[project_name][batch_name]:
+            logger.warning(f"Treatment name {treatment_name} already exists in history file")
+            return
+
+        self.projects_data[project_name][batch_name][treatment_name] = [treatment_name, dose, dose_unit, note]
+
+        self.saver()
+
+
+    def saver(self):
+        with open(self.history_path, "w") as file:
+            json.dump(self.projects_data, file, indent=4)
 
 
 class InputWindow(tkinter.Toplevel):
