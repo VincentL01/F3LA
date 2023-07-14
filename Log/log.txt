@@ -1,0 +1,572 @@
+2023-07-14 15:22:49,403 DEBUG    [main.py] Refresh projects
+2023-07-14 15:22:49,413 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:22:49,413 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:22:49,413 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:22:56,410 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:22:56,410 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:23:48,205 DEBUG    [main.py] Refresh projects
+2023-07-14 15:23:48,215 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:23:48,215 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:23:48,215 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:23:48,936 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:23:48,946 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:24:58,170 DEBUG    [main.py] Refresh projects
+2023-07-14 15:24:58,180 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:24:58,180 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:24:58,180 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:24:59,133 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:24:59,133 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:25:40,661 DEBUG    [main.py] Refresh projects
+2023-07-14 15:25:40,671 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:25:40,671 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:25:40,671 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:25:41,357 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:25:41,357 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:26:18,204 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:26:28,422 DEBUG    [main.py] Refresh projects
+2023-07-14 15:26:28,432 INFO     [main.py] Save project Test
+2023-07-14 15:26:35,706 DEBUG    [main.py] Accessing history file
+2023-07-14 15:26:35,706 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:26:35,706 DEBUG    [main.py] CP: Test ,Batch name: None
+2023-07-14 15:28:39,763 DEBUG    [main.py] Refresh projects
+2023-07-14 15:28:39,774 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:28:39,784 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:28:39,784 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:28:41,769 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:28:41,779 INFO     [main.py] Current project: Test
+2023-07-14 15:28:41,779 DEBUG    [main.py] Accessing history file
+2023-07-14 15:28:41,779 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:28:41,779 DEBUG    [main.py] Accessing history file
+2023-07-14 15:28:41,779 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:28:41,779 DEBUG    [main.py] CP: Test ,Batch name: Batch 1
+2023-07-14 15:28:41,779 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:28:41,779 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:28:41,779 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:28:41,779 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:28:41,779 INFO     [customwidgets.py] Loading.. project name = Test
+2023-07-14 15:28:41,779 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', 'DMSO'], 'Treatment B': ['Graphene', '', '', 'DMSO'], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', 'DMSO']}
+2023-07-14 15:28:41,789 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:29:28,800 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:29:28,800 INFO     [main.py] Current project: Test
+2023-07-14 15:29:28,800 DEBUG    [main.py] Accessing history file
+2023-07-14 15:29:28,800 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:29:28,800 DEBUG    [main.py] Accessing history file
+2023-07-14 15:29:28,800 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:29:28,800 DEBUG    [main.py] CP: Test ,Batch name: Batch 1
+2023-07-14 15:29:28,800 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:29:28,800 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:29:28,800 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:29:28,807 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:29:28,817 INFO     [customwidgets.py] Loading.. project name = Test
+2023-07-14 15:29:28,817 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', 'DMSO'], 'Treatment B': ['Graphene', '', '', 'DMSO'], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', 'DMSO']}
+2023-07-14 15:29:28,827 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:31:57,666 DEBUG    [main.py] Refresh projects
+2023-07-14 15:31:57,686 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:31:57,686 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:31:57,686 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:31:59,077 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:31:59,077 INFO     [main.py] Current project: Test
+2023-07-14 15:31:59,077 DEBUG    [main.py] Accessing history file
+2023-07-14 15:31:59,077 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:31:59,077 DEBUG    [main.py] Accessing history file
+2023-07-14 15:31:59,077 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:31:59,077 DEBUG    [main.py] CP: Test ,Batch name: Batch 1
+2023-07-14 15:31:59,077 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:31:59,087 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:31:59,087 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:31:59,097 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:31:59,097 INFO     [customwidgets.py] Loading.. project name = Test
+2023-07-14 15:31:59,097 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', 'DMSO'], 'Treatment B': ['Graphene', '', '', 'DMSO'], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', 'DMSO']}
+2023-07-14 15:31:59,097 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:32:00,378 INFO     [customwidgets.py] Project directory of Test does not exist. Asking for relocation
+2023-07-14 15:32:04,548 INFO     [customwidgets.py] Project directory of Test has been relocated to F:/Test
+2023-07-14 15:32:04,549 DEBUG    [main.py] Current project dir: F:/Test
+2023-07-14 15:32:04,549 DEBUG    [customwidgets.py] Loading parameters for project_name = Test, batch_num = 1, treatment = A
+2023-07-14 15:32:04,599 DEBUG    [customwidgets.py] Retrieved hyp from F:\Test\Batch 1\static\A\parameters.json
+2023-07-14 15:32:04,599 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-14 15:32:04,599 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-14 15:32:04,599 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-14 15:32:04,599 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-14 15:32:04,599 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-14 15:32:06,048 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-14 15:32:06,049 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-14 15:32:06,049 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-14 15:32:42,414 DEBUG    [main.py] Refresh projects
+2023-07-14 15:32:42,428 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:32:42,430 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:32:42,430 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:32:43,308 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:32:43,309 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:33:02,187 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:33:09,778 DEBUG    [main.py] Refresh projects
+2023-07-14 15:33:09,778 INFO     [main.py] Save project Tester
+2023-07-14 15:33:12,331 DEBUG    [main.py] Accessing history file
+2023-07-14 15:33:12,331 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:33:12,331 DEBUG    [main.py] CP: Tester ,Batch name: None
+2023-07-14 15:35:07,205 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:35:07,205 INFO     [main.py] Current project: Tester
+2023-07-14 15:35:07,205 DEBUG    [main.py] Accessing history file
+2023-07-14 15:35:07,205 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:35:07,205 DEBUG    [main.py] Accessing history file
+2023-07-14 15:35:07,205 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:35:07,205 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:35:07,205 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:35:07,205 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:35:07,205 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:35:07,205 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:35:07,205 INFO     [customwidgets.py] Loading.. project name = Tester
+2023-07-14 15:35:07,215 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', 'DMSO'], 'Treatment B': ['Graphene', '', '', 'DMSO'], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', 'DMSO']}
+2023-07-14 15:35:07,215 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:35:08,321 INFO     [customwidgets.py] Project directory of Tester does not exist. Asking for relocation
+2023-07-14 15:35:10,701 DEBUG    [main.py] Project directory does not exist: , just remove from History
+2023-07-14 15:35:10,753 INFO     [main.py] Set current project to blank
+2023-07-14 15:35:10,753 DEBUG    [main.py] Refresh projects
+2023-07-14 15:35:10,763 DEBUG    [main.py] Refresh projects
+2023-07-14 15:35:10,763 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:35:10,773 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:35:12,162 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:35:12,162 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:35:18,033 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:35:21,944 DEBUG    [main.py] Refresh projects
+2023-07-14 15:35:21,944 INFO     [main.py] Save project Tester
+2023-07-14 15:35:24,223 DEBUG    [main.py] Accessing history file
+2023-07-14 15:35:24,223 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:35:24,223 DEBUG    [main.py] CP: Tester ,Batch name: None
+2023-07-14 15:36:00,820 DEBUG    [main.py] Refresh projects
+2023-07-14 15:36:00,844 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:36:00,845 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:36:00,845 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:36:03,514 DEBUG    [main.py] Project directory does not exist: , just remove from History
+2023-07-14 15:36:03,517 INFO     [main.py] Set current project to blank
+2023-07-14 15:36:03,517 DEBUG    [main.py] Refresh projects
+2023-07-14 15:36:03,517 DEBUG    [main.py] Refresh projects
+2023-07-14 15:36:03,519 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:36:03,519 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:36:04,506 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:36:04,506 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:36:11,910 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:36:18,040 DEBUG    [main.py] Refresh projects
+2023-07-14 15:36:18,040 INFO     [main.py] Save project Tester
+2023-07-14 15:36:20,158 DEBUG    [main.py] Accessing history file
+2023-07-14 15:36:20,158 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:36:20,158 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:36:20,158 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:36:20,158 INFO     [project.py] Creating project structure at F:\Test\Tester, batch 1
+2023-07-14 15:36:31,190 DEBUG    [main.py] Project directory does not exist: , just remove from History
+2023-07-14 15:36:31,216 INFO     [main.py] Set current project to blank
+2023-07-14 15:36:31,216 DEBUG    [main.py] Refresh projects
+2023-07-14 15:36:31,216 DEBUG    [main.py] Refresh projects
+2023-07-14 15:36:31,216 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:36:31,216 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:37:54,547 DEBUG    [main.py] Refresh projects
+2023-07-14 15:37:54,560 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:37:54,561 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:37:54,562 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:37:55,363 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:37:55,364 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:38:02,265 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:38:05,961 DEBUG    [main.py] Refresh projects
+2023-07-14 15:38:05,961 INFO     [main.py] Save project Tester
+2023-07-14 15:38:07,944 DEBUG    [main.py] Accessing history file
+2023-07-14 15:38:07,944 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:38:07,944 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:38:07,944 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:38:07,944 INFO     [project.py] Creating project structure at F:\Test\Tester, batch 1
+2023-07-14 15:40:46,233 DEBUG    [main.py] Refresh projects
+2023-07-14 15:40:46,257 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:40:46,258 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:40:46,258 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:40:48,646 DEBUG    [main.py] Project directory does not exist: , just remove from History
+2023-07-14 15:40:48,657 INFO     [main.py] Set current project to blank
+2023-07-14 15:40:48,657 DEBUG    [main.py] Refresh projects
+2023-07-14 15:40:48,657 DEBUG    [main.py] Refresh projects
+2023-07-14 15:40:48,657 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:40:48,657 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:40:49,177 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:40:49,177 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:40:57,405 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:41:02,198 DEBUG    [main.py] Refresh projects
+2023-07-14 15:41:02,204 INFO     [main.py] Save project Tester
+2023-07-14 15:41:04,159 DEBUG    [main.py] Accessing history file
+2023-07-14 15:41:04,159 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:41:04,159 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:41:04,159 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:41:04,159 INFO     [project.py] Creating project structure at F:\Test\Tester, batch 1
+2023-07-14 15:41:04,159 WARNING  [project.py] Substance has space in name, treatment_dir = C - Graphene oxide 1.0ppm
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\A
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\B
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\C
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Side View
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Top View
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene
+2023-07-14 15:41:04,159 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene\Side View
+2023-07-14 15:41:04,169 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene\Top View
+2023-07-14 15:41:04,169 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm
+2023-07-14 15:41:04,169 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Side View
+2023-07-14 15:41:04,169 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Top View
+2023-07-14 15:41:04,169 INFO     [project.py] Project structure created
+2023-07-14 15:41:04,169 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:41:04,169 DEBUG    [customwidgets.py] Set project variable to Tester
+2023-07-14 15:41:04,169 INFO     [main.py] Current project: Tester
+2023-07-14 15:41:04,169 DEBUG    [main.py] Accessing history file
+2023-07-14 15:41:04,169 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:41:04,169 DEBUG    [main.py] Accessing history file
+2023-07-14 15:41:04,169 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:41:04,169 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:41:04,169 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:41:04,179 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:41:04,179 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:41:04,179 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:41:04,179 INFO     [customwidgets.py] Loading.. project name = Tester
+2023-07-14 15:41:04,179 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', ''], 'Treatment B': ['Graphene', '', '', ''], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', '']}
+2023-07-14 15:41:04,179 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:41:04,179 DEBUG    [main.py] Current project dir: F:\Test\Tester
+2023-07-14 15:41:04,179 DEBUG    [customwidgets.py] Loading parameters for project_name = Tester, batch_num = 1, treatment = A
+2023-07-14 15:41:04,239 DEBUG    [customwidgets.py] Retrieved hyp from F:\Test\Tester\Batch 1\static\A\parameters.json
+2023-07-14 15:41:04,239 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-14 15:41:04,239 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-14 15:41:04,239 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-14 15:41:04,239 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-14 15:41:04,239 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-14 15:41:06,031 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-14 15:41:06,032 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-14 15:41:06,032 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-14 15:41:12,835 DEBUG    [main.py] Start importing trajectories
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Working with A - Batch 1 - Side View
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Working with A - Batch 1 - Top View
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Working with A - Batch 2 - Side View
+2023-07-14 15:41:15,271 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Working with A - Batch 2 - Top View
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Working with B - Batch 1 - Side View
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Graphene\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,271 DEBUG    [misc.py] Working with B - Batch 1 - Top View
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Graphene\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Working with B - Batch 2 - Side View
+2023-07-14 15:41:15,281 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Working with B - Batch 2 - Top View
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Working with C - Batch 1 - Side View
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Working with C - Batch 1 - Top View
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,281 DEBUG    [misc.py] Working with C - Batch 2 - Side View
+2023-07-14 15:41:15,281 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:41:15,373 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,373 DEBUG    [misc.py] Working with C - Batch 2 - Top View
+2023-07-14 15:41:15,373 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Working with D - Batch 1 - Side View
+2023-07-14 15:41:15,383 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Working with D - Batch 1 - Top View
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Working with D - Batch 2 - Side View
+2023-07-14 15:41:15,383 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:41:15,383 DEBUG    [misc.py] Working with D - Batch 2 - Top View
+2023-07-14 15:41:15,393 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:42:09,065 INFO     [main.py] Set current project to blank
+2023-07-14 15:42:09,065 DEBUG    [main.py] Refresh projects
+2023-07-14 15:42:09,075 DEBUG    [main.py] Refresh projects
+2023-07-14 15:42:09,075 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:42:09,085 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:42:09,568 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:42:09,568 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:42:15,967 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:42:21,572 DEBUG    [main.py] Refresh projects
+2023-07-14 15:42:21,576 INFO     [main.py] Save project Tester
+2023-07-14 15:42:24,503 DEBUG    [main.py] Accessing history file
+2023-07-14 15:42:24,503 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:42:24,503 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:42:24,503 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:42:24,503 INFO     [project.py] Creating project structure at F:\Test\Tester, batch 1
+2023-07-14 15:42:24,503 WARNING  [project.py] Substance has space in name, treatment_dir = C - Graphene oxide 1.0ppm
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\A
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\B
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\C
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Side View
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Top View
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene\Side View
+2023-07-14 15:42:24,503 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene\Top View
+2023-07-14 15:42:24,513 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm
+2023-07-14 15:42:24,513 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Side View
+2023-07-14 15:42:24,513 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Top View
+2023-07-14 15:42:24,513 INFO     [project.py] Project structure created
+2023-07-14 15:42:24,523 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:42:24,523 DEBUG    [customwidgets.py] Set project variable to Tester
+2023-07-14 15:42:24,523 INFO     [main.py] Current project: Tester
+2023-07-14 15:42:24,523 DEBUG    [main.py] Accessing history file
+2023-07-14 15:42:24,523 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:42:24,523 DEBUG    [main.py] Accessing history file
+2023-07-14 15:42:24,523 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:42:24,533 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:42:24,533 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:42:24,533 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:42:24,533 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:42:24,533 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:42:24,533 INFO     [customwidgets.py] Loading.. project name = Tester
+2023-07-14 15:42:24,533 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', ''], 'Treatment B': ['Graphene', '', '', ''], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', '']}
+2023-07-14 15:42:24,540 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:42:24,543 DEBUG    [main.py] Current project dir: F:\Test\Tester
+2023-07-14 15:42:24,543 DEBUG    [customwidgets.py] Loading parameters for project_name = Tester, batch_num = 1, treatment = A
+2023-07-14 15:42:24,543 DEBUG    [customwidgets.py] Retrieved hyp from F:\Test\Tester\Batch 1\static\A\parameters.json
+2023-07-14 15:42:24,543 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-14 15:42:24,543 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-14 15:42:24,543 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-14 15:42:24,543 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-14 15:42:24,543 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-14 15:42:25,607 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-14 15:42:25,608 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-14 15:42:25,608 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-14 15:42:26,118 DEBUG    [main.py] Start importing trajectories
+2023-07-14 15:42:28,256 DEBUG    [misc.py] Working with A - Batch 1 - Side View
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Working with A - Batch 1 - Top View
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Working with A - Batch 2 - Side View
+2023-07-14 15:42:28,259 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Working with A - Batch 2 - Top View
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,259 DEBUG    [misc.py] Working with B - Batch 1 - Side View
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Graphene\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Working with B - Batch 1 - Top View
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Graphene\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Working with B - Batch 2 - Side View
+2023-07-14 15:42:28,267 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Working with B - Batch 2 - Top View
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Working with C - Batch 1 - Side View
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Working with C - Batch 1 - Top View
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,267 DEBUG    [misc.py] Working with C - Batch 2 - Side View
+2023-07-14 15:42:28,277 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Working with C - Batch 2 - Top View
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Working with D - Batch 1 - Side View
+2023-07-14 15:42:28,277 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Working with D - Batch 1 - Top View
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Working with D - Batch 2 - Side View
+2023-07-14 15:42:28,277 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:42:28,277 DEBUG    [misc.py] Working with D - Batch 2 - Top View
+2023-07-14 15:42:28,288 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:42:48,754 INFO     [main.py] Set current project to blank
+2023-07-14 15:42:48,754 DEBUG    [main.py] Refresh projects
+2023-07-14 15:42:48,754 DEBUG    [main.py] Refresh projects
+2023-07-14 15:42:48,754 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:42:48,764 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:42:52,396 DEBUG    [main.py] Refresh projects
+2023-07-14 15:42:52,410 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:42:52,412 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:42:52,412 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:42:53,175 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:42:53,176 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:42:59,628 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:43:03,845 DEBUG    [main.py] Refresh projects
+2023-07-14 15:43:03,845 INFO     [main.py] Save project Tester
+2023-07-14 15:43:06,005 DEBUG    [main.py] Accessing history file
+2023-07-14 15:43:06,005 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:43:06,005 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:43:06,005 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:43:06,005 INFO     [project.py] Creating project structure at F:\Test\Tester, batch 1
+2023-07-14 15:43:06,005 WARNING  [project.py] Substance has space in name, treatment_dir = C - Graphene oxide 1.0ppm
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\A
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\B
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\C
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Side View
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Top View
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene
+2023-07-14 15:43:06,005 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene\Side View
+2023-07-14 15:43:06,015 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Graphene\Top View
+2023-07-14 15:43:06,015 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm
+2023-07-14 15:43:06,016 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Side View
+2023-07-14 15:43:06,017 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Top View
+2023-07-14 15:43:06,017 INFO     [project.py] Project structure created
+2023-07-14 15:43:06,075 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:43:06,075 DEBUG    [customwidgets.py] Set project variable to Tester
+2023-07-14 15:43:06,075 INFO     [main.py] Current project: Tester
+2023-07-14 15:43:06,075 DEBUG    [main.py] Accessing history file
+2023-07-14 15:43:06,075 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:43:06,075 DEBUG    [main.py] Accessing history file
+2023-07-14 15:43:06,075 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:43:06,075 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:43:06,075 DEBUG    [main.py] Treatments: ['Control', 'Graphene', 'Graphene oxide 1.0 ppm']
+2023-07-14 15:43:06,075 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:43:06,075 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:43:06,075 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:43:06,085 INFO     [customwidgets.py] Loading.. project name = Tester
+2023-07-14 15:43:06,085 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', ''], 'Treatment B': ['Graphene', '', '', ''], 'Treatment C': ['Graphene oxide', 1.0, 'ppm', '']}
+2023-07-14 15:43:06,085 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:43:06,085 DEBUG    [main.py] Current project dir: F:\Test\Tester
+2023-07-14 15:43:06,085 DEBUG    [customwidgets.py] Loading parameters for project_name = Tester, batch_num = 1, treatment = A
+2023-07-14 15:43:06,145 DEBUG    [customwidgets.py] Retrieved hyp from F:\Test\Tester\Batch 1\static\A\parameters.json
+2023-07-14 15:43:06,145 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-14 15:43:06,145 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-14 15:43:06,145 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-14 15:43:06,145 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-14 15:43:06,145 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-14 15:43:07,307 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-14 15:43:07,307 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-14 15:43:07,307 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-14 15:43:07,777 DEBUG    [main.py] Start importing trajectories
+2023-07-14 15:43:11,721 DEBUG    [misc.py] Working with A - Batch 1 - Side View
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Working with A - Batch 1 - Top View
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Working with A - Batch 2 - Side View
+2023-07-14 15:43:11,724 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Working with A - Batch 2 - Top View
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,724 DEBUG    [misc.py] Working with B - Batch 1 - Side View
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Graphene\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Working with B - Batch 1 - Top View
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Graphene\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Working with B - Batch 2 - Side View
+2023-07-14 15:43:11,732 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Working with B - Batch 2 - Top View
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Working with C - Batch 1 - Side View
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Working with C - Batch 1 - Top View
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Graphene oxide 1.0ppm\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Working with C - Batch 2 - Side View
+2023-07-14 15:43:11,732 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:43:11,732 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Working with C - Batch 2 - Top View
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Working with D - Batch 1 - Side View
+2023-07-14 15:43:11,742 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Working with D - Batch 1 - Top View
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Working with D - Batch 2 - Side View
+2023-07-14 15:43:11,742 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:43:11,742 DEBUG    [misc.py] Working with D - Batch 2 - Top View
+2023-07-14 15:43:11,752 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:43:59,505 INFO     [main.py] Set current project to blank
+2023-07-14 15:43:59,505 DEBUG    [main.py] Refresh projects
+2023-07-14 15:43:59,505 DEBUG    [main.py] Refresh projects
+2023-07-14 15:43:59,505 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:43:59,515 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-14 15:44:05,236 DEBUG    [main.py] Refresh projects
+2023-07-14 15:44:05,251 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-14 15:44:05,252 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-14 15:44:05,255 DEBUG    [customwidgets.py] Retrieved hyp from F:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-14 15:44:05,985 DEBUG    [main.py] Create project button pressed
+2023-07-14 15:44:05,987 INFO     [customwidgets.py] Project input window opened
+2023-07-14 15:44:10,338 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-14 15:44:13,795 DEBUG    [main.py] Refresh projects
+2023-07-14 15:44:13,795 INFO     [main.py] Save project Tester
+2023-07-14 15:44:16,771 DEBUG    [main.py] Accessing history file
+2023-07-14 15:44:16,771 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:44:16,771 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:44:16,771 DEBUG    [main.py] Treatments: ['Control', 'Gra', 'Gra oxide 1.0 ppm']
+2023-07-14 15:44:16,771 INFO     [project.py] Creating project structure at F:\Test\Tester, batch 1
+2023-07-14 15:44:16,771 WARNING  [project.py] Substance has space in name, treatment_dir = C - Gra oxide 1.0ppm
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\A
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\B
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\static\C
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Side View
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\A - Control\Top View
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Gra
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Gra\Side View
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\B - Gra\Top View
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Gra oxide 1.0ppm
+2023-07-14 15:44:16,771 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Gra oxide 1.0ppm\Side View
+2023-07-14 15:44:16,781 DEBUG    [project.py] Created directory: F:\Test\Tester\Batch 1\C - Gra oxide 1.0ppm\Top View
+2023-07-14 15:44:16,781 INFO     [project.py] Project structure created
+2023-07-14 15:44:16,790 DEBUG    [main.py] Load project button pressed
+2023-07-14 15:44:16,790 DEBUG    [customwidgets.py] Set project variable to Tester
+2023-07-14 15:44:16,790 INFO     [main.py] Current project: Tester
+2023-07-14 15:44:16,800 DEBUG    [main.py] Accessing history file
+2023-07-14 15:44:16,800 DEBUG    [main.py] Command = load batch list
+2023-07-14 15:44:16,800 DEBUG    [main.py] Accessing history file
+2023-07-14 15:44:16,800 DEBUG    [main.py] Command = load treatment list
+2023-07-14 15:44:16,800 DEBUG    [main.py] CP: Tester ,Batch name: Batch 1
+2023-07-14 15:44:16,800 DEBUG    [main.py] Treatments: ['Control', 'Gra', 'Gra oxide 1.0 ppm']
+2023-07-14 15:44:16,800 DEBUG    [main.py] Loaded treatment list
+2023-07-14 15:44:16,800 DEBUG    [main.py] Possible warning: None
+2023-07-14 15:44:16,800 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:44:16,800 INFO     [customwidgets.py] Loading.. project name = Tester
+2023-07-14 15:44:16,800 INFO     [customwidgets.py] {'Treatment A': ['Control', '', '', ''], 'Treatment B': ['Gra', '', '', ''], 'Treatment C': ['Gra oxide', 1.0, 'ppm', '']}
+2023-07-14 15:44:16,810 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-14 15:44:16,810 DEBUG    [main.py] Current project dir: F:\Test\Tester
+2023-07-14 15:44:16,810 DEBUG    [customwidgets.py] Loading parameters for project_name = Tester, batch_num = 1, treatment = A
+2023-07-14 15:44:16,860 DEBUG    [customwidgets.py] Retrieved hyp from F:\Test\Tester\Batch 1\static\A\parameters.json
+2023-07-14 15:44:16,860 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-14 15:44:16,860 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-14 15:44:16,860 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-14 15:44:16,860 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-14 15:44:16,860 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-14 15:44:18,037 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-14 15:44:18,037 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-14 15:44:18,037 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-14 15:44:18,416 DEBUG    [main.py] Start importing trajectories
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Working with A - Batch 1 - Side View
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Working with A - Batch 1 - Top View
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\A - Control\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Working with A - Batch 2 - Side View
+2023-07-14 15:44:20,298 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Working with A - Batch 2 - Top View
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\01 - dZKniC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\A - dZKniC\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,298 DEBUG    [misc.py] Working with B - Batch 1 - Side View
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Gra\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Working with B - Batch 1 - Top View
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\B - Gra\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Working with B - Batch 2 - Side View
+2023-07-14 15:44:20,308 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Working with B - Batch 2 - Top View
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\02 - gvSSuo\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\B - gvSSuo\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Working with C - Batch 1 - Side View
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Gra oxide 1.0ppm\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Working with C - Batch 1 - Top View
+2023-07-14 15:44:20,308 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\C - Gra oxide 1.0ppm\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Working with C - Batch 2 - Side View
+2023-07-14 15:44:20,318 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Working with C - Batch 2 - Top View
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\03 - XVVRLC\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\C - XVVRLC\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Working with D - Batch 1 - Side View
+2023-07-14 15:44:20,318 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Working with D - Batch 1 - Top View
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\1st Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 1\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,318 DEBUG    [misc.py] Working with D - Batch 2 - Side View
+2023-07-14 15:44:20,328 WARNING  [misc.py] Treatment folder not found! Creating new folder based on import data...
+2023-07-14 15:44:20,328 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Side View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Side View\trajectories_nogap.txt
+2023-07-14 15:44:20,328 DEBUG    [misc.py] Working with D - Batch 2 - Top View
+2023-07-14 15:44:20,328 DEBUG    [misc.py] Copied F:\Test\To_Be_Imported\04 - vcLkCD\2nd Batch (Top View)\trajectories_nogap.txt to F:\Test\Tester\Batch 2\D - vcLkCD\Top View\trajectories_nogap.txt
+2023-07-14 15:44:20,328 WARNING  [customwidgets.py] Batch name Batch 2 not found in history file
+2023-07-14 15:44:20,328 WARNING  [customwidgets.py] Batch name Batch 2 not found in history file
+2023-07-14 15:44:20,328 WARNING  [customwidgets.py] Batch name Batch 2 not found in history file
+2023-07-14 15:44:20,378 WARNING  [customwidgets.py] Batch name Batch 2 not found in history file
+2023-07-14 15:45:52,370 INFO     [main.py] Set current project to blank
+2023-07-14 15:45:52,370 DEBUG    [main.py] Refresh projects
+2023-07-14 15:45:52,370 DEBUG    [main.py] Refresh projects
+2023-07-14 15:45:52,380 DEBUG    [main.py] Refresh projects detail
+2023-07-14 15:45:52,390 INFO     [customwidgets.py] Loading.. project name = 

@@ -387,7 +387,7 @@ class App(customtkinter.CTk):
         self.update_param_display(load_type = "refresh")
     
 
-    def access_history(self, command_type, batch_name=None, edit_command=None):
+    def access_history(self, command_type, project_name = None, batch_name=None, edit_command=None):
         logger.debug("Accessing history file")
 
         # load the history file
@@ -400,7 +400,10 @@ class App(customtkinter.CTk):
             return None, ErrorType
 
         # current project name
-        cp = self.CURRENT_PROJECT
+        if project_name == None:
+            cp = self.CURRENT_PROJECT
+        else:
+            cp = project_name
 
         # Check if the project exists
         if cp not in projects_data.keys():
@@ -479,6 +482,9 @@ class App(customtkinter.CTk):
             logger.debug("Command = load treatment list")
             logger.debug(f"CP: {cp} ,Batch name: {batch_name}")
             treatments = []
+            key_list = list(projects_data[cp][batch_name].keys())
+            if key_list == 0:
+                logger.warning(f"cp = {cp}, batch_name = {batch_name}, no treatments found")
             for treatment_key in projects_data[cp][batch_name].keys():
                 _name = projects_data[cp][batch_name][treatment_key][0]
                 _dose = projects_data[cp][batch_name][treatment_key][1]
@@ -754,7 +760,10 @@ class App(customtkinter.CTk):
         else:
             project_dir = Path(THE_HISTORY.get_project_dir(self.CURRENT_PROJECT))
 
-        CreateProject(project_dir, batch_num = batch_num)
+        treatment_info, _ = self.access_history(command_type = "load treatment list", 
+                                             batch_name = f"Batch {batch_num}")
+
+        CreateProject(project_dir, treatment_info = treatment_info, batch_num = batch_num)
 
         with open(HISTORY_PATH, "r") as file:
             projects_data = json.load(file)
@@ -843,13 +852,27 @@ class App(customtkinter.CTk):
         
         importer.import_trajectories()
 
-        treatments_to_be_added = importer.new_treatments
+        treatments_to_be_added = importer.new_treatments 
         
         for treatment_info in treatments_to_be_added:
+            # _info = {
+            #     "char": treatment_char,
+            #     "name": self.import_treatment_names[treatment_char],
+            #     "batch_num": batch_num
+            # }
+            treatment_char = treatment_info['char']
+            treatment_name = treatment_info['name']
+            batch_num = treatment_info['batch_num']
+
+            substance, dose, unit = substance_dose_unit_finder(treatment_name)
+
             #update the projects.json
-            THE_HISTORY.add_treament(project_name = self.CURRENT_PROJECT,
-                                    batch_name = self.BatchOptions.get(),
-                                    treatment_name = self.TreatmentOptions.get(),
+            THE_HISTORY.add_treatment(project_name = self.CURRENT_PROJECT,
+                                    batch_name = f"Batch {batch_num}",
+                                    treatment_char = treatment_char,
+                                    substance = substance,
+                                    dose = dose,
+                                    dose_unit = unit)
 
 
         

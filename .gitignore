@@ -7,6 +7,7 @@ __pycache__/
 Data/*
 *.ipynb
 test*
+Archive/*
 
 # C extensions
 *.so

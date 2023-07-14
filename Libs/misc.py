@@ -678,6 +678,23 @@ def find_treatment_num(given_string):
     return indicator
 
 
+def substance_dose_unit_finder(given_string):
+
+    parts = given_string.split()
+
+    if len(parts) == 1:
+        return given_string, "", ""
+    elif len(parts) >= 2:
+        substance = ""
+        for part in parts:
+            if re.search('[0-9]', part) and re.search('[a-zA-Z]', part):
+                unit = re.findall("[a-zA-Z]+", part)[0]
+                dose = part.replace(unit, "")
+            else:
+                substance += part + " "
+        return substance.strip(), dose, unit
+
+
 class Importer():
 
     def __init__(self, import_project_dir, target_project_dir, trajectories_format="trajectories_nogap.txt"):

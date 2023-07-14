@@ -593,42 +593,48 @@ class HISTORY():
             self.projects_data = json.load(file)
 
 
+    def find_dir(self, project_name):
+        tkinter.messagebox.showerror("Error", "Project directory does not exist!")
+        logger.info(f"Project directory of {project_name} does not exist. Asking for relocation")
+        relocate = tkinter.messagebox.askyesno("Project not found", "Do you want to relocate it?")
+        if relocate:
+            # ask for new input of project_dir
+            new_dir = tkinter.filedialog.askdirectory()
+            
+            self.projects_data[project_name]["DIRECTORY"] = new_dir
+            self.saver()
+            logger.info(f"Project directory of {project_name} has been relocated to {new_dir}")
+
+            return new_dir
+        else:
+            return None
+
     def get_project_dir(self, project_name):
         self.reload()
 
         if project_name == "":
             logger.warning("Tried to get project directory of an empty project name")
             return None
-        
-        project_dir = self.projects_data[project_name]["DIRECTORY"]
+        try:
+            project_dir = self.projects_data[project_name]["DIRECTORY"]
+        except KeyError:
+            project_dir = self.find_dir(project_name)
+
 
         # check if the project directory exists
         if not os.path.exists(project_dir):
-            tkinter.messagebox.showerror("Error", "Project directory does not exist!")
-            logger.info(f"Project directory of {project_name} does not exist. Asking for relocation")
-            relocate = tkinter.messagebox.askyesno("Project not found", "Do you want to relocate it?")
-            if relocate:
-                # ask for new input of project_dir
-                new_dir = tkinter.filedialog.askdirectory()
-                
-                self.projects_data[project_name]["DIRECTORY"] = new_dir
-                self.saver()
-                logger.info(f"Project directory of {project_name} has been relocated to {new_dir}")
+            project_dir = self.find_dir(project_name)
 
-                return new_dir
-            else:
-                return None
+        return project_dir       
+     
 
-        return project_dir
-    
-
-    def add_treament(self, project_name, batch_name, treatment_name, dose, dose_unit, note):
+    def add_treatment(self, project_name, batch_name, treatment_char, substance, dose, dose_unit, note=""):
 
         if project_name == "":
             logger.warning("Tried to add treatment to an empty project name")
             return
 
-        if treatment_name == "":
+        if substance == "":
             logger.warning("Tried to add treatment with empty treatment name")
             return
 
@@ -644,11 +650,15 @@ class HISTORY():
             logger.warning(f"Batch name {batch_name} not found in history file")
             return
 
-        if treatment_name in self.projects_data[project_name][batch_name]:
-            logger.warning(f"Treatment name {treatment_name} already exists in history file")
-            return
-
-        self.projects_data[project_name][batch_name][treatment_name] = [treatment_name, dose, dose_unit, note]
+        if f"Treatment {treatment_char}" in self.projects_data[project_name][batch_name]:
+            logger.warning(f"Treatment {treatment_char} already exists in history file")
+            choice = tkinter.messagebox.askyesno("Treatment already exists", "Do you want to overwrite it?")
+            if choice:
+                pass
+            else:
+                return
+            
+        self.projects_data[project_name][batch_name][f"Treatment {treatment_char}"] = [substance, dose, dose_unit, note]
 
         self.saver()
 
@@ -676,6 +686,8 @@ class InputWindow(tkinter.Toplevel):
         self.batch_name = "Batch 1"
         self.BOLD_FONT = customtkinter.CTkFont(size = 15, weight="bold")
 
+        self.TOTAL_INFO = {}
+
         self.treatment_widgets = []
 
         self.rowconfigure(0, weight=1)
@@ -691,21 +703,45 @@ class InputWindow(tkinter.Toplevel):
         self.project_name_entry = customtkinter.CTkEntry(self.top_canvas)
         self.project_name_entry.grid(row=self.ROW, column=1, pady=5)
 
+        self.DoseToggler = customtkinter.CTkCheckBox(self.top_canvas, text="Have Dose", command=self.toggle_dose)
+        self.DoseToggler.grid(row=self.ROW, column=2, pady=5)
+
+
         self.ROW+=1
-        # Treatment A (Control)
-        treatment_a_label = customtkinter.CTkLabel(self.top_canvas, text="Treatment A:", font=self.BOLD_FONT)
-        treatment_a_label.grid(row=self.ROW, column=0, pady=5)
-        self.treatment_a_entry = customtkinter.CTkEntry(self.top_canvas)
-        self.treatment_a_entry.grid(row=self.ROW, column=1, pady=5)
+        # Common substance
+        common_substance_label = customtkinter.CTkLabel(self.top_canvas, text="Common substance:", font=self.BOLD_FONT)
+        common_substance_label.grid(row=self.ROW, column=0, pady=5)
+        self.common_substance_entry = customtkinter.CTkEntry(self.top_canvas)
+        self.common_substance_entry.grid(row=self.ROW, column=1, pady=5)
 
         hover_button = tkinter.Button(self.top_canvas, text="?")
         hover_button.grid(row=self.ROW, column=2, pady=5)
-        CreateToolTip(hover_button, text = 'Control treatment\n'
-                    'Leave blank if you used pure water\n'
+        CreateToolTip(hover_button, text = 'Common condition in all group\n'
+                    'Can be left blank\n'
                     'The info you put here would be saved as Note\n'
+                    'Group A is default as Control, you can change at your own will'
         )
 
+
         self.ROW+=1
+        # Treatment A (Control)
+        treatment_a_label = customtkinter.CTkLabel(self.top_canvas, text="Group A:", font=self.BOLD_FONT)
+        treatment_a_label.grid(row=self.ROW, column=0, pady=5)
+        self.treatment_a_entry = customtkinter.CTkEntry(self.top_canvas)
+        self.treatment_a_entry.grid(row=self.ROW, column=1, pady=5)
+        self.treatment_a_entry.insert(0, "Control")
+
+        self.ROW+=1
+        # Dose
+        dose_label = customtkinter.CTkLabel(self.top_canvas, text="Dose:")
+        dose_label.grid(row=self.ROW, column=0, pady=5)
+        self.dose_a_entry = customtkinter.CTkEntry(self.top_canvas)
+        self.dose_a_entry.grid(row=self.ROW, column=1, pady=5)
+        self.unit_a_optionmenu = customtkinter.CTkOptionMenu(self.top_canvas, values=["ppm", "ppb"])
+        self.unit_a_optionmenu.grid(row=self.ROW, column=2, pady=5)
+
+
+        # self.ROW+=1
         # Fish number
         # fish_number_a_label = customtkinter.CTkLabel(self.top_canvas, text="Fish Number:")
         # fish_number_a_label.grid(row=self.ROW, column=0, pady=5)
@@ -714,7 +750,7 @@ class InputWindow(tkinter.Toplevel):
         
         self.ROW+=1
         # Treatment B
-        treatment_b_label = customtkinter.CTkLabel(self.top_canvas, text="Treatment B:", font=self.BOLD_FONT)
+        treatment_b_label = customtkinter.CTkLabel(self.top_canvas, text="Group B:", font=self.BOLD_FONT)
         treatment_b_label.grid(row=self.ROW, column=0, pady=(20, 5))
         self.treatment_b_entry = customtkinter.CTkEntry(self.top_canvas)
         self.treatment_b_entry.grid(row=self.ROW, column=1, pady=(20, 5))
@@ -728,7 +764,7 @@ class InputWindow(tkinter.Toplevel):
         self.unit_b_optionmenu = customtkinter.CTkOptionMenu(self.top_canvas, values=["ppm", "ppb"])
         self.unit_b_optionmenu.grid(row=self.ROW, column=2, pady=5)
 
-        self.ROW+=1
+        # self.ROW+=1
         # Fish number
         # fish_number_b_label = customtkinter.CTkLabel(self.top_canvas, text="Fish Number:")
         # fish_number_b_label.grid(row=self.ROW, column=0, pady=5)
@@ -757,6 +793,36 @@ class InputWindow(tkinter.Toplevel):
         cancel_button.grid(row=1, column=1, padx=5, pady=20)
 
         self.wait_window()
+
+
+    def toggle_dose(self):
+
+        if self.DoseToggler.get() == 1:
+            self.dose_a_entry.configure(state="normal")
+            self.unit_a_optionmenu.configure(state="normal")
+            self.dose_b_entry.configure(state="normal")
+            self.unit_b_optionmenu.configure(state="normal")
+            for widget in self.treatment_widgets:
+                widget[1].configure(state="normal")
+                widget[2].configure(state="normal")
+        else:
+            self.dose_a_entry.configure(state="disabled")
+            self.unit_a_optionmenu.configure(state="disabled")
+            self.dose_b_entry.configure(state="disabled")
+            self.unit_b_optionmenu.configure(state="disabled")
+            for widget in self.treatment_widgets:
+                widget[1].configure(state="disabled")
+                widget[2].configure(state="disabled")
+
+    
+    def get_dose_value(self, dose_entry, unit_entry):
+        try:
+            dose = float(dose_entry.get())
+            unit = unit_entry.get()
+        except ValueError:
+            dose = ""      
+            unit = ""  
+        return dose, unit
 
 
     def add_treatment(self):
@@ -793,22 +859,24 @@ class InputWindow(tkinter.Toplevel):
         project_name = self.project_name_entry.get()
         self.CURRENT_PROJECT = project_name
         try:
-            note = self.treatment_a_entry.get()
+            note = self.common_substance_entry.get()
         except:
             note = ""
+        a_dose, a_unit = self.get_dose_value(self.dose_a_entry, self.unit_a_optionmenu)
+        b_dose, b_unit = self.get_dose_value(self.dose_b_entry, self.unit_b_optionmenu)
         try:
             treatment_list = {
                 "Treatment A": [
-                    "Control",
-                    0,
-                    "",
+                    self.treatment_a_entry.get(),
+                    a_dose,
+                    b_dose,
                     # int(self.fish_number_a_entry.get()),
                     note
                 ],
                 "Treatment B": [
                     self.treatment_b_entry.get(),
-                    float(self.dose_b_entry.get()),
-                    self.unit_b_optionmenu.get(),
+                    b_dose,
+                    b_unit,
                     # int(self.fish_number_b_entry.get()),
                     note
                 ]
@@ -824,10 +892,11 @@ class InputWindow(tkinter.Toplevel):
                 # fish_number_entry
                 ) in enumerate(self.treatment_widgets):
             treatment_name = f"Treatment {chr(ord('C') + i)}"
+            dose, unit = self.get_dose_value(dose_entry, unit_optionmenu)
             treatment_list[treatment_name] = [
                 treatment_entry.get(),
-                float(dose_entry.get()),
-                unit_optionmenu.get(),
+                dose,
+                unit,
                 # int(fish_number_entry.get()),
                 note
             ]
