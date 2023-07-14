@@ -41,8 +41,11 @@ customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "gr
 
 ########################################### SETUP LOGGING CONFIGURATION ###############################################
 logger = logging.getLogger(__name__)
+
 Path('Log').mkdir(parents=True, exist_ok=True)
 log_file = 'Log/log.txt'
+
+initiator()
 
 class ContextFilter(logging.Filter):
     """

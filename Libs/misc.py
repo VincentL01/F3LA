@@ -14,6 +14,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from . import HISTORY_PATH, LOG_PATH
 
 def num_to_ord(input_number):
     suf = lambda n: "%d%s"%(n,{1:"st",2:"nd",3:"rd"}.get(n%100 if (n%100)<20 else n%10,"th"))
@@ -774,3 +775,16 @@ class Importer():
         view_path = view_dir / self.trajectories_format
 
         return view_path
+    
+
+def initiator():
+
+    # check if HISTORY_PATH Exists
+    if not HISTORY_PATH.exists():
+        #make an empty .json history file
+        with open(HISTORY_PATH, "w") as f:
+            json.dump({}, f, indent=4)
+
+        logger.info("No history file found! Creating new history file...")
+
+    
