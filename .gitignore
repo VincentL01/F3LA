@@ -8,6 +8,8 @@ Data/*
 *.ipynb
 test*
 Archive/*
+Bin/projects.json
+
 
 # C extensions
 *.so
