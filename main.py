@@ -41,8 +41,11 @@ customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "gr
 
 ########################################### SETUP LOGGING CONFIGURATION ###############################################
 logger = logging.getLogger(__name__)
+
 Path('Log').mkdir(parents=True, exist_ok=True)
 log_file = 'Log/log.txt'
+
+initiator()
 
 class ContextFilter(logging.Filter):
     """
@@ -183,12 +186,12 @@ class App(customtkinter.CTk):
         self.sidebar_button_3.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
 
 
-        self.ImportVideoButton = customtkinter.CTkButton(self.sidebar_frame, 
-                                                         text="Import Video",
-                                                         command=self.import_video
+        self.ImportButton = customtkinter.CTkButton(self.sidebar_frame, 
+                                                         text="Import Trajectories",
+                                                         command=self.import_trajectories
                                                          )
-        self.ImportVideoButton.configure(**PANEL_BUTTON_CONFIG)
-        self.ImportVideoButton.grid(row=4, column=0, columnspan = 2, padx=20, pady=20)
+        self.ImportButton.configure(**PANEL_BUTTON_CONFIG)
+        self.ImportButton.grid(row=4, column=0, columnspan = 2, padx=20, pady=20)
 
 
         self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, 
@@ -387,7 +390,7 @@ class App(customtkinter.CTk):
         self.update_param_display(load_type = "refresh")
     
 
-    def access_history(self, command_type, batch_name=None, edit_command=None):
+    def access_history(self, command_type, project_name = None, batch_name=None, edit_command=None):
         logger.debug("Accessing history file")
 
         # load the history file
@@ -400,7 +403,10 @@ class App(customtkinter.CTk):
             return None, ErrorType
 
         # current project name
-        cp = self.CURRENT_PROJECT
+        if project_name == None:
+            cp = self.CURRENT_PROJECT
+        else:
+            cp = project_name
 
         # Check if the project exists
         if cp not in projects_data.keys():
@@ -479,6 +485,9 @@ class App(customtkinter.CTk):
             logger.debug("Command = load treatment list")
             logger.debug(f"CP: {cp} ,Batch name: {batch_name}")
             treatments = []
+            key_list = list(projects_data[cp][batch_name].keys())
+            if key_list == 0:
+                logger.warning(f"cp = {cp}, batch_name = {batch_name}, no treatments found")
             for treatment_key in projects_data[cp][batch_name].keys():
                 _name = projects_data[cp][batch_name][treatment_key][0]
                 _dose = projects_data[cp][batch_name][treatment_key][1]
@@ -754,9 +763,10 @@ class App(customtkinter.CTk):
         else:
             project_dir = Path(THE_HISTORY.get_project_dir(self.CURRENT_PROJECT))
 
-        # treatment_lists = self.TREATMENTLIST
+        treatment_info, _ = self.access_history(command_type = "load treatment list", 
+                                             batch_name = f"Batch {batch_num}")
 
-        CreateProject(project_dir, batch_num = batch_num)
+        CreateProject(project_dir, treatment_info = treatment_info, batch_num = batch_num)
 
         with open(HISTORY_PATH, "r") as file:
             projects_data = json.load(file)
@@ -830,8 +840,45 @@ class App(customtkinter.CTk):
         for project_name in projects_data.keys():
             self.scrollable_frame.add_project(project_name)
 
-    def import_video(self):
-        pass
+
+    def import_trajectories(self):
+        logger.debug("Start importing trajectories")
+
+        import_project_dir = tkinter.filedialog.askdirectory()
+        if not import_project_dir:
+            logger.debug("No directory selected")
+            return
+        
+        importer = Importer(import_project_dir = import_project_dir,
+                            target_project_dir=THE_HISTORY.get_project_dir(self.CURRENT_PROJECT),
+                            trajectories_format="trajectories_nogap.txt")
+        
+        importer.import_trajectories()
+
+        treatments_to_be_added = importer.new_treatments 
+        
+        for treatment_info in treatments_to_be_added:
+            # _info = {
+            #     "char": treatment_char,
+            #     "name": self.import_treatment_names[treatment_char],
+            #     "batch_num": batch_num
+            # }
+            treatment_char = treatment_info['char']
+            treatment_name = treatment_info['name']
+            batch_num = treatment_info['batch_num']
+
+            substance, dose, unit = substance_dose_unit_finder(treatment_name)
+
+            #update the projects.json
+            THE_HISTORY.add_treatment(project_name = self.CURRENT_PROJECT,
+                                    batch_name = f"Batch {batch_num}",
+                                    treatment_char = treatment_char,
+                                    substance = substance,
+                                    dose = dose,
+                                    dose_unit = unit)
+
+
+        
 
     def pre_analyze_check(self):
         logger.debug("Start pre-analyze check")

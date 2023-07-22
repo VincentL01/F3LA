@@ -6,8 +6,6 @@ tk
 openpyxl
 tqdm
 opencv-python
-num2words
-shutil
 pathlib
 customtkinter
 colorlog

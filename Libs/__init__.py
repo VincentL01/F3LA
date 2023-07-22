@@ -5,6 +5,7 @@ ROOT = Path(__file__).parent.parent
 
 BIN_PATH = ROOT / "Bin"
 TEMPLATE_PATH = ROOT / "Template" 
+LOG_PATH = ROOT / "Logs"
 HISTORY_PATH = ROOT / "Bin" / "projects.json"
 
 POS_INF = math.inf
