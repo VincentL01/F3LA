@@ -17902,3 +17902,132 @@
 2023-07-05 12:17:58,829 DEBUG    [main.py] Refresh projects
 2023-07-05 12:17:58,860 DEBUG    [main.py] Refresh projects detail
 2023-07-05 12:17:58,876 INFO     [customwidgets.py] Loading.. project name = 
+2023-07-13 14:39:49,267 DEBUG    [main.py] Refresh projects
+2023-07-13 14:39:49,329 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-13 14:39:49,332 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-13 14:39:49,332 DEBUG    [customwidgets.py] Retrieved hyp from D:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-13 15:14:07,371 DEBUG    [main.py] Refresh projects
+2023-07-13 15:14:07,432 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-13 15:14:07,434 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-13 15:14:07,434 DEBUG    [customwidgets.py] Retrieved hyp from D:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-13 15:14:09,165 DEBUG    [main.py] Load project button pressed
+2023-07-13 15:14:09,165 INFO     [main.py] Current project: NoName
+2023-07-13 15:14:09,165 DEBUG    [main.py] Accessing history file
+2023-07-13 15:14:09,167 DEBUG    [main.py] Command = load batch list
+2023-07-13 15:14:09,167 DEBUG    [main.py] Accessing history file
+2023-07-13 15:14:09,167 DEBUG    [main.py] Command = load treatment list
+2023-07-13 15:14:09,168 DEBUG    [main.py] CP: NoName ,Batch name: Batch 1
+2023-07-13 15:14:09,168 DEBUG    [main.py] Treatments: ['Control', 'Treatment B 1.0 ppm', 'Treatment C 1.0 ppm']
+2023-07-13 15:14:09,168 DEBUG    [main.py] Loaded treatment list
+2023-07-13 15:14:09,168 DEBUG    [main.py] Possible warning: None
+2023-07-13 15:14:09,168 DEBUG    [main.py] Refresh projects detail
+2023-07-13 15:14:09,171 INFO     [customwidgets.py] Loading.. project name = NoName
+2023-07-13 15:14:09,171 INFO     [customwidgets.py] {'Treatment A': ['Control', 0, '', ''], 'Treatment B': ['Treatment B', 1.0, 'ppm', ''], 'Treatment C': ['Treatment C', 1.0, 'ppm', '']}
+2023-07-13 15:14:09,183 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-13 15:14:09,184 DEBUG    [main.py] Current project dir: D:\TestSave\NoName
+2023-07-13 15:14:09,184 DEBUG    [customwidgets.py] Loading parameters for project_name = NoName, batch_num = 1, treatment = A
+2023-07-13 15:14:09,363 DEBUG    [customwidgets.py] Retrieved hyp from D:\TestSave\NoName\Batch 1\static\A\parameters.json
+2023-07-13 15:14:09,461 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-13 15:14:09,461 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-13 15:14:14,318 DEBUG    [main.py] Create project button pressed
+2023-07-13 15:14:14,319 INFO     [customwidgets.py] Project input window opened
+2023-07-13 15:14:28,197 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-13 15:14:45,034 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-13 15:14:49,134 DEBUG    [customwidgets.py] Cancel button clicked
+2023-07-13 15:14:50,110 DEBUG    [main.py] Create project button pressed
+2023-07-13 15:14:50,112 INFO     [customwidgets.py] Project input window opened
+2023-07-13 15:15:04,386 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-13 15:15:11,549 DEBUG    [main.py] Create project button pressed
+2023-07-13 15:15:11,549 INFO     [customwidgets.py] Project input window opened
+2023-07-13 15:15:21,190 DEBUG    [customwidgets.py] Add treatment button clicked
+2023-07-13 15:15:25,545 DEBUG    [main.py] Refresh projects
+2023-07-13 15:15:25,588 INFO     [main.py] Save project Gender 1st
+2023-07-13 15:15:31,656 INFO     [project.py] Creating project structure at D:\Code\Gilbert\Gender 1st, batch 1
+2023-07-13 15:15:31,657 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\A - Control
+2023-07-13 15:15:31,657 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\A - Control\Side View
+2023-07-13 15:15:31,657 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\A - Control\Top View
+2023-07-13 15:15:31,658 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\B - Treatment 01
+2023-07-13 15:15:31,658 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\B - Treatment 01\Side View
+2023-07-13 15:15:31,658 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\B - Treatment 01\Top View
+2023-07-13 15:15:31,659 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\C - Treatment 02
+2023-07-13 15:15:31,659 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\C - Treatment 02\Side View
+2023-07-13 15:15:31,659 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\C - Treatment 02\Top View
+2023-07-13 15:15:31,660 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\static
+2023-07-13 15:15:31,660 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\static\A
+2023-07-13 15:15:31,660 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\static\B
+2023-07-13 15:15:31,660 DEBUG    [project.py] Created directory: D:\Code\Gilbert\Gender 1st\Batch 1\static\C
+2023-07-13 15:15:31,661 INFO     [project.py] Project structure created
+2023-07-13 15:15:31,662 DEBUG    [main.py] Load project button pressed
+2023-07-13 15:15:31,667 DEBUG    [customwidgets.py] Set project variable to Gender 1st
+2023-07-13 15:15:31,667 INFO     [main.py] Current project: Gender 1st
+2023-07-13 15:15:31,667 DEBUG    [main.py] Accessing history file
+2023-07-13 15:15:31,672 DEBUG    [main.py] Command = load batch list
+2023-07-13 15:15:31,673 DEBUG    [main.py] Accessing history file
+2023-07-13 15:15:31,673 DEBUG    [main.py] Command = load treatment list
+2023-07-13 15:15:31,673 DEBUG    [main.py] CP: Gender 1st ,Batch name: Batch 1
+2023-07-13 15:15:31,673 DEBUG    [main.py] Treatments: ['Control', 'Female&Female 1.0 ppm', 'Male&Male 1.0 ppm']
+2023-07-13 15:15:31,674 DEBUG    [main.py] Loaded treatment list
+2023-07-13 15:15:31,674 DEBUG    [main.py] Possible warning: None
+2023-07-13 15:15:31,674 DEBUG    [main.py] Refresh projects detail
+2023-07-13 15:15:31,719 INFO     [customwidgets.py] Loading.. project name = Gender 1st
+2023-07-13 15:15:31,720 INFO     [customwidgets.py] {'Treatment A': ['Control', 0, '', ''], 'Treatment B': ['Female&Female', 1.0, 'ppm', ''], 'Treatment C': ['Male&Male', 1.0, 'ppm', '']}
+2023-07-13 15:15:31,727 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-13 15:15:31,728 DEBUG    [main.py] Current project dir: D:\Code\Gilbert\Gender 1st
+2023-07-13 15:15:31,728 DEBUG    [customwidgets.py] Loading parameters for project_name = Gender 1st, batch_num = 1, treatment = A
+2023-07-13 15:15:31,927 DEBUG    [customwidgets.py] Retrieved hyp from D:\Code\Gilbert\Gender 1st\Batch 1\static\A\parameters.json
+2023-07-13 15:15:31,927 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-13 15:15:31,928 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-13 15:15:31,928 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-13 15:15:31,928 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-13 15:15:31,928 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-13 15:15:33,790 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-13 15:15:33,791 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-13 15:15:33,791 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-21 16:42:13,283 DEBUG    [main.py] Refresh projects
+2023-07-21 16:42:13,350 WARNING  [customwidgets.py] Tried to get project directory of an empty project name
+2023-07-21 16:42:13,353 DEBUG    [customwidgets.py] Loading parameters for project_name = Template, batch_num = 1, treatment = A
+2023-07-21 16:42:13,353 DEBUG    [customwidgets.py] Retrieved hyp from D:\Code\LA3D\Template\Batch 1\static\A\parameters.json
+2023-07-21 16:42:17,125 DEBUG    [main.py] Load project button pressed
+2023-07-21 16:42:17,126 INFO     [main.py] Current project: Gender 1st
+2023-07-21 16:42:17,126 DEBUG    [main.py] Accessing history file
+2023-07-21 16:42:17,126 DEBUG    [main.py] Command = load batch list
+2023-07-21 16:42:17,127 DEBUG    [main.py] Accessing history file
+2023-07-21 16:42:17,127 DEBUG    [main.py] Command = load treatment list
+2023-07-21 16:42:17,127 DEBUG    [main.py] CP: Gender 1st ,Batch name: Batch 1
+2023-07-21 16:42:17,127 DEBUG    [main.py] Treatments: ['Control', 'Female&Female 1.0 ppm', 'Male&Male 1.0 ppm']
+2023-07-21 16:42:17,127 DEBUG    [main.py] Loaded treatment list
+2023-07-21 16:42:17,127 DEBUG    [main.py] Possible warning: None
+2023-07-21 16:42:17,128 DEBUG    [main.py] Refresh projects detail
+2023-07-21 16:42:17,129 INFO     [customwidgets.py] Loading.. project name = Gender 1st
+2023-07-21 16:42:17,130 INFO     [customwidgets.py] {'Treatment A': ['Control', 0, '', ''], 'Treatment B': ['Female&Female', 1.0, 'ppm', ''], 'Treatment C': ['Male&Male', 1.0, 'ppm', '']}
+2023-07-21 16:42:17,140 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-21 16:42:17,141 DEBUG    [main.py] Current project dir: D:\Code\Gilbert\Gender 1st
+2023-07-21 16:42:17,141 DEBUG    [customwidgets.py] Loading parameters for project_name = Gender 1st, batch_num = 1, treatment = A
+2023-07-21 16:42:17,216 DEBUG    [customwidgets.py] Retrieved hyp from D:\Code\Gilbert\Gender 1st\Batch 1\static\A\parameters.json
+2023-07-21 16:42:17,216 INFO     [general.py] ParamsCalculator() initiated.
+2023-07-21 16:42:17,217 DEBUG    [general.py] Loading user-input coordinates...
+2023-07-21 16:42:17,217 DEBUG    [general.py] Loading raw user-input coordinates...
+2023-07-21 16:42:17,217 ERROR    [general.py] File of User-input coordinates not found. Please check the path or run Measurer() before hand.
+2023-07-21 16:42:17,217 INFO     [customwidgets.py] Unable to calculate parameters, asking user to re-measure
+2023-07-21 16:42:18,756 INFO     [customwidgets.py] User chose not to open Measurer Window
+2023-07-21 16:42:18,757 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-21 16:42:18,757 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A
+2023-07-21 16:42:20,762 DEBUG    [main.py] Load project button pressed
+2023-07-21 16:42:20,763 INFO     [main.py] Current project: UnamputatedC1
+2023-07-21 16:42:20,763 DEBUG    [main.py] Accessing history file
+2023-07-21 16:42:20,763 DEBUG    [main.py] Command = load batch list
+2023-07-21 16:42:20,764 DEBUG    [main.py] Accessing history file
+2023-07-21 16:42:20,764 DEBUG    [main.py] Command = load treatment list
+2023-07-21 16:42:20,764 DEBUG    [main.py] CP: UnamputatedC1 ,Batch name: Batch 1
+2023-07-21 16:42:20,764 DEBUG    [main.py] Treatments: ['Control', 'Treatment B 1.0 ppm', 'Treatment C 1.0 ppm']
+2023-07-21 16:42:20,764 DEBUG    [main.py] Loaded treatment list
+2023-07-21 16:42:20,765 DEBUG    [main.py] Possible warning: None
+2023-07-21 16:42:20,765 DEBUG    [main.py] Refresh projects detail
+2023-07-21 16:42:20,782 INFO     [customwidgets.py] Loading.. project name = UnamputatedC1
+2023-07-21 16:42:20,782 INFO     [customwidgets.py] {'Treatment A': ['Control', 0, '', ''], 'Treatment B': ['Treatment B', 1.0, 'ppm', ''], 'Treatment C': ['Treatment C', 1.0, 'ppm', '']}
+2023-07-21 16:42:20,792 INFO     [main.py] Loading the abitrary numbers used for initial display
+2023-07-21 16:42:20,793 DEBUG    [main.py] Current project dir: D:\TestSave\UnamputatedC1
+2023-07-21 16:42:20,793 DEBUG    [customwidgets.py] Loading parameters for project_name = UnamputatedC1, batch_num = 1, treatment = A
+2023-07-21 16:42:20,793 DEBUG    [customwidgets.py] Retrieved hyp from D:\TestSave\UnamputatedC1\Batch 1\static\A\parameters.json
+2023-07-21 16:42:20,885 DEBUG    [main.py] Set PREVIOUS_BATCH to 1
+2023-07-21 16:42:20,885 DEBUG    [main.py] Set PREVIOUS_TREATMENT to A

@@ -874,6 +874,20 @@ class Parameters(customtkinter.CTkFrame):
 
         self.entries = {}
 
+
+    def null_label_display(self):
+        if self.null_label == None:
+            # Destroy null_label_notif if it exists
+            logger.debug("Destroying null_label_notif")
+            try:
+                self.null_label_notif.destroy()
+            except:
+                pass
+            return
+        
+        self.null_label_notif = customtkinter.CTkLabel(self, text="No parameters found")
+        self.null_label_notif.grid(row=0, column=0, padx=5, pady=5)
+
         
     def OpenMeasurerWindow(self, project_dir, batch_num, treatment_char):
         save_path = get_static_dir(project_dir=project_dir, 
@@ -1078,3 +1092,21 @@ class Parameters(customtkinter.CTkFrame):
 
         logger.info(f"Parameters saved to {self.hyp_path}.")
 
+
+
+class TickBoxList(customtkinter.CTkFrame):
+
+    def __init__(self, master, values, **kwargs):
+        super().__init__(master, **kwargs)
+
+        self.values = values
+
+        self.tickboxes = {}
+
+        for i, value in enumerate(self.values):
+            tickbox = customtkinter.CTkCheckButton(self, text=value)
+            tickbox.grid(row=i, column=0, sticky="w")
+            self.tickboxes[value] = tickbox
+
+    def ticked_boxes(self):
+        return [key for key, value in self.tickboxes.items() if value.get() == 1]

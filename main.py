@@ -754,6 +754,8 @@ class App(customtkinter.CTk):
         else:
             project_dir = Path(THE_HISTORY.get_project_dir(self.CURRENT_PROJECT))
 
+        # treatment_lists = self.TREATMENTLIST
+
         CreateProject(project_dir, batch_num = batch_num)
 
         with open(HISTORY_PATH, "r") as file:
