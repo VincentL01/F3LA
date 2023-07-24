@@ -31,9 +31,11 @@ customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "gr
 #       [1] Add an L ruler to the Measurer class in Libs\customwidgets.py to define the orientation of the tank
 #       [2] Add a resize step to the Measurer but remember to multiple the Measuring results by the resize factor
 # DONE  [3] Change foreground color of all widgets to black 
-#       [4] BUG - Right after Measuring the Parameters can not be loaded, need to reset the program?!?
+# DONE  [4] BUG - Right after Measuring the Parameters can not be loaded, need to reset the program?!?
 #       [5] Add the manual selection after general.TrajectoriesLoader.rearranger, 
 #           set the rearranger to selecting the second best SV Y if the best matched SV Y has been matched by another TV Y
+#       [6] Add something to the GUI to show how to make the Measurer reappear
+#       [7] Add a list of treatments to the copy to other treatment button
 
 
 # [WHAT I'M DOING] finishing the 3D convex hull plotting, put it on the right side of the GUI
@@ -322,19 +324,23 @@ class App(customtkinter.CTk):
         self.TreatmentOptions.configure(**OPTION_MENU_CONFIG)
         self.TreatmentOptions.grid(row=2, column=0, columnspan=3, padx=20, pady=(20, 10), sticky="nsew")
 
+
+        # create a Cloner button to copy current treatment's parameters to other treatment
+        self.Cloner = customtkinter.CTkButton(self.container_2_mid, text="Copy to other treatment", width = 50,
+                                              command=self.copy_to_other_treatment)
+        self.Cloner.grid(row=3, column=0, pady=20, padx=20, sticky="nsew")
+
+
+        # Row 2
+        self.container_2_bot = customtkinter.CTkFrame(container_2)
+        self.container_2_bot.grid(row=2, column=0, columnspan=3, sticky="nsew")
+
         project_dir = THE_HISTORY.get_project_dir(self.CURRENT_PROJECT)
 
-        self.parameters_frame = Parameters(self.container_2_mid, project_dir)
-        self.parameters_frame.grid(row=3, columnspan=3, padx=20, pady=20, sticky="nsew")
+        self.parameters_frame = Parameters(self.container_2_bot, project_dir, width = 400)
+        self.parameters_frame.grid(row=0, columnspan=3, padx=20, pady=20, sticky="nsew")
 
-        # # Row 2
-        # container_2_bot = customtkinter.CTkFrame(container_2)
-        # container_2_bot.grid(row=2, column=0, columnspan=3, sticky="nsew")
-
-        # # create a Cloner button to copy current treatment's parameters to other treatment
-        # self.Cloner = customtkinter.CTkButton(container_2_bot, text="Copy to other treatment", width = 50,
-        #                                       command=self.copy_to_other_treatment)
-        # self.Cloner.grid(row=1, column=0, pady=20, padx=20, sticky="nsew")
+        
 
         # self.ClonerToolTip = tkinter.Button(container_2_bot, text="?")
         # self.ClonerToolTip.grid(row=1, column=1, pady=20, padx=20)
@@ -383,7 +389,7 @@ class App(customtkinter.CTk):
         # self.TestOptions.configure(command=self.update_param_display)
         self.TreatmentOptions.configure(command=self.update_param_display)
 
-        # # Load the first test by default
+        # # # Load the first test by default
         # self.update_param_display(load_type = "first_load")
 
     def refresh(self):
@@ -567,20 +573,73 @@ class App(customtkinter.CTk):
         batch_dir = project_dir / f"Batch {batch_num}"
         shutil.rmtree(batch_dir)
 
+
+    def treatment_to_treatment_char(self, treatment):
+        treatment_index = self.TREATMENTLIST.index(treatment)
+        treatment_char = CHARS[treatment_index]
+        return treatment_char
     
     def get_treatment_char(self, current_treatment = None):
         if current_treatment == None:
             current_treatment = self.TreatmentOptions.get()
-        treatment_index = self.TREATMENTLIST.index(current_treatment)
-        treatment_char = CHARS[treatment_index]
-        return treatment_char
+        return self.treatment_to_treatment_char(current_treatment)
+    
     
     def get_batch_num(self):
         batch_num = self.BatchOptions.get().split()[1]
         return batch_num
+    
+
+    def OpenTickBoxWindow(self, current_treatment):
+
+        self.TickedTreatmentBoxes = []
+
+        other_treatments = [treatment for treatment in self.TREATMENTLIST if treatment != current_treatment]
+
+        self.Tickbox = TickBoxWindow(self, other_treatments)
+
+        def on_close():
+            self.Tickbox.destroy()
+            self.master.focus_set()
+
+        self.Tickbox.protocol("WM_DELETE_WINDOW", on_close)
+        self.Tickbox.wait_window()
+
+        ticked_char = [self.treatment_to_treatment_char(treatment) for treatment in self.Tickbox.TickedTreatmentBoxes]
+        logger.debug(f"{self.TickedTreatmentBoxes=}")
+        logger.debug(f"{ticked_char=}")
+
+        return ticked_char
+    
+
+    def copy_to_other_treatment(self):
+        current_treatment = self.TreatmentOptions.get() #OK - just for display
+
+        message_ = f"You are going to copy current treatment parameters to other treatments'"
+        message_ += f"\nThis is an irreversible action, do you want to continue?"
+        confirm = tkinter.messagebox.askyesno("Confirmation", message_)
+        if not confirm:
+            return
+
+        logger.debug(f"Copying parameters from {current_treatment} to other treatment")
+
+        ticked_char = self.OpenTickBoxWindow(current_treatment)
+
+        # save current treatment parameters to other treatments
+        self.save_parameters(mode="current", save_target=ticked_char)
+
+        # # count current entries in available parameters
+        # target_amount = self.nested_key_1_frame.get_current_entry_quantity()
+        # # mimic the folder change of the current treatment to other treatment
+        # self.folder_changer(target_amount, treatment_mode=treatment_mode)
+
+        # Notification
+        message_ = "Copied the parameters settings to all other treatments and Saved!"
+        tkinter.messagebox.showinfo("Action Completed", message_)
+        logger.debug(message_)
 
 
-    def save_parameters(self, mode = "current"):
+    def save_parameters(self, mode = "current", save_target="self"):
         assert mode in ["current", "previous"]
 
         if mode == "current":
@@ -602,7 +661,8 @@ class App(customtkinter.CTk):
         project_dir = THE_HISTORY.get_project_dir(self.CURRENT_PROJECT)
         self.parameters_frame.save_parameters(project_dir = project_dir, 
                                               batch_num = batch_num,
-                                              treatment_char = treatment_char)
+                                              treatment_char = treatment_char,
+                                              save_target=save_target)
 
 
 

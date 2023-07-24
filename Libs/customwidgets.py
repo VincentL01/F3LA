@@ -68,12 +68,12 @@ class ProgressWindow(tkinter.Toplevel):
 
         self.total_label = tkinter.Label(self, text="Total Progress", font=FONT)
         self.total_label.pack(pady=5)
-        self.total = ttk.Progressbar(self, length=100, mode='determinate')
+        self.total = ttkinter.Progressbar(self, length=100, mode='determinate')
         self.total.pack(pady=5)
 
         self.task_label = tkinter.Label(self, text="Task Progress", font=FONT)
         self.task_label.pack(pady=5)
-        self.task = ttk.Progressbar(self, length=100, mode='determinate')
+        self.task = ttkinter.Progressbar(self, length=100, mode='determinate')
         self.task.pack(pady=5)
 
     def total_update(self, value, text="Total Progress"):
@@ -502,7 +502,7 @@ class ProjectDetailFrame(customtkinter.CTkFrame):
         super().__init__(master, **kwargs)
 
         # # Create tree view
-        # self.tree = ttk.Treeview(self, height = 5, show = "headings")
+        # self.tree = ttkinter.Treeview(self, height = 5, show = "headings")
         # self.tree.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
         
 
@@ -677,7 +677,7 @@ class InputWindow(tkinter.Toplevel):
 
 
         # set window size
-        self.geometry("400x500")
+        self.geometry("460x500")
 
         self.title("Project Input")
 
@@ -692,7 +692,7 @@ class InputWindow(tkinter.Toplevel):
 
         self.rowconfigure(0, weight=1)
         # Top Canvas
-        self.top_canvas = customtkinter.CTkScrollableFrame(self, width = 380)
+        self.top_canvas = customtkinter.CTkScrollableFrame(self, width = 440)
         # expand the canvas to fill the window
         self.top_canvas.grid(row=0, column=0, sticky="nsew")
 
@@ -705,6 +705,7 @@ class InputWindow(tkinter.Toplevel):
 
         self.DoseToggler = customtkinter.CTkCheckBox(self.top_canvas, text="Have Dose", command=self.toggle_dose)
         self.DoseToggler.grid(row=self.ROW, column=2, pady=5)
+        self.DoseToggler.select()
 
 
         self.ROW+=1
@@ -939,7 +940,7 @@ class InputWindow(tkinter.Toplevel):
         return self.CURRENT_PROJECT, self.PROJECT_CREATED
     
 
-class Parameters(customtkinter.CTkFrame):
+class Parameters(customtkinter.CTkScrollableFrame):
 
     def __init__(self, master, project_dir=None, *args, **kwargs):
         
@@ -969,6 +970,8 @@ class Parameters(customtkinter.CTkFrame):
             "Z POSITION": ""
         }
 
+        self.null_label_check()
+
         self.DATA_ZERO = {k: 0 for k in list(self.UNITS.keys())}
 
         if self.project_name == "":
@@ -980,7 +983,8 @@ class Parameters(customtkinter.CTkFrame):
         self.entries = {}
 
 
-    def null_label_display(self):
+    def null_label_check(self):
+        logger.debug(f"{self.null_label=}")
         if self.null_label == None:
             # Destroy null_label_notif if it exists
             logger.debug("Destroying null_label_notif")
@@ -990,7 +994,7 @@ class Parameters(customtkinter.CTkFrame):
                 pass
             return
         
-        self.null_label_notif = customtkinter.CTkLabel(self, text="No parameters found")
+        self.null_label_notif = customtkinter.CTkLabel(self, text="No parameters found, \nPress Load Project again to open Measurer window")
         self.null_label_notif.grid(row=0, column=0, padx=5, pady=5)
 
         
@@ -1073,6 +1077,7 @@ class Parameters(customtkinter.CTkFrame):
         try:
             with open(self.hyp_path, "r") as file:
                 ori_dict = json.load(file)
+
         except:
             try:
                 _ = ParamsCalculator(project_dir = project_dir,
@@ -1109,8 +1114,10 @@ class Parameters(customtkinter.CTkFrame):
 
                     logger.info("Measured completed, loading parameters")
                     self.load_parameters(project_dir, batch_num, treatment_char)
+                    self.null_label_check()
                 else:
                     logger.info("User chose not to open Measurer Window")
+                    self.null_label_check()
                     return
 
         
@@ -1147,7 +1154,7 @@ class Parameters(customtkinter.CTkFrame):
         for child in self.winfo_children():
             child.destroy()
 
-    def save_parameters(self, project_dir, batch_num, treatment_char):
+    def save_parameters(self, project_dir, batch_num, treatment_char, save_target):
         logger.debug(f"Saving parameters for {Path(project_dir).name}.Batch {batch_num}.Treatment {treatment_char}")
 
         def get_entry(entry_dict):
@@ -1197,21 +1204,88 @@ class Parameters(customtkinter.CTkFrame):
 
         logger.info(f"Parameters saved to {self.hyp_path}.")
 
+        
+        if save_target != "self":
+            for target_char in save_target:
+                target_hyp_path = self.get_hyp_path(project_dir, batch_num, target_char)
+                with open(target_hyp_path, "w") as file:
+                    json.dump(parameters_data, file, indent=4)
+                    logger.debug(f"Parameters from {treatment_char} saved to {target_char}.")
 
 
-class TickBoxList(customtkinter.CTkFrame):
 
-    def __init__(self, master, values, **kwargs):
+class TickBoxWindow(tkinter.Toplevel):
+
+    def __init__(self, master, values, box_command=None, **kwargs):
         super().__init__(master, **kwargs)
 
         self.values = values
+        self.master = master
+
+        # Configure window size
+        self.geometry("250x250")
 
         self.tickboxes = {}
 
+        ROW = 0
+
+        tickbox_height = 30
+        tickbox_padx = 30
+        tickbox_pady = 10
+        element_height = tickbox_height + tickbox_pady
+        max_tickbox_width = 0
+
+        font = ("Arial", 14)
+
+        # Configure custom style for the ttk.Checkbutton
+        custom_style = ttk.Style()
+        custom_style.configure("Custom.TCheckbutton", font=font)
+
         for i, value in enumerate(self.values):
-            tickbox = customtkinter.CTkCheckButton(self, text=value)
-            tickbox.grid(row=i, column=0, sticky="w")
+            tickbox = ttk.Checkbutton(self, text=value, style="Custom.TCheckbutton")
+
+            if box_command:
+                tickbox.configure(command=box_command)
+
+            tickbox.grid(row=ROW, column=0, padx=tickbox_padx, pady=tickbox_pady, sticky="w")
+
+            # Measure the width of the checkbox widget, not the text itself
+            tickbox_width = tickbox.winfo_reqwidth()
+
+            if tickbox_width > max_tickbox_width:
+                max_tickbox_width = tickbox_width
+
             self.tickboxes[value] = tickbox
 
+            # set default unchecked
+            tickbox.state(['!alternate'])
+
+            ROW += 1
+
+        self.ButtonFrame = tkinter.Frame(self)
+        self.ButtonFrame.grid(row=ROW, column=0, padx=tickbox_padx, pady=tickbox_pady)
+        ROW += 1
+
+        window_width = max_tickbox_width + tickbox_padx * 2
+        window_height = element_height * len(self.values) + 100
+
+        self.ConfirmButton = tkinter.Button(self.ButtonFrame, text="Confirm", command=self.confirm)
+        self.ConfirmButton.pack(side="left", fill="both", expand=True, padx=10)
+
+        # Configure window height to fit all tickboxes
+        self.update_idletasks()
+        self.geometry(f"{window_width}x{window_height}")
+
+        # self.wait_window()
+
     def ticked_boxes(self):
-        return [key for key, value in self.tickboxes.items() if value.get() == 1]
+        ticked = [key for key, value in self.tickboxes.items() if value.instate(['selected'])]
+        logger.debug(f"{ticked=}")
+        return ticked
+    
+
+    def confirm(self):
+        self.TickedTreatmentBoxes = self.ticked_boxes()
+        logger.debug(f"{self.TickedTreatmentBoxes=}")
+        logger.debug("Updated TickedTreatmentBoxes")
+        self.destroy()
