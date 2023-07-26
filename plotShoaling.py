@@ -200,3 +200,7 @@ def StandAlone3DPlot(given_fish_dict, limit_dict=None):
     root = tk.Tk()
     app = AnimatedPlot(given_fish_dict, master=root, limit_dict=limit_dict)
     app.mainloop()
+
+
+if __name__ == "__main__":
+    StandAlone3DPlot()

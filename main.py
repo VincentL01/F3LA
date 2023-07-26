@@ -271,9 +271,12 @@ class App(customtkinter.CTk):
 
         ### COLUMN 2 ###
 
+        column2_padx = 20
+        column2_pady = (10,5)
+
         # Create a canvas to hold the project parameters
         container_2 = customtkinter.CTkFrame(self, width = 400)
-        container_2.grid(row=0, column=2, columnspan = 2, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        container_2.grid(row=0, column=2, columnspan = 2, padx=(20, 0), pady=column2_pady, sticky="nsew")
 
         # ROW 0
         # Top part is a dropdown menu to select type of test
@@ -282,11 +285,11 @@ class App(customtkinter.CTk):
 
         Header = customtkinter.CTkLabel(container_2_top, text="Loaded Project:", anchor="w")
         Header.configure(**BOLD_LABEL_CONFIG)
-        Header.grid(row=0, column=0, padx=20, pady=(20, 10), sticky="nsew")
+        Header.grid(row=0, column=0, padx=column2_padx, pady=column2_pady, sticky="nsew")
 
         self.LoadedProject = customtkinter.CTkLabel(container_2_top, text="None", anchor="w")
         self.LoadedProject.configure(**BOLD_LABEL_CONFIG)
-        self.LoadedProject.grid(row=0, column=1, columnspan=2, padx=20, pady=(20, 10), sticky="nsew")
+        self.LoadedProject.grid(row=0, column=1, columnspan=2, padx=column2_padx, pady=column2_pady, sticky="nsew")
 
         # ROW 1
         self.BATCHLIST = ["Batch 1"]
@@ -298,17 +301,17 @@ class App(customtkinter.CTk):
         self.BatchOptions = customtkinter.CTkOptionMenu(self.container_2_mid, dynamic_resizing=False,
                                                         width = 105, values=self.BATCHLIST)
         self.BatchOptions.configure(**OPTION_MENU_CONFIG)
-        self.BatchOptions.grid(row=0, column=0, padx=20, pady=(20, 10), sticky="nsew")
+        self.BatchOptions.grid(row=0, column=0, padx=column2_padx, pady=column2_pady, sticky="nsew")
 
         self.BatchAddButton = customtkinter.CTkButton(self.container_2_mid, text="Add Batch", width = 40,
                                                         command=self.add_batch)
         self.BatchAddButton.configure(**BUTTON_CONFIG)
-        self.BatchAddButton.grid(row=0, column=1, padx=20, pady=(20, 10), sticky="nsew")
+        self.BatchAddButton.grid(row=0, column=1, padx=column2_padx, pady=column2_pady, sticky="nsew")
 
         self.BatchRemoveButton = customtkinter.CTkButton(self.container_2_mid, text="Remove Batch", width = 40,
                                                         command=self.remove_batch)
         self.BatchRemoveButton.configure(**BUTTON_CONFIG)
-        self.BatchRemoveButton.grid(row=0, column=2, padx=20, pady=(20, 10), sticky="nsew")
+        self.BatchRemoveButton.grid(row=0, column=2, padx=column2_padx, pady=column2_pady, sticky="nsew")
         
         # self.TestOptions = customtkinter.CTkOptionMenu(self.container_2_mid, dynamic_resizing=False, 
         #                                           width=210, values=self.TESTLIST)
@@ -322,13 +325,13 @@ class App(customtkinter.CTk):
         self.TreatmentOptions = customtkinter.CTkOptionMenu(self.container_2_mid, dynamic_resizing=False,
                                                                 width=210, values=self.TREATMENTLIST)
         self.TreatmentOptions.configure(**OPTION_MENU_CONFIG)
-        self.TreatmentOptions.grid(row=2, column=0, columnspan=3, padx=20, pady=(20, 10), sticky="nsew")
+        self.TreatmentOptions.grid(row=2, column=0, columnspan=2, padx=column2_padx, pady=column2_pady, sticky="nsew")
 
 
         # create a Cloner button to copy current treatment's parameters to other treatment
         self.Cloner = customtkinter.CTkButton(self.container_2_mid, text="Copy to other treatment", width = 50,
                                               command=self.copy_to_other_treatment)
-        self.Cloner.grid(row=3, column=0, pady=20, padx=20, sticky="nsew")
+        self.Cloner.grid(row=2, column=2, padx=column2_padx, pady=column2_pady, sticky="nsew")
 
 
         # Row 2
@@ -337,7 +340,7 @@ class App(customtkinter.CTk):
 
         project_dir = THE_HISTORY.get_project_dir(self.CURRENT_PROJECT)
 
-        self.parameters_frame = Parameters(self.container_2_bot, project_dir, width = 400)
+        self.parameters_frame = Parameters(self.container_2_bot, project_dir, height = 500, width = 400)
         self.parameters_frame.grid(row=0, columnspan=3, padx=20, pady=20, sticky="nsew")
 
         
