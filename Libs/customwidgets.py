@@ -68,12 +68,12 @@ class ProgressWindow(tkinter.Toplevel):
 
         self.total_label = tkinter.Label(self, text="Total Progress", font=FONT)
         self.total_label.pack(pady=5)
-        self.total = ttkinter.Progressbar(self, length=100, mode='determinate')
+        self.total = ttk.Progressbar(self, length=100, mode='determinate')
         self.total.pack(pady=5)
 
         self.task_label = tkinter.Label(self, text="Task Progress", font=FONT)
         self.task_label.pack(pady=5)
-        self.task = ttkinter.Progressbar(self, length=100, mode='determinate')
+        self.task = ttk.Progressbar(self, length=100, mode='determinate')
         self.task.pack(pady=5)
 
     def total_update(self, value, text="Total Progress"):

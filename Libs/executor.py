@@ -394,6 +394,8 @@ class Executor():
                                                        fish_num=fish_num,
                                                        DISPLAY=DISPLAY)
             
+            logger.debug(f"AV plot for Fish {fish_num} saved to {save_path}")
+            
                                                     
     
     

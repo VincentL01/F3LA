@@ -413,9 +413,10 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startcol=None, startro
                 startcol=startcol if startcol is not None else 0, 
                 startrow=startrow if startrow is not None else 0,
                 **to_excel_kwargs)
-            logger.info(f"Successful write to {filename}/{sheet_name} at column = {startcol}, row = {startrow}")
+            logger.info(f"Successful write to {filename}, sheet={sheet_name} at column = {startcol}, row = {startrow}")
         except:
-            logger.warning(f"UNSUCCESS write to {filename}/{sheet_name} at column = {startcol}, row = {startrow}")
+            logger.warning(f"UNSUCCESS write to {filename}, sheet={sheet_name} at column = {startcol}, row = {startrow}")
+            logger.debug(f"df: {df}")
 
         # wb = openpyxl.load_workbook(filename)
         # ws = wb[sheet_name]
