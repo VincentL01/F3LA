@@ -414,7 +414,8 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startcol=None, startro
                 startrow=startrow if startrow is not None else 0,
                 **to_excel_kwargs)
             logger.info(f"Successful write to {filename}, sheet={sheet_name} at column = {startcol}, row = {startrow}")
-        except:
+        except Exception as e:
+            logger.warning(f"EXCEPTION: {e}")
             logger.warning(f"UNSUCCESS write to {filename}, sheet={sheet_name} at column = {startcol}, row = {startrow}")
             logger.debug(f"df: {df}")
 

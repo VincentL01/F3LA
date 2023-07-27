@@ -883,7 +883,7 @@ class Speed_A(CustomDisplay):
             append_df_to_excel(filename=excel_path,
                                 df=df,
                                 sheet_name='Angular Velocity',
-                                row=0,
+                                startrow=0,
                                 index=index)
 
         if DISPLAY:
