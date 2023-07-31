@@ -15,5 +15,5 @@ Email: [thang.luongcao@gmail.com](mailto:thang.luongcao@gmail.com)
 
 # GUI
 
-    ![readme_01](https://github.com/ThangLC304/LA3D/blob/main/bin/readme01.png?raw=true)
+![readme_01](https://github.com/ThangLC304/LA3D/blob/main/bin/readme01.png?raw=true)
 
