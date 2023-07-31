@@ -94,7 +94,47 @@ def pearson_corr(list1, list2):
         return np.corrcoef(arr1, arr2)[0, 1]
     else:
         return "The lists have different lengths!"
+
+def calculate_turning_angle(x1, y1, x2, y2, x3, y3):
+    """
+    Compute the turning angle (in degrees) at point B=(x2, y2) for a path defined by points A=(x1, y1), B=(x2, y2), and C=(x3, y3).
+    The turning angle is the angle between vectors AB and BC.
+    Positive values represent right turns, negative values represent left turns.
+    """
+
+    # Calculate direction vectors
+    D1 = (x2 - x1, y2 - y1)  # BA'
+    D2 = (x3 - x2, y3 - y2)  # BC
+
+    # Calculate dot product
+    dot_product = D1[0]*D2[0] + D1[1]*D2[1]
+
+    # Calculate magnitudes
+    mag_D1 = math.sqrt(D1[0]**2 + D1[1]**2)
+    mag_D2 = math.sqrt(D2[0]**2 + D2[1]**2)
+
+    # Calculate cosine of the angle
+    try:
+        cos_theta = dot_product / (mag_D1 * mag_D2)
+    except ZeroDivisionError:
+        cos_theta = 0
+    cos_theta = max(-1, min(1, cos_theta))
     
+    # Calculate the angle in radians
+    theta_rad = math.acos(cos_theta)
+
+    # Convert the angle to degrees
+    theta_deg = math.degrees(theta_rad)
+
+    # Calculate cross product
+    cross_product = D1[0]*D2[1] - D1[1]*D2[0]
+    
+    # If cross product is positive, make the angle negative
+    if cross_product > 0:
+        theta_deg = -theta_deg
+
+    return theta_deg
+
 
 def compute_turning_angle(x1, y1, x2, y2, x3, y3):
     """
@@ -232,12 +272,19 @@ def FD_Entropy_Calculator(input_df):
     for i in range(FRAMES):
         N1[i] = countif(list(delta_r.values()), thresholds[i])
         Cr[i] = N1[i] / (FRAMES - 1)
+
         try:
-            sigma[i] = math.log10(Cr[i])/math.log10(thresholds[i])
-        except:
-            print(f"i = {i}, N1[i] = {N1[i]}, C[i] = {Cr[i]}, thresholds[i] = {thresholds[i]}")
+            logCr[i] = math.log10(Cr[i])
+        except Exception as e:
+            logger.error(f"At i = {i}, Cr[i] = {Cr[i]}")
+            logger.error(f"Set Cr[i] to 10e-10")
+            Cr[i] = 10e-10
+            logCr[i] = math.log10(Cr[i])
+
+        sigma[i] = math.log10(Cr[i])/math.log10(thresholds[i])
         logr[i] = math.log10(thresholds[i])
-        logCr[i] = math.log10(Cr[i])
+
+        
 
     APPROCH = 0.000
     neg_close = math.inf*(-1)

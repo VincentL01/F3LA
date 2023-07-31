@@ -4,7 +4,7 @@ import pandas as pd
 
 
 from Libs.general import Loader, Time, Events, Area, Distance, Speed, Angle, Speed_A
-from Libs.misc import compute_turning_angle, event_extractor, FD_Entropy_Calculator, HullVolumeCalculator
+from Libs.misc import compute_turning_angle, event_extractor, FD_Entropy_Calculator, HullVolumeCalculator, calculate_turning_angle
 from . import ALLOWED_DECIMALS
 
 import logging
@@ -170,7 +170,7 @@ class TurningAngles():
         intervalized_Y_coords = self.Y_coords[::interval]
 
         for i in range(len(intervalized_X_coords) - 2):
-            turning_angle = compute_turning_angle(intervalized_X_coords[i], intervalized_Y_coords[i], intervalized_X_coords[i + 1], intervalized_Y_coords[i + 1], intervalized_X_coords[i + 2], intervalized_Y_coords[i + 2])
+            turning_angle = calculate_turning_angle(intervalized_X_coords[i], intervalized_Y_coords[i], intervalized_X_coords[i + 1], intervalized_Y_coords[i + 1], intervalized_X_coords[i + 2], intervalized_Y_coords[i + 2])
             turning_angles.append(turning_angle)
 
         # for i in range(len(self.X_coords) - 2 * interval):

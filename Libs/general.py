@@ -804,8 +804,9 @@ class Angle(CustomDisplay):
 
         self.angle_class = angle_class
         self.frame_rate = frame_rate
+        self.interval = interval
 
-        self.list = self.angle_class.turning_angles(interval=1)
+        self.list = self.angle_class.turning_angles(interval=self.interval)
         self.absolute = [abs(x) for x in self.list]
         self.total = round(sum(self.absolute), ALLOWED_DECIMALS)
         self.avg = round(mean(self.absolute), ALLOWED_DECIMALS)
@@ -825,7 +826,7 @@ class Angle(CustomDisplay):
         angular_velocity_list = []
         for i in range(len(self.list)):
             # Angular velocity = Turning angle/Time
-            angular_velocity = self.absolute[i]*self.frame_rate
+            angular_velocity = self.absolute[i]*self.frame_rate/self.interval
             angular_velocity_list.append(angular_velocity)
             # UNIT: degree/s
         angular_velocity = Speed_A(speed_a_list = angular_velocity_list)
@@ -834,8 +835,10 @@ class Angle(CustomDisplay):
     
 
     def set_interval(self, interval):
+
+        self.interval = interval
             
-        self.list = self.angle_class.turning_angles(interval=interval)
+        self.list = self.angle_class.turning_angles(interval=self.interval)
         self.absolute = [abs(x) for x in self.list]
         self.total = round(sum(self.absolute), ALLOWED_DECIMALS)
         self.avg = round(mean(self.absolute), ALLOWED_DECIMALS)
@@ -872,9 +875,14 @@ class Speed_A(CustomDisplay):
         plt.xlabel('Angular Velocity (degree/s)')
         plt.ylabel('Frequency')
         if save_path:
+            # if save_path file existed, overwrite
+            if os.path.exists(save_path):
+                os.unlink(save_path)
             plt.savefig(save_path)
 
         if excel_path and fish_num:
+            if fish_num == 1:
+                os.unlink(excel_path)
             if os.path.exists(excel_path):
                 index=False
             else:
