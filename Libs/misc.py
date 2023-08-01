@@ -378,8 +378,12 @@ def HullVolumeCalculator(fishes_coords, surface = ['X', 'Y', 'Z']):
         coords_array = frame_coords[surface].to_numpy()
         
         # Calculate the convex hull
-        hull = ConvexHull(coords_array)
-        volumes.append(hull.volume)
+        try:
+            hull = ConvexHull(coords_array)
+            hull_volume = hull.volume
+        except: # In case the convex hull cannot be calculated
+            hull_volume = 0
+        volumes.append(hull_volume)
 
     # Create a dataframe with the calculated volumes
     df_volumes = pd.DataFrame(volumes, columns=['ConvexHullVolume'])
