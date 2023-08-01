@@ -723,6 +723,7 @@ def find_treatment_num(given_string):
             indicator = char_to_index(indicator)
         except Exception as e:
             message = f"[STRUCTURE ERROR] The indicator before the dash char ( - ) in Treatment folder name is unusual!\n{e}"
+            logger.error(f"{indicator=}")
             raise Exception(message)
 
     return indicator
@@ -763,7 +764,7 @@ class Importer():
 
     def data_sorter(self):
         # find all directories inside
-        treatment_dirs = [x for x in self.import_project_dir.iterdir() if x.is_dir()]
+        treatment_dirs = [x for x in self.import_project_dir.iterdir() if x.is_dir() and "-" in x.name]
 
         import_data = {}
 
