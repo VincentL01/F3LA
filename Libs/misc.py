@@ -748,7 +748,7 @@ def substance_dose_unit_finder(given_string):
 
 class Importer():
 
-    def __init__(self, import_project_dir, target_project_dir, trajectories_format="trajectories_nogap.txt"):
+    def __init__(self, import_project_dir, target_project_dir, trajectories_format="trajectories_nogaps.txt"):
                  
         self.import_project_dir = Path(import_project_dir)
         self.target_project_dir = Path(target_project_dir)
