@@ -914,7 +914,7 @@ class App(customtkinter.CTk):
         
         importer = Importer(import_project_dir = import_project_dir,
                             target_project_dir=THE_HISTORY.get_project_dir(self.CURRENT_PROJECT),
-                            trajectories_format="trajectories_nogap.txt")
+                            trajectories_format="trajectories_nogaps.txt")
         
         importer.import_trajectories()
 
