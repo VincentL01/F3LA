@@ -39,7 +39,11 @@ if !bat_found!==0 (
 
 echo "Updating program..."
 
-
+if "%OS%"=="Windows_NT" (
+        set "get_git=call %conda_path%\Scripts\conda install -c anaconda git -y"
+) else (
+        set "get_git=call $conda_path/bin/conda install -c anaconda git -y"
+)
 
 @REM Check if Git is installed
 where git >nul 2>nul
@@ -52,12 +56,9 @@ if errorlevel 1 (
   echo git path is !git_path!
 )
 
-
 if "%OS%"=="Windows_NT" (
-        set "get_git=call %conda_path%\Scripts\conda install -c anaconda git -y"
         set clone_cmd=call "!git_path!" clone %my_repo% %my_dir%
 ) else (
-        set "get_git=call $conda_path/bin/conda install -c anaconda git -y"
         set clone_cmd=call "!git_path!" clone %my_repo% %my_dir%
 )
 
