@@ -26,7 +26,16 @@ class GeneralAnalysis(Loader):
         # self.BasicCalculation()
 
     
-    def BasicCalculation(self):
+    def BasicCalculation(self, DEFAULT_INTERVAL = 1):
+
+        if DEFAULT_INTERVAL > self.PARAMS["FRAME RATE"]:
+            logger.error(f"User set {DEFAULT_INTERVAL=} but {self.PARAMS['FRAME RATE']=} is smaller than {DEFAULT_INTERVAL=}. Please check the code.")
+            raise Exception(f"{self.PARAMS['FRAME RATE']=} is smaller than {DEFAULT_INTERVAL=}. Please check the code.")
+
+        if self.PARAMS["FRAME RATE"] % DEFAULT_INTERVAL != 0:
+            logger.error(f"User set {DEFAULT_INTERVAL=} but {self.PARAMS['FRAME RATE']=} is not divisible by {DEFAULT_INTERVAL=}. Please check the code.")
+            raise Exception(f"{self.PARAMS['FRAME RATE']=} is not divisible by {DEFAULT_INTERVAL=}. Please check the code.")
+
 
         distance_list = []
 
@@ -76,8 +85,7 @@ class GeneralAnalysis(Loader):
         turning_angle = TurningAngles(X_coords = self.TJ_df['X'].tolist(),
                                       Y_coords = self.TJ_df['Y'].tolist())
         
-        DEFAULT_INTERVAL = 1 # 1 frame
-
+        
         self.turning_angle = Angle(angle_class = turning_angle, 
                                    frame_rate=self.PARAMS["FRAME RATE"], 
                                    interval = DEFAULT_INTERVAL)

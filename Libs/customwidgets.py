@@ -958,6 +958,7 @@ class Parameters(customtkinter.CTkScrollableFrame):
         self.UNITS = {
             "DURATION": "seconds",
             "FRAME RATE": "frames/second",
+            # "AV INTERVAL": "frames",
             "X POSITION": "",
             "CENTER X": "",
             "CONVERSION SV": "pixels/cm",

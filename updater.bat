@@ -2,8 +2,9 @@
 setlocal enabledelayedexpansion
 
 set "my_repo=https://github.com/ThangLC304/LA3D"
-@REM set my_dir at current directory/temp_update
-set "my_dir=%cd%\temp_update"
+@REM set my_dir at parent directory/temp_update
+set "parent_dir=%~dp0.."
+set "my_dir=%parent_dir%\temp_update"
 
 @REM Make my_dir if not existed
 if not exist "%my_dir%" mkdir "%my_dir%"

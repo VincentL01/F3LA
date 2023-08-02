@@ -761,24 +761,32 @@ class Speed(CustomDisplay):
     def __init__(self, speed_list, total_frames):
 
         self.list = speed_list
+        self.total_frames = total_frames
+
         self.max = round(max(self.list), ALLOWED_DECIMALS)
         self.min = round(min(self.list), ALLOWED_DECIMALS)
         self.avg = round(mean(self.list), ALLOWED_DECIMALS)
         self.unit = 'cm/s'
 
-        self.Classifier(total_frames=total_frames)
+        self.Classifier()
 
     
     def __add__(self, other):
 
+        # Check if other has list and total_frames
+        if not hasattr(other, 'list') or not hasattr(other, 'total_frames'):
+            raise AttributeError("Other object doesn't have 'list' or 'total_frames' attribute")
+
         temp_list = self.list + other.list
-        return Speed(temp_list, self.hyp)
-    
 
-    def Classifier(self, total_frames):
+        if self.total_frames != other.total_frames:
+            raise ValueError(f"Total frames of self and other are not the same, {self.total_frames=} != {other.total_frames=}")
+        else:
+            return Speed(temp_list, self.total_frames)
 
-        THRESHOLD_1 = 1
-        THRESHOLD_2 = 10
+    def Classifier(self, 
+                   THRESHOLD_1 = 1,
+                   THRESHOLD_2 = 10):
 
         slow_count = 0
         medium_count = 0
@@ -792,9 +800,9 @@ class Speed(CustomDisplay):
             else:
                 fast_count += 1
 
-        self.slow = round(slow_count / total_frames * 100, ALLOWED_DECIMALS)
-        self.medium = round(medium_count / total_frames * 100, ALLOWED_DECIMALS)
-        self.fast = round(fast_count / total_frames * 100, ALLOWED_DECIMALS)
+        self.slow = round(slow_count / self.total_frames * 100, ALLOWED_DECIMALS)
+        self.medium = round(medium_count / self.total_frames * 100, ALLOWED_DECIMALS)
+        self.fast = round(fast_count / self.total_frames * 100, ALLOWED_DECIMALS)
 
         
 
@@ -804,47 +812,48 @@ class Angle(CustomDisplay):
 
         self.angle_class = angle_class
         self.frame_rate = frame_rate
-        self.interval = interval
 
-        self.list = self.angle_class.turning_angles(interval=self.interval)
-        self.absolute = [abs(x) for x in self.list]
-        self.total = round(sum(self.absolute), ALLOWED_DECIMALS)
-        self.avg = round(mean(self.absolute), ALLOWED_DECIMALS)
-        self.unit = 'degree'
+        self.interval = -1
+        self.set_interval(interval=interval)
 
-        self.velocity = self.calculate_velocity()
-
-
-    def __add__(self, other):
-
-        temp_list = self.list + other.list
-        return Angle(temp_list, self.hyp)
-    
 
     def calculate_velocity(self):
+
+        def chunk_calc(input_list : list[float], chunk_size : int) -> list[float]:
+            logger.debug(f"Calculated angular velocity using chunk_calc(), {chunk_size=}")
+            return [abs(sum(input_list[i:i+chunk_size])) for i in range(0, len(input_list), chunk_size)]
         
-        angular_velocity_list = []
-        for i in range(len(self.list)):
-            # Angular velocity = Turning angle/Time
-            angular_velocity = self.absolute[i]*self.frame_rate/self.interval
-            angular_velocity_list.append(angular_velocity)
-            # UNIT: degree/s
+        # angular_velocity_list = []
+        # for i in range(len(self.list)):
+        #     # Angular velocity = Turning angle/Time
+        #     angular_velocity = self.list[i]
+        #     angular_velocity_list.append(angular_velocity)
+        #     # UNIT: degree/s
+        chunk_size = int(self.frame_rate/self.interval)
+        angular_velocity_list = chunk_calc(input_list=self.list, chunk_size=chunk_size)
+
+        # [NOTE] Used same name for the class and the variablwe to save memory, but they are different
+            
         angular_velocity = Speed_A(speed_a_list = angular_velocity_list)
 
         return angular_velocity
     
 
     def set_interval(self, interval):
-
-        self.interval = interval
+        
+        if self.interval == interval:
+            logger.warning(f"Interval is already {self.interval}, no need to set again.")
+        else:
+            logger.info(f"Setting interval to {interval}")
+            self.interval = interval
             
-        self.list = self.angle_class.turning_angles(interval=self.interval)
-        self.absolute = [abs(x) for x in self.list]
-        self.total = round(sum(self.absolute), ALLOWED_DECIMALS)
-        self.avg = round(mean(self.absolute), ALLOWED_DECIMALS)
-        self.unit = 'degree'
+            self.list = self.angle_class.turning_angles(interval=self.interval)
+            self.absolute = [abs(x) for x in self.list]
+            self.total = round(sum(self.absolute), ALLOWED_DECIMALS)
+            self.avg = round(mean(self.absolute), ALLOWED_DECIMALS)
+            self.unit = 'degree'
 
-        self.velocity = self.calculate_velocity()
+            self.velocity = self.calculate_velocity()
 
 
 
@@ -853,18 +862,36 @@ class Speed_A(CustomDisplay):
     def __init__(self, speed_a_list):
 
         self.list = speed_a_list
+        self.total_instances = len(self.list)
+
         self.max = round(max(self.list), ALLOWED_DECIMALS)
         self.min = round(min(self.list), ALLOWED_DECIMALS)
         self.avg = round(mean(self.list), ALLOWED_DECIMALS)
         self.unit = 'degree/s'
 
-    
-    def __add__(self, other):
+        self.Classifier()
 
-        temp_list = self.list + other.list
-        return Speed_A(temp_list, self.hyp)
-    
 
+    def Classifier(self, THRESHOLD = 90):
+
+        slow_count = 0
+        fast_count = 0
+
+        for speed in self.list:
+            if speed < 0:
+                raise Exception(f"Negative speed, {speed=} found, please check your input.")
+            if speed > 181:
+                raise Exception(f"Speed > 180, {speed=} found, please check your input.")
+            
+            if speed <= THRESHOLD:
+                slow_count += 1
+            else:
+                fast_count += 1
+
+        self.slow = round(slow_count / self.total_instances * 100, ALLOWED_DECIMALS)
+        self.fast = round(fast_count / self.total_instances * 100, ALLOWED_DECIMALS)
+
+    
     def plot_histogram(self, bins=100, DISPLAY=True, save_path=None, excel_path=None, fish_num=None):
 
         #reset figure

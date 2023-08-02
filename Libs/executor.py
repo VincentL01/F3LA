@@ -44,6 +44,16 @@ def EndPoints_Adder(object):
     unit = object.turning_angle.velocity.unit
     add_endpoint(name, value, unit)
 
+    name = "Slow Angular Velocity Percentage"
+    value = object.turning_angle.velocity.slow
+    unit = "%"
+    add_endpoint(name, value, unit)
+
+    name = "Fast Angular Velocity Percentage"
+    value = object.turning_angle.velocity.fast
+    unit = "%"
+    add_endpoint(name, value, unit)
+
     name = "Meandering"
     value = object.meandering
     unit = "degree/m"
@@ -230,7 +240,7 @@ class Executor():
         self.timing["Trajectories loading"] = time.time() - _starttime
 
 
-    def ENDPOINTS_ANALYSIS(self, OVERWRITE=False):
+    def ENDPOINTS_ANALYSIS(self, OVERWRITE=False, AV_interval=None):
 
         # ENDPOINTS ANALYSIS
         _starttime = time.time()
@@ -249,6 +259,17 @@ class Executor():
                 # remove existing file
                 self.excel_path.unlink()
 
+        DEFAULT_INTERVAL = self.PARAMS["FRAME RATE"]
+
+        if AV_interval == None:
+            AV_interval = DEFAULT_INTERVAL
+        else:
+            try:
+                AV_interval = int(float(AV_interval))
+            except:
+                AV_interval = DEFAULT_INTERVAL
+                logger.error(f"Invalid AV_interval. Using default value = {self.PARAMS['FRAME RATE']} instead.")
+
 
         # FishQuantities = count the number of .csv file in self.trajectories_dir
         self.FishQuantities = len(list(self.trajectories_dir.glob("*.csv")))
@@ -257,7 +278,7 @@ class Executor():
         self.EndPoints = {}
         self.FishCoordinates = {}
 
-        self.Fish_Adder(EPA = self.EPA)
+        self.Fish_Adder(EPA = self.EPA, AV_interval = AV_interval)
 
         if self.EPA:
             ShoalingAnalyze = ShoalingAnalysis(self.FishCoordinates)
@@ -354,7 +375,7 @@ class Executor():
 
 
     
-    def Fish_Adder(self, EPA=True):
+    def Fish_Adder(self, EPA=True, AV_interval = 1):
 
         for fish_num in range(1, self.FishQuantities+1):
             _starttime = time.time()
@@ -365,7 +386,7 @@ class Executor():
                                                     params = self.PARAMS)
             if EPA == True:
                 logger.info(f"EndPoints analysis for Fish {fish_num} initiated...")
-                self.FISHES[fish_num].BasicCalculation()
+                self.FISHES[fish_num].BasicCalculation(DEFAULT_INTERVAL = AV_interval)
                 self.EndPoints[fish_num] = EndPoints_Adder(self.FISHES[fish_num])
                 self.FishCoordinates[fish_num] = self.FISHES[fish_num].TJ_df
             else:
