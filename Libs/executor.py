@@ -316,6 +316,14 @@ class Executor():
         sa = list(self.shoalingarea["ConvexHullVolume"])
         sv = list(self.shoalingvolume["ConvexHullVolume"])
 
+        CONVERT_RATIO_AREA = 1 / self.PARAMS["CONVERSION TV"] ** 2
+        CONVERT_RATIO_VOLUME = 1 / self.PARAMS["CONVERSION TV"] ** 3
+
+        # Convert sa from pixel^2 to cm^2
+        sa = [i * CONVERT_RATIO_AREA for i in sa]
+        # Convert sv from pixel^3 to cm^3
+        sv = [i * CONVERT_RATIO_VOLUME for i in sv]
+
         SA_HEADER = "Shoaling Area"
         SV_HEADER = "Shoaling Volume"
 

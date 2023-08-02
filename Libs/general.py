@@ -821,7 +821,7 @@ class Angle(CustomDisplay):
 
         def chunk_calc(input_list : list[float], chunk_size : int) -> list[float]:
             logger.debug(f"Calculated angular velocity using chunk_calc(), {chunk_size=}")
-            return [abs(sum(input_list[i:i+chunk_size])) for i in range(0, len(input_list), chunk_size)]
+            return [abs(sum(input_list[i:i+chunk_size]))%180 for i in range(0, len(input_list), chunk_size)]
         
         # angular_velocity_list = []
         # for i in range(len(self.list)):
@@ -830,6 +830,7 @@ class Angle(CustomDisplay):
         #     angular_velocity_list.append(angular_velocity)
         #     # UNIT: degree/s
         chunk_size = int(self.frame_rate/self.interval)
+        print(f"{chunk_size=}, {self.frame_rate=} {self.interval=}")
         angular_velocity_list = chunk_calc(input_list=self.list, chunk_size=chunk_size)
 
         # [NOTE] Used same name for the class and the variablwe to save memory, but they are different
@@ -877,11 +878,11 @@ class Speed_A(CustomDisplay):
         slow_count = 0
         fast_count = 0
 
-        for speed in self.list:
+        for i, speed in enumerate(self.list):
             if speed < 0:
                 raise Exception(f"Negative speed, {speed=} found, please check your input.")
             if speed > 181:
-                raise Exception(f"Speed > 180, {speed=} found, please check your input.")
+                raise Exception(f"Speed > 180, {speed=} found at position {i}/{len(self.list)} please check your input.")
             
             if speed <= THRESHOLD:
                 slow_count += 1
