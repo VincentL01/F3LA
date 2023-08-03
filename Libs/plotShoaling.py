@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.spatial import ConvexHull
-from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import matplotlib.pyplot as plt
 import matplotlib
 from tkinter import *
@@ -12,6 +11,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 from Libs.misc import HullVolumeCalculator
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+matplotlib_logger = logging.getLogger('matplotlib')
+matplotlib_logger.setLevel(logging.WARNING)
 
 class VolumePlot(tk.Toplevel):
     def __init__(self, volumes, master=None):
@@ -48,7 +54,8 @@ class AnimatedPlot(tk.Toplevel):
         self.master = master
         self.fishes_coords = fishes_coords
         self.frame_num = 0
-        self.is_paused = False
+        self.is_paused = True
+        self._after_id = None
     
         if limit_dict == None:
             limit_dict = {"X": 700,
@@ -64,7 +71,9 @@ class AnimatedPlot(tk.Toplevel):
         self.max_length = min([len(df) for df in fishes_coords.values()]) - 1
 
         # Creating play button
-        self.play_button = tk.Button(self, text='Play', command=self.play)
+        # self.play_button = tk.Button(self, text='Play', command=self.play)
+        # self.play_button.pack()
+        self.play_button = tk.Button(self, text='Play', command=self.play_pause)
         self.play_button.pack()
 
          # Creating slider
@@ -78,7 +87,6 @@ class AnimatedPlot(tk.Toplevel):
         # Create a label to display the current frame
         self.frame_label = tk.Label(self, text="Frame: 0")
         self.frame_label.pack()
-
 
         # Create the VolumePlot
         print("Calculating volume")
@@ -101,28 +109,50 @@ class AnimatedPlot(tk.Toplevel):
         # Creating initial plot
         self.plot_current_frame()
 
+        # bind the "X" icon to the close_window method
+        self.protocol("WM_DELETE_WINDOW", self.close_window)
+
 
     def updater(self):
         self.frame_label['text'] = f"Frame: {self.frame_num}"
         self.volume_plot.move_dot(self.frame_num)
 
 
-    def play(self):
+    def close_window(self):
+        logger.debug("Destroy method called")
+        try:
+            self.after_cancel(self._after_id)  # cancel the scheduled task
+        except ValueError:
+            logger.debug("No scheduled task")
+            
+        self.master.deiconify()
+        # destoy this window
+        self.destroy()
+
+    def play_pause(self):
         self.is_paused = not self.is_paused
+        logger.debug(f"{self.is_paused=}")
+        self.play_button.config(text='Pause' if not self.is_paused else 'Play')
+        if not self.is_paused:
+            logger.debug(f"Start playing")
+            self.play()
+
+    def play(self):
+        # self.is_paused = not self.is_paused
         if not self.is_paused and self.frame_num < self.max_length:
             self.plot_current_frame()
             self.frame_num += 1
             self.slider.set(self.frame_num)
             self.updater()
-            self.after(10, self.play)  # call 'play' function after 100 ms
+            self._after_id = self.after(10, self.play)  # call 'play' function after 100 ms
         elif self.frame_num >= self.max_length:
             self.is_paused = True
         else:
             print("Animation paused")  # Debugging statement
             return
 
+
     def on_slider_moved(self, value):
-        self.is_paused = True
         self.frame_num = int(float(value))
         self.updater()
         self.plot_current_frame()
@@ -168,7 +198,6 @@ class AnimatedPlot(tk.Toplevel):
         self.ax.set_zlim([0, self.ZLIM])
 
         self.canvas.draw()
-
 
 def StandAlone3DPlot(given_fish_dict, limit_dict=None):
     root = tk.Tk()

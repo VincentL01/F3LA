@@ -22,6 +22,7 @@ from Libs.misc import *
 from Libs.customwidgets import *
 from Libs.project import CreateProject
 from Libs.executor import Executor
+from Libs.plotShoaling import AnimatedPlot
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -162,75 +163,90 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
         
+        SIDEBAR_ROW = 0
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text=APP_TITLE)
         self.logo_label.configure(**LOGO_CONFIG)
-        self.logo_label.grid(row=0, column=0, columnspan=2, padx=20, pady=(20, 10))
+        self.logo_label.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(20, 10))
         
+        SIDEBAR_ROW += 1
         self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, 
                                                         text="Create Project", 
                                                         command=self.create_project
                                                         )
         self.sidebar_button_1.configure(**PANEL_BUTTON_CONFIG)
-        self.sidebar_button_1.grid(row=1, column=0, columnspan=2, padx=20, pady=20)
+        self.sidebar_button_1.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=20)
 
+        SIDEBAR_ROW += 1
         self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame, 
                                                         text="Load Project", 
                                                         command=self.load_project
                                                         )
         self.sidebar_button_2.configure(**PANEL_BUTTON_CONFIG)
-        self.sidebar_button_2.grid(row=2, column=0, columnspan=2, padx=20, pady=20)
-
+        self.sidebar_button_2.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=20)
+        
+        SIDEBAR_ROW += 1
         self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame, 
                                                         text="Delete Project", 
                                                         command=self.delete_project
                                                         )
         self.sidebar_button_3.configure(**PANEL_BUTTON_CONFIG)
-        self.sidebar_button_3.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
+        self.sidebar_button_3.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=20)
 
-
+        SIDEBAR_ROW += 1
         self.ImportButton = customtkinter.CTkButton(self.sidebar_frame, 
                                                          text="Import Trajectories",
                                                          command=self.import_trajectories
                                                          )
         self.ImportButton.configure(**PANEL_BUTTON_CONFIG)
-        self.ImportButton.grid(row=4, column=0, columnspan = 2, padx=20, pady=20)
+        self.ImportButton.grid(row=SIDEBAR_ROW, column=0, columnspan = 2, padx=20, pady=20)
 
-
+        SIDEBAR_ROW += 1
         self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, 
                                                         text="Export Trajectories", 
                                                         command=self.export_trajectories_THREADED
                                                         )
         self.sidebar_button_4.configure(**PANEL_BUTTON_CONFIG)
-        self.sidebar_button_4.grid(row=5, column=0, columnspan=2, padx=20, pady=20)
+        self.sidebar_button_4.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=20)
 
-
+        SIDEBAR_ROW += 1
         self.sidebar_button_5 = customtkinter.CTkButton(self.sidebar_frame, 
                                                         text="Analyze", 
                                                         command=self.analyze_project_THREADED
                                                         )
         self.sidebar_button_5.configure(**PANEL_BUTTON_CONFIG)
-        self.sidebar_button_5.grid(row=6, column=0, columnspan=2, padx=20, pady=20)
+        self.sidebar_button_5.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=20)
 
+        SIDEBAR_ROW += 1
+        self.ShoalingPlotButton = customtkinter.CTkButton(self.sidebar_frame,
+                                                            text="Plot Shoaling",
+                                                            command=self.plot_shoaling
+                                                            )
+        self.ShoalingPlotButton.configure(**PANEL_BUTTON_CONFIG)
+        self.ShoalingPlotButton.grid(row=SIDEBAR_ROW, column=0, columnspan = 2, padx=20, pady=20)
 
+        SIDEBAR_ROW += 1
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.configure(**LABEL_CONFIG)
-        self.appearance_mode_label.grid(row=7, column=0, columnspan=2, padx=20, pady=(10, 0))
-
+        self.appearance_mode_label.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 0))
+        
+        SIDEBAR_ROW += 1
         self.appearance_mode_optionmenu = customtkinter.CTkOptionMenu(self.sidebar_frame, 
                                                                        values=["Light", "Dark", "System"],
                                                                        command=self.change_appearance_mode_event)
         self.appearance_mode_optionmenu.configure(**OPTION_MENU_CONFIG)
-        self.appearance_mode_optionmenu.grid(row=8, column=0, columnspan=2, padx=20, pady=(10, 10))
+        self.appearance_mode_optionmenu.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 10))
         
+        SIDEBAR_ROW += 1
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
         self.scaling_label.configure(**LABEL_CONFIG)
-        self.scaling_label.grid(row=9, column=0, columnspan=2, padx=20, pady=(10, 0))
+        self.scaling_label.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 0))
 
+        SIDEBAR_ROW += 1
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, 
                                                                values=["80%", "90%", "100%", "110%", "120%"],
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.configure(**OPTION_MENU_CONFIG)
-        self.scaling_optionemenu.grid(row=10, column=0, columnspan=2, padx=20, pady=(10, 20))
+        self.scaling_optionemenu.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 20))
 
         ## COLUMN 1 ###
 
@@ -395,6 +411,9 @@ class App(customtkinter.CTk):
         # # # Load the first test by default
         # self.update_param_display(load_type = "first_load")
 
+        self.protocol("WM_DELETE_WINDOW", self.close_app)
+
+
     def refresh(self):
         self.update_param_display(load_type = "refresh")
     
@@ -512,6 +531,107 @@ class App(customtkinter.CTk):
             logger.error("Invalid command type")
             raise Exception("Invalid command type")
         
+
+    def plot_shoaling(self):
+
+        # Check EndPoints.xlsx existence
+        project_dir = THE_HISTORY.get_project_dir(self.CURRENT_PROJECT)
+        batch_dir = get_working_dir(project_dir, self.get_batch_num())
+        end_points_path = batch_dir / "EndPoints.xlsx"
+        static_dir = get_static_dir(project_dir, 
+                                        batch_num=self.get_batch_num(),
+                                        treatment_char=self.get_treatment_char()
+                                        )
+
+        if not end_points_path.exists():
+            _message = "EndPoints.xlsx not found"
+            _message += "\nPlease make sure you have imported trajectories and analyzed them"
+            tkinter.messagebox.showerror("Error", _message)
+            return
+        
+        def load_volume_list():
+            # open EndPoints.xlsx, sheet_name = "Shoaling"
+            df = pd.read_excel(end_points_path, sheet_name="Shoaling")
+            # get the volume list, column_name = f"Shoaling Volume {self.get_treatment_char}"
+            try:
+                volume_list = df[f"Shoaling Volume {self.get_treatment_char()}"].tolist()
+            except KeyError:
+                _message = f"Shoaling Volume {self.get_treatment_char()} not found"
+                tkinter.messagebox.showerror("Error", _message)
+                return None
+            
+            if len(volume_list) == 0:
+                _message = f"Shoaling Volume {self.get_treatment_char()} empty"
+                tkinter.messagebox.showerror("Error", _message)
+                return None
+
+            return volume_list
+        
+
+        def get_fish_dict():
+            trajectories_n_p = {}
+
+            trajectories_n_p_dir = static_dir / 'trajectories_normalized_cm'
+            for csv_path in list(trajectories_n_p_dir.iterdir()):
+                csv_stem = csv_path.stem
+                logger.debug(f"{csv_stem=}")
+                df = pd.read_csv(csv_path)
+                try:
+                    df.drop("Z_SV", axis=1, inplace=True)
+                except:
+                    pass
+
+                trajectories_n_p[csv_stem] = df
+
+            return trajectories_n_p
+        
+
+        def calculate_limit_dict():
+            ec_path = static_dir / 'essential_coords.json'
+
+            if not ec_path.exists():
+                logger.info(f"essential_coords.json of {self.get_treatment_char()} not found")
+                logger.info(f"Try to find essential_coords.json of other treatments")
+                # find static_dir of other treatments
+                other_treatments = [treatment for treatment in self.TREATMENTLIST if treatment != self.TreatmentOptions.get()]
+                other_treatments_char = [self.treatment_to_treatment_char(treatment) for treatment in other_treatments]
+                while len(other_treatments_char) > 0:
+                    other_char = other_treatments_char.pop()
+                    logger.info(f"Try {other_char}")
+                    other_static_dir = get_static_dir(project_dir,
+                                                        batch_num=self.get_batch_num(),
+                                                        treatment_char=other_char)
+                    other_ec_path = other_static_dir / 'essential_coords.json'
+                    if other_ec_path.exists():
+                        break
+                else:
+                    _message = "No available essential_coords.json found"
+                    logger.error(_message)
+                    raise Exception(_message)
+            
+            with open(ec_path) as f:
+                ec = json.load(f)
+
+            Conversion = (ec['A']['pixel'][1][0] - ec['A']['pixel'][0][0]) / ec['A']['real']
+            
+            limit_dict = {
+                        "X": (ec['A']['pixel'][1][0] - ec['A']['pixel'][0][0])/Conversion,
+                        "Y": (ec['B']['pixel'][1][1] - ec['B']['pixel'][0][1])/Conversion,
+                        "Z": (ec['D']['pixel'][1][0] - ec['D']['pixel'][0][0])/Conversion
+                    }
+            
+            return limit_dict
+        
+        given_fish_dict = get_fish_dict()
+        limit_dict = calculate_limit_dict()
+        volume_list = load_volume_list()
+
+        self.visualize_window = AnimatedPlot(given_fish_dict, 
+                                        master=self, 
+                                        limit_dict=limit_dict,
+                                        volume_list=volume_list)
+
+
     def add_batch(self):
         logger.debug("Adding batch")
         new_batch_num = len(self.BATCHLIST) + 1
@@ -959,7 +1079,6 @@ class App(customtkinter.CTk):
             return False
         
         return True
-            
 
     def analyze_project(self):
         logger.info("Start analyzing project")
@@ -1102,6 +1221,11 @@ class App(customtkinter.CTk):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         logger.debug(f"New UI scaling: {new_scaling_float}")
         customtkinter.set_widget_scaling(new_scaling_float)
+
+    
+    def close_app(self):
+        self.quit()
+
 
 if __name__ == "__main__":
     app = App()
