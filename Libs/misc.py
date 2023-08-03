@@ -367,7 +367,7 @@ def FD_Entropy_Calculator(input_df):
 ############################################## SHOALING AREA / VOLUME ##############################################
 
 
-def HullVolumeCalculator(fishes_coords, surface = ['X', 'Y', 'Z']):
+def HullVolumeCalculator(fishes_coords, surface = ['X', 'Y', 'Z'], save_dir = None):
     volumes = []
 
     # Assuming that each fish dataframe has the same number of frames
@@ -388,6 +388,12 @@ def HullVolumeCalculator(fishes_coords, surface = ['X', 'Y', 'Z']):
     # Create a dataframe with the calculated volumes
     df_volumes = pd.DataFrame(volumes, columns=['ConvexHullVolume'])
     df_volumes.index.name = 'Frame'
+
+    if save_dir:               
+        save_path = os.path.join(save_dir, f"HullVolume_{len(surface)}D.csv")
+        df_volumes.to_csv(save_path, index=True)
+        print(f"Saved to {save_path}")
+
 
     return df_volumes
 

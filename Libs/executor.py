@@ -324,8 +324,8 @@ class Executor():
         # Convert sv from pixel^3 to cm^3
         sv = [i * CONVERT_RATIO_VOLUME for i in sv]
 
-        SA_HEADER = "Shoaling Area"
-        SV_HEADER = "Shoaling Volume"
+        SA_HEADER = f"Shoaling Area {self.treatment_char}"
+        SV_HEADER = f"Shoaling Volume {self.treatment_char}"
 
         shoaling_df = pd.DataFrame({SA_HEADER: sa, SV_HEADER: sv})
         shoaling_df.index = list(self.shoalingarea.index)
@@ -333,7 +333,10 @@ class Executor():
         sheet_name = "Shoaling"
         append_df_to_excel(filename = excel_path,
                            df = shoaling_df,
-                           sheet_name=sheet_name)
+                           sheet_name=sheet_name,
+                           startrow=0,
+                           col_sep=1,
+                           index=False)
         logger.debug(f"Shoaling.xlsx is saved to {excel_path}, sheetname={sheet_name}")
 
         SA_AVG_HEADER = SA_HEADER + " Average"

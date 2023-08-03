@@ -1026,7 +1026,7 @@ class App(customtkinter.CTk):
 
         OVERWRITE = False
         while True:
-            ERROR, EPA_path = EXECUTOR.ENDPOINTS_ANALYSIS(OVERWRITE=OVERWRITE)
+            ERROR, EPA_path = EXECUTOR.ENDPOINTS_ANALYSIS(OVERWRITE=OVERWRITE, AV_interval=50)
             if ERROR == None:
                 logger.debug("Analysis completed successfully")
                 break

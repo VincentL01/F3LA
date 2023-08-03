@@ -42,7 +42,8 @@ class VolumePlot(tk.Toplevel):
 class AnimatedPlot(tk.Toplevel):
     def __init__(self, fishes_coords, 
                  master=None, 
-                 limit_dict=None):
+                 limit_dict=None,
+                 volume_list=None):
         super().__init__(master)
         self.master = master
         self.fishes_coords = fishes_coords
@@ -62,8 +63,13 @@ class AnimatedPlot(tk.Toplevel):
         # Calculate the maximum length for the slider
         self.max_length = min([len(df) for df in fishes_coords.values()]) - 1
 
+        # Setup an self.animation to store the id of the 'play' function
+        self.animation = None
+
         # Creating play button
-        self.play_button = tk.Button(self, text='Play', command=self.play)
+        # self.play_button = tk.Button(self, text='Play', command=self.play)
+        # self.play_button.pack()
+        self.play_button = tk.Button(self, text='Play', command=self.play_pause)
         self.play_button.pack()
 
          # Creating slider
@@ -81,8 +87,12 @@ class AnimatedPlot(tk.Toplevel):
 
         # Create the VolumePlot
         print("Calculating volume")
-        volumes = HullVolumeCalculator(fishes_coords)['ConvexHullVolume'].tolist()
-        self.volume_plot = VolumePlot(volumes, master=self)
+        if volume_list == None:
+            self.volumes = HullVolumeCalculator(fishes_coords)['ConvexHullVolume'].tolist()
+        else:
+            self.volumes = volume_list
+
+        self.volume_plot = VolumePlot(self.volumes, master=self)
 
         print("Done Volume Calculation, start plotting...")
 
@@ -102,19 +112,49 @@ class AnimatedPlot(tk.Toplevel):
         self.volume_plot.move_dot(self.frame_num)
 
 
+    def destroy(self):
+        if self.animation:
+            self.after_cancel(self.animation)  # cancel 'play' function
+        tk.Toplevel.destroy(self)
+
+    def play_pause(self):
+        if self.is_paused:
+            self.play()
+        else:
+            self.pause()
+
     def play(self):
-        self.is_paused = not self.is_paused
+        self.is_paused = False
+        self.play_button.config(text='Pause')
         if not self.is_paused and self.frame_num < self.max_length:
             self.plot_current_frame()
             self.frame_num += 1
             self.slider.set(self.frame_num)
             self.updater()
-            self.after(10, self.play)  # call 'play' function after 100 ms
+            self.animation = self.after(10, self.play)  # save 'play' function id
         elif self.frame_num >= self.max_length:
             self.is_paused = True
-        else:
-            print("Animation paused")  # Debugging statement
-            return
+
+    def pause(self):
+        self.is_paused = True
+        self.play_button.config(text='Play')
+        if self.animation:
+            self.after_cancel(self.animation)
+
+
+    # def play(self):
+    #     self.is_paused = not self.is_paused
+    #     if not self.is_paused and self.frame_num < self.max_length:
+    #         self.plot_current_frame()
+    #         self.frame_num += 1
+    #         self.slider.set(self.frame_num)
+    #         self.updater()
+    #         self.after(10, self.play)  # call 'play' function after 100 ms
+    #     elif self.frame_num >= self.max_length:
+    #         self.is_paused = True
+    #     else:
+    #         print("Animation paused")  # Debugging statement
+    #         return
 
     def on_slider_moved(self, value):
         self.is_paused = True
@@ -164,40 +204,9 @@ class AnimatedPlot(tk.Toplevel):
 
         self.canvas.draw()
 
-    # def plot_current_frame(self):
-    #     frame = pd.concat([df.iloc[[self.frame_num]][['X', 'Y', 'Z']] for df in self.fishes_coords.values()])
-
-    #     # Create ConvexHull
-    #     hull = ConvexHull(frame.values)
-
-    #     self.fig.clear()
-    #     ax = self.fig.add_subplot(111, projection='3d')
-
-    #     # Plot points
-    #     ax.scatter(frame['X'], frame['Y'], frame['Z'])
-
-    #     # Plot hull
-    #     for s in hull.simplices:
-    #         s = np.append(s, s[0])  # Here we cycle back to the first coordinate
-    #         ax.plot(frame['X'].iloc[s], frame['Y'].iloc[s], frame['Z'].iloc[s], "r-")
-
-    #     # Create 3D blob
-    #     hull_polygon = Poly3DCollection(hull.points[hull.simplices], alpha=0.5)
-    #     hull_polygon.set_facecolor([0,0,1])
-    #     ax.add_collection3d(hull_polygon)
-
-    #     # # Set equal aspect ratio
-    #     # ax.auto_scale_xyz(frame['X'], frame['Y'], frame['Z'])
-
-    #     # Set equal aspect ratio
-    #     ax.set_xlim([0, 700])
-    #     ax.set_ylim([0, 700])
-    #     ax.set_zlim([0, 550])
-
-    #     self.canvas.draw()
-
 def StandAlone3DPlot(given_fish_dict, limit_dict=None):
     root = tk.Tk()
+    root.withdraw()
     app = AnimatedPlot(given_fish_dict, master=root, limit_dict=limit_dict)
     app.mainloop()
 
