@@ -193,6 +193,14 @@ class App(customtkinter.CTk):
         self.sidebar_button_3.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=20)
 
         SIDEBAR_ROW += 1
+        self.ReMeasureButton = customtkinter.CTkButton(self.sidebar_frame, 
+                                                         text="Re-Measure Params",
+                                                         command=self.params_remeasure
+                                                         )
+        self.ReMeasureButton.configure(**PANEL_BUTTON_CONFIG)
+        self.ReMeasureButton.grid(row=SIDEBAR_ROW, column=0, columnspan = 2, padx=20, pady=20)
+
+        SIDEBAR_ROW += 1
         self.ImportButton = customtkinter.CTkButton(self.sidebar_frame, 
                                                          text="Import Trajectories",
                                                          command=self.import_trajectories
@@ -359,57 +367,11 @@ class App(customtkinter.CTk):
         self.parameters_frame = Parameters(self.container_2_bot, project_dir, height = 500, width = 400)
         self.parameters_frame.grid(row=0, columnspan=3, padx=20, pady=20, sticky="nsew")
 
-        
-
-        # self.ClonerToolTip = tkinter.Button(container_2_bot, text="?")
-        # self.ClonerToolTip.grid(row=1, column=1, pady=20, padx=20)
-        # CreateToolTip(self.ClonerToolTip, text = 'Copy all parameters setting above and on the right-side columns\n'
-        #          'to other Treatment and save them immediately\n'
-        # )
-
-        # self.CheckIntegrity = customtkinter.CTkButton(container_2_bot, text="Trajectories Check", width = 50,
-        #                                         command=self.trajectories_check)
-        # self.CheckIntegrity.grid(row=1, column=2, pady=20, padx=20)
-
-
-        # ### COLUMN 3+ ###
-
-        # # ROW 0 #
-
-        # container_3 = customtkinter.CTkScrollableFrame(self, width = 500)
-        # container_3.grid(row=0, rowspan=2, column=5, columnspan = 2, padx=(20, 0), pady=(20, 0), sticky="nsew")
-
-        # self.nested_key_1_header = customtkinter.CTkLabel(container_3, text="None", anchor="w", font=customtkinter.CTkFont(size=20, weight="bold"))
-        # self.nested_key_1_header.grid(row=0, column=0, padx=20, pady=(20, 10), sticky="nsew")
-        # self.nested_key_1_frame = Parameters(container_3, self.CURRENT_PROJECT, self.TESTLIST[0], 1)
-        # self.nested_key_1_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=(10, 20), sticky="nsew")
-
-        # self.nk_add_button = NK_button(container_3, text="Add", width = 20,
-        #                                 row = 2, column = 0,
-        #                                 command=self.nk_add)
-        # self.nk_remove_button = NK_button(container_3, text="Remove", width = 20,
-        #                                 row = 2, column = 1,
-        #                                 command=self.nk_remove)
-
-        # self.nested_key_2_header = customtkinter.CTkLabel(container_3, text="None", anchor="w", font=customtkinter.CTkFont(size=20, weight="bold"))
-        # self.nested_key_2_header.grid(row=0, column=2, padx=20, pady=(20, 10), sticky="nsew")
-        # self.nested_key_2_frame = Parameters(container_3, self.CURRENT_PROJECT, self.TESTLIST[0], 2)
-        # self.nested_key_2_frame.grid(row=1, column=2, columnspan = 2, padx=20, pady=(10, 20), sticky="nsew")
-
-        # # self.nk2_add_button = NK_button(container_3, text="Add", width = 20,
-        # #                                 row = 2, column = 2,
-        # #                                 command=self.nk2_add)
-        # # self.nk2_remove_button = NK_button(container_3, text="Remove", width = 20,
-        # #                                 row = 2, column = 3,
-        # #                                 command=self.nk2_remove)
-
         # Config
         self.BatchOptions.configure(command=self.update_param_display)
         # self.TestOptions.configure(command=self.update_param_display)
         self.TreatmentOptions.configure(command=self.update_param_display)
 
-        # # # Load the first test by default
-        # self.update_param_display(load_type = "first_load")
 
         self.protocol("WM_DELETE_WINDOW", self.close_app)
 
@@ -426,19 +388,21 @@ class App(customtkinter.CTk):
             with open(HISTORY_PATH, "r") as file:
                 projects_data = json.load(file)
         except:
-            ErrorType = "Empty history file"
+            ErrorType = f"Empty history file at path {HISTORY_PATH}"
             logger.warning(ErrorType)
             return None, ErrorType
 
         # current project name
         if project_name == None:
+            logger.debug(f"No given project name, using {self.CURRENT_PROJECT=}")
             cp = self.CURRENT_PROJECT
         else:
+            logger.debug(f"Use given project name: {project_name=}")
             cp = project_name
 
         # Check if the project exists
         if cp not in projects_data.keys():
-            ErrorType = "Project doesn't exist"
+            ErrorType = f"Project {cp} doesn't exist"
             logger.warning(ErrorType)
             return None, ErrorType
     
@@ -459,7 +423,7 @@ class App(customtkinter.CTk):
         if command_type == "add":
             logger.debug("Command = add")
             if batch_name in projects_data[cp].keys():
-                ErrorType = "Batch already exists, can't add"
+                ErrorType = f"Batch {batch_name=} already exists, can't add"
                 logger.warning(ErrorType)
                 return None, ErrorType
             else:
@@ -530,6 +494,20 @@ class App(customtkinter.CTk):
         else:
             logger.error("Invalid command type")
             raise Exception("Invalid command type")
+        
+
+    def params_remeasure(self):
+
+        project_dir = THE_HISTORY.get_project_dir(self.CURRENT_PROJECT)
+        batch_num = self.get_batch_num()
+        treatment_char = self.get_treatment_char()
+
+        logger.debug(f"User clicked Re-Measure Params button")
+        logger.debug(f"Current status: project = {self.CURRENT_PROJECT}, batch = {batch_num}, treatment = {treatment_char}")
+        
+        self.parameters_frame.MeasureAndCalculate(project_dir = project_dir,
+                                                  batch_num = batch_num,
+                                                  treatment_char = treatment_char)
         
 
     def plot_shoaling(self):
@@ -644,7 +622,7 @@ class App(customtkinter.CTk):
         self.BatchOptions.set(self.BATCHLIST[-1])
 
         # Modify history file
-        _, ErrorType = self.access_history("add", f"Batch {new_batch_num}")
+        _, ErrorType = self.access_history("add", batch_name=f"Batch {new_batch_num}")
 
         if ErrorType != None:
             logger.error(ErrorType)
@@ -666,7 +644,7 @@ class App(customtkinter.CTk):
             return
 
         # Modify history file
-        _, ErrorType = self.access_history("remove", selected_batch)
+        _, ErrorType = self.access_history("remove", batch_name=selected_batch)
 
         if ErrorType != None:
             logger.error(ErrorType)
@@ -806,7 +784,7 @@ class App(customtkinter.CTk):
 
 
     def update_param_display(self, event=None, load_type="not_first_load"):
-        assert load_type in ["not_first_load", "first_load"]
+        assert load_type in ["not_first_load", "first_load", "refresh"]
 
         if load_type == "first_load":
             logger.info("Loading the abitrary numbers used for initial display")

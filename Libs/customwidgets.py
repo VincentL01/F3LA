@@ -495,7 +495,7 @@ class ScrollableProjectList(customtkinter.CTkScrollableFrame):
         return self.project_radiobuttons[-1].cget("text")
     
 
-class ProjectDetailFrame(customtkinter.CTkFrame):
+class ProjectDetailFrame(customtkinter.CTkScrollableFrame):
 
     def __init__(self, master, project_name, **kwargs):
 
@@ -1053,6 +1053,31 @@ class Parameters(customtkinter.CTkScrollableFrame):
         except:
             return 0
         
+    def MeasureAndCalculate(self, project_dir=None, batch_num=1, treatment_char="A"):
+        logger.info("Opening Measurer Window")
+        MEASURED = self.OpenMeasurerWindow(project_dir = project_dir,
+                                        batch_num = batch_num,
+                                        treatment_char = treatment_char)
+
+        if MEASURED:
+            logger.info("Measurer window closed after measuring")
+        else:
+            logger.warning("Measurer window closed without measuring")
+            return
+
+        logger.info("Calculating parameters")
+        try:
+            _ = ParamsCalculator(project_dir = project_dir,
+                                batch_num = batch_num,
+                                treatment_char = treatment_char)
+            logger.info("Parameters (re-)calculated")
+        except:
+            logger.warning("Error in calculating parameters, please check the Measuring process")
+
+        logger.info("Measured completed, loading parameters")
+        self.load_parameters(project_dir, batch_num, treatment_char)
+        self.null_label_check()
+        
 
     def load_parameters(self, project_dir=None, batch_num=1, treatment_char="A"):
 
@@ -1076,10 +1101,13 @@ class Parameters(customtkinter.CTkScrollableFrame):
             self.hyp_path = self.get_hyp_path(project_dir, batch_num, treatment_char)
 
         try:
+            logger.debug("Trying to load parameters from json file")
             with open(self.hyp_path, "r") as file:
                 ori_dict = json.load(file)
 
         except:
+            logger.debug("Unable to load parameters from json file")
+            logger.debug("Trying to measure parameters using given essential_coords")
             try:
                 _ = ParamsCalculator(project_dir = project_dir,
                                     batch_num = batch_num,
@@ -1093,29 +1121,32 @@ class Parameters(customtkinter.CTkScrollableFrame):
                 message = "No parameters found, Do you want to open Measurer Window to generate parameters?"
                 choice = tkinter.messagebox.askyesno("No parameters found", message)
                 if choice == True:
-                    logger.info("Opening Measurer Window")
-                    MEASURED = self.OpenMeasurerWindow(project_dir = project_dir,
-                                                    batch_num = batch_num,
-                                                    treatment_char = treatment_char)
+                    self.MeasureAndCalculate(project_dir=project_dir, 
+                                             batch_num=batch_num, 
+                                             treatment_char=treatment_char)
+                    # logger.info("Opening Measurer Window")
+                    # MEASURED = self.OpenMeasurerWindow(project_dir = project_dir,
+                    #                                 batch_num = batch_num,
+                    #                                 treatment_char = treatment_char)
 
-                    if MEASURED:
-                        logger.info("Measurer window closed after measuring")
-                    else:
-                        logger.warning("Measurer window closed without measuring")
-                        return
+                    # if MEASURED:
+                    #     logger.info("Measurer window closed after measuring")
+                    # else:
+                    #     logger.warning("Measurer window closed without measuring")
+                    #     return
 
-                    logger.info("Calculating parameters")
-                    try:
-                        _ = ParamsCalculator(project_dir = project_dir,
-                                            batch_num = batch_num,
-                                            treatment_char = treatment_char)
-                        logger.info("Parameters (re-)calculated")
-                    except:
-                        logger.warning("Error in calculating parameters, please check the Measuring process")
+                    # logger.info("Calculating parameters")
+                    # try:
+                    #     _ = ParamsCalculator(project_dir = project_dir,
+                    #                         batch_num = batch_num,
+                    #                         treatment_char = treatment_char)
+                    #     logger.info("Parameters (re-)calculated")
+                    # except:
+                    #     logger.warning("Error in calculating parameters, please check the Measuring process")
 
-                    logger.info("Measured completed, loading parameters")
-                    self.load_parameters(project_dir, batch_num, treatment_char)
-                    self.null_label_check()
+                    # logger.info("Measured completed, loading parameters")
+                    # self.load_parameters(project_dir, batch_num, treatment_char)
+                    # self.null_label_check()
                 else:
                     logger.info("User chose not to open Measurer Window")
                     self.null_label_check()
@@ -1156,7 +1187,7 @@ class Parameters(customtkinter.CTkScrollableFrame):
             child.destroy()
 
     def save_parameters(self, project_dir, batch_num, treatment_char, save_target):
-        logger.debug(f"Saving parameters for {Path(project_dir).name}.Batch {batch_num}.Treatment {treatment_char}")
+        logger.debug(f"Saving parameters for {Path(project_dir).name}.Batch {batch_num}.Treatment {treatment_char}, save_target = {save_target}")
 
         def get_entry(entry_dict):
             out_dict = {}
@@ -1204,7 +1235,6 @@ class Parameters(customtkinter.CTkScrollableFrame):
             json.dump(parameters_data, file, indent=4)
 
         logger.info(f"Parameters saved to {self.hyp_path}.")
-
         
         if save_target != "self":
             for target_char in save_target:
