@@ -1,0 +1,4 @@
+1.8.4.1:
+- Fixed display bug for treatments not copied to
+- Fixed bug of Add batch button
+- Added button for Re-Measuring Parameters ("Re-Measure Params" button)
