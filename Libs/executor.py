@@ -3,7 +3,7 @@ import time
 
 from Libs.analyzer import GeneralAnalysis, ShoalingAnalysis
 from Libs.general import TrajectoriesLoader, Parameters
-from Libs.misc import get_trajectories_dir, has_csv_file, append_df_to_excel, excel_polish, get_working_dir, merge_cells
+from Libs.misc import get_trajectories_dir, has_csv_file, append_df_to_excel, excel_polish, get_working_dir, merge_cells, check_sheet_existence, remove_sheet_by_name
 from . import TEMPLATE_PATH, CHARS
 
 import logging
@@ -249,15 +249,21 @@ class Executor():
 
         if self.EPA:
 
-            ERROR = self.excel_path_check()
+            REPORT = self.analyzed_check()
 
-            if ERROR == "File Existed" and not OVERWRITE:
-                return ERROR, None
+            if REPORT == "Analyzed" and not OVERWRITE:
+                return "Existed", None
             
-            if ERROR == "File Existed" and OVERWRITE:
-                logger.info("Overwriting existing file...")
-                # remove existing file
-                self.excel_path.unlink()
+            if REPORT == "Analyzed" and OVERWRITE:
+                logger.info(f"Removing existing sheet of {self.treatment_char}...")
+
+                try:
+                    remove_sheet_by_name(self.excel_path, self.treatment_char)
+                    logger.info(f"Existing sheet of {self.treatment_char} removed.")
+                except:
+                    logger.error(f"Failed to remove existing sheet of {self.treatment_char}.")
+                    return "Skip", None
+                
 
         DEFAULT_INTERVAL = self.PARAMS["FRAME RATE"]
 
@@ -292,7 +298,7 @@ class Executor():
 
         self.timing["EndPoints analysis"] = time.time() - _starttime
 
-        return None, return_excel_path
+        return "Completed", return_excel_path
     
     def update_progress_bar(self, value, text):
         if self.progress_window is not None:
@@ -304,11 +310,16 @@ class Executor():
         return excel_path
 
 
-    def excel_path_check(self):
-        if self.excel_path.exists():
-            return "File Existed"
+
+    def analyzed_check(self):
+        if not self.excel_path.exists():
+            return "Not analyzed"
         
-        return None
+        # open the workbook to see if there is sheetname == self.treatment_char
+        if check_sheet_existence(self.excel_path, self.treatment_char):
+            return "Analyzed"
+        
+        return "Not analyzed"
 
 
     def Add_Shoaling_Data_To_Excel(self, excel_path):

@@ -1058,16 +1058,12 @@ class App(customtkinter.CTk):
         
         return True
 
-    def analyze_project(self):
-        logger.info("Start analyzing project")
+    def analyze_treatment(self, PROGRESS_WINDOW, treatment_char = None):
 
         if self.CURRENT_PROJECT == "":
             tkinter.messagebox.showerror("Error", "Please select a project")
             return
         
-        # save the current parameters
-        self.save_parameters(mode='current')
-
         project_dir = Path(THE_HISTORY.get_project_dir(self.CURRENT_PROJECT))
 
         try:
@@ -1075,13 +1071,14 @@ class App(customtkinter.CTk):
         except ValueError:
             batch_num = 1
 
-        treatment_char = self.get_treatment_char()
+        if treatment_char == None:
+            treatment_char = self.get_treatment_char()
+        else:
+            treatment_char = treatment_char
 
-        overwrite = False
+        logger.info(f"Start analyzing treatment: {treatment_char}")
 
-        PROGRESS_WINDOW = ProgressWindow(self)
-
-        time00 = time.time()
+        static_path = get_static_dir(project_dir, batch_num, treatment_char)
 
         #######################################################################
 
@@ -1092,8 +1089,8 @@ class App(customtkinter.CTk):
                             progress_window=PROGRESS_WINDOW)
         
         #######################################################################
-
-        PROGRESS_WINDOW.total_update(0, text = "Loading parameters...")
+        PROGRESS_WINDOW.lift()
+        PROGRESS_WINDOW.step_update(0, text = "Loading parameters...")
         
         while True:
             ERROR = EXECUTOR.PARAMS_LOADING()
@@ -1109,7 +1106,7 @@ class App(customtkinter.CTk):
         time.sleep(1)
         #######################################################################
 
-        PROGRESS_WINDOW.total_update(30, text = "Loading trajectories...")
+        PROGRESS_WINDOW.step_update(30, text = "Loading trajectories...")
 
         EXECUTOR.TRAJECTORIES_LOADING()
 
@@ -1119,62 +1116,115 @@ class App(customtkinter.CTk):
 
         #######################################################################
 
-        PROGRESS_WINDOW.total_update(60, text = "Analyzing...")
+        PROGRESS_WINDOW.step_update(60, text = "Analyzing...")
+        # Lift the window to the front
 
         OVERWRITE = False
         while True:
-            ERROR, EPA_path = EXECUTOR.ENDPOINTS_ANALYSIS(OVERWRITE=OVERWRITE, AV_interval=50)
-            if ERROR == None:
+            PROGRESS_WINDOW.lift()
+            REPORT, EPA_path = EXECUTOR.ENDPOINTS_ANALYSIS(OVERWRITE=OVERWRITE, AV_interval=50)
+            if REPORT == "Completed":
                 logger.debug("Analysis completed successfully")
                 break
-            else:
-                choice = tkinter.messagebox.askyesno("Error", ERROR + ". Do you want to overwrite? Y/N?")
+            elif REPORT == "Existed":
+                choice = tkinter.messagebox.askyesno("Error",  f"Sheet name {treatment_char} existed.\nDo you want to overwrite? Y/N?")
                 if choice:
                     logger.debug("User chose to overwrite")
                     OVERWRITE = True
                 else:
                     logger.debug("User chose not to overwrite")
-                    PROGRESS_WINDOW.destroy()
-                    return
+                    return EPA_path, static_path
+            elif REPORT == "Skip":
+                _message = f"Skip analysis of {treatment_char}"
+                tkinter.messagebox.showinfo(REPORT, _message)
+                logger.debug(_message)
+                return EPA_path, static_path
             
-        PROGRESS_WINDOW.total_update(100, text = "Completed")
+        PROGRESS_WINDOW.step_update(100, text = "Completed")
 
         #######################################################################
 
-        # Create notification box to show analysis complete
-        if EPA_path != None:
-            logger.debug("EPA_path is not None")
-            if EPA_path.exists():
-                logger.debug("EPA_path exists")
-                open_path = EPA_path.parent
-                _ = CustomDialog(self, title = "Analysis Complete",
-                                    message =  "Click GO button to go to the saved directory of EndPoints.xlsx", 
-                                    button_text = "GO",
-                                    button_command = lambda : open_explorer(path=open_path))
-                logger.info("Analysis complete")
-            else:
-                logger.debug("EPA_path does not exist")
-                message = "Something went wrong during the analysis, no exported EndPoints.xlsx found"
-                tkinter.messagebox.showerror("Error", message)
-                logger.info(message)
-        else:
-            logger.debug("EPA_path is None")
-            open_path = get_static_dir(project_dir, batch_num, treatment_char)
-            _ = CustomDialog(self, title = "Trajectories Exported",
-                                  message =  "All 3D trajectories, normalized to pixel and cm are exported.\nClick GO button to go to the saved directory", 
-                                  button_text = "GO",
-                                  button_command = lambda : open_explorer(path=open_path))
-            logger.info("Analysis skipped, only trajectories are loaded and saved")
+        return EPA_path, static_path
+
+        # # Create notification box to show analysis complete
+        # if EPA_path != None:
+        #     logger.debug("EPA_path is not None")
+        #     if EPA_path.exists():
+        #         logger.debug("EPA_path exists")
+        #         open_path = EPA_path.parent
+        #         _ = CustomDialog(self, title = "Analysis Complete",
+        #                             message =  "Click GO button to go to the saved directory of EndPoints.xlsx", 
+        #                             button_text = "GO",
+        #                             button_command = lambda : open_explorer(path=open_path))
+        #         logger.info("Analysis complete")
+        #     else:
+        #         logger.debug("EPA_path does not exist")
+        #         message = "Something went wrong during the analysis, no exported EndPoints.xlsx found"
+        #         tkinter.messagebox.showerror("Error", message)
+        #         logger.info(message)
+        # else:
+        #     logger.debug("EPA_path is None")
+        #     open_path = get_static_dir(project_dir, batch_num, treatment_char)
+        #     _ = CustomDialog(self, title = "Trajectories Exported",
+        #                           message =  "All 3D trajectories, normalized to pixel and cm are exported.\nClick GO button to go to the saved directory", 
+        #                           button_text = "GO",
+        #                           button_command = lambda : open_explorer(path=open_path))
+        #     logger.info("Analysis skipped, only trajectories are loaded and saved")
+
+
+    def analyze_project(self):
+
+        PROGRESS_WINDOW = ProgressWindow(self)
+
+        time00 = time.time()
+        time0 = time.time()
+
+        time_for_treatment = {}
+
+        TREATMENT_LIST_CHAR = [self.treatment_to_treatment_char(treatment) for treatment in self.TREATMENTLIST]
+
+        for i, treatment_char in enumerate(TREATMENT_LIST_CHAR):
+            _message = f"Analyzing treatment {treatment_char}"
+            _progress = (i+1) / len(TREATMENT_LIST_CHAR) * 100
+            PROGRESS_WINDOW.group_update(_progress, text = _message)
+            logger.info(_message)
+            EPA_path, _ = self.analyze_treatment(PROGRESS_WINDOW, treatment_char=treatment_char)
+
+            time_for_treatment[treatment_char] = time.time() - time0
+            time0 = time.time()
 
         # Destroy the progress window
         logger.debug("Destroying the progress window")
         PROGRESS_WINDOW.destroy()
 
-        tkinter.messagebox.showinfo("Completion time", f"Time taken: {round(time.time() - time00, 2)} seconds")
+        _message = f"Time taken: {round(time.time() - time00, 2)} seconds"
+        _message += f"\nTime taken for each treatment:"
+        for treatment_char in TREATMENT_LIST_CHAR:
+            _message += f"\n  {treatment_char}: {round(time_for_treatment[treatment_char], 2)} seconds"
+        tkinter.messagebox.showinfo("Completion time", _message)
+
+
+        logger.debug("EPA_path is not None")
+        if EPA_path.exists():
+            logger.debug("EPA_path exists")
+            open_path = EPA_path.parent
+            _ = CustomDialog(self, title = "Analysis Complete",
+                                message =  "Click GO button to go to the saved directory of EndPoints.xlsx", 
+                                button_text = "GO",
+                                button_command = lambda : open_explorer(path=open_path))
+            logger.info("Analysis complete")
+        else:
+            logger.debug("EPA_path does not exist")
+            message = "Something went wrong during the analysis, no exported EndPoints.xlsx found"
+            tkinter.messagebox.showerror("Error", message)
+            logger.info(message)
 
 
     def analyze_project_THREADED(self):
         logger.debug("Open a new thread to analyze project")
+
+        # save the current parameters
+        self.save_parameters(mode='current')
 
         self.EPA = True        
 
@@ -1182,12 +1232,25 @@ class App(customtkinter.CTk):
         analyze_thread.start()
 
 
+    def export_trajectories(self):
+
+        PROGRESS_WINDOW = ProgressWindow(self)
+        
+        _, static_path = self.analyze_treatment(PROGRESS_WINDOW)
+
+        _ = CustomDialog(self, title = "Trajectories Exported",
+                                message =  "All 3D trajectories, normalized to pixel and cm are exported.\nClick GO button to go to the saved directory", 
+                                button_text = "GO",
+                                button_command = lambda : open_explorer(path=static_path))
+        logger.info("Analysis skipped, only trajectories are loaded and saved")
+
+
     def export_trajectories_THREADED(self):
         logger.debug("Open a new thread to export trajectories project")
 
         self.EPA = False
 
-        analyze_thread = threading.Thread(target=self.analyze_project)
+        analyze_thread = threading.Thread(target=self.export_trajectories)
         analyze_thread.start()
 
 

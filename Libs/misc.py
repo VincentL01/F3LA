@@ -14,7 +14,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from . import HISTORY_PATH, LOG_PATH
+from . import HISTORY_PATH, EPSILON
 
 def num_to_ord(input_number):
     suf = lambda n: "%d%s"%(n,{1:"st",2:"nd",3:"rd"}.get(n%100 if (n%100)<20 else n%10,"th"))
@@ -206,6 +206,27 @@ def has_csv_file(directory_path):
         return True
     else:
         return False
+    
+    
+def check_sheet_existence(file_path, sheet_name):
+    # Load the Excel workbook
+    workbook = openpyxl.load_workbook(filename=file_path)
+
+    if sheet_name in workbook.sheetnames:
+        return True
+    else:
+        return False
+    
+def remove_sheet_by_name(file_path, sheet_name):
+    # Load the Excel workbook
+    workbook = openpyxl.load_workbook(filename=file_path)
+
+    if sheet_name in workbook.sheetnames:
+        workbook.remove(workbook[sheet_name])
+        workbook.save(filename=file_path)
+        return True
+    else:
+        return False
 
 ############################################# FD and Entropy Calculator #############################################
 
@@ -251,7 +272,7 @@ def FD_Entropy_Calculator(input_df):
         if i>1:
             dot_product = (delta_x[i]*delta_x[i-1] + delta_y[i]*delta_y[i-1] + delta_z[i]*delta_z[i-1])
             product_of_magnitudes = (delta_r[i]*delta_r[i-1])
-            value = dot_product / product_of_magnitudes
+            value = dot_product / (product_of_magnitudes + EPSILON)
             value = max(-1, min(1, value))
             temp_theta = math.acos(value)*180/math.pi
             thetas[i] = temp_theta

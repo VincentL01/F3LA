@@ -1,5 +1,3 @@
-UPDATED_TIME = "2023-08-01 15:29"
-
 from pathlib import Path
 import math
 
@@ -18,6 +16,9 @@ project_structure_path = BIN_PATH / "project_structure.json"
 
 
 ALLOWED_DECIMALS = 4
+EPSILON = 1e-10 # CONSTANT TO AVOID DIVISION BY ZERO
+
+
 ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th']
 CHARS = [chr(i) for i in range(65, 65+26)]
 

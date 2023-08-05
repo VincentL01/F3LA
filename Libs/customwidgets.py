@@ -59,26 +59,36 @@ def CreateToolTip(widget, text):
 
 class ProgressWindow(tkinter.Toplevel):
         
-    def __init__(self, master, title="Analysis Progress", geometry="300x200"):
+    def __init__(self, master, title="Analysis Progress", geometry="300x250"):
         tkinter.Toplevel.__init__(self, master)
         self.title(title)
         self.geometry(geometry)
 
         FONT = ('Helvetica', 14, 'bold')
 
-        self.total_label = tkinter.Label(self, text="Total Progress", font=FONT)
-        self.total_label.pack(pady=5)
-        self.total = ttk.Progressbar(self, length=100, mode='determinate')
-        self.total.pack(pady=5)
+        self.group_label = tkinter.Label(self, text="Group Progress", font=FONT)
+        self.group_label.pack(pady=5)
+        self.group = ttk.Progressbar(self, length=100, mode='determinate')
+        self.group.pack(pady=5)
+
+        self.step_label = tkinter.Label(self, text="Step Progress", font=FONT)
+        self.step_label.pack(pady=5)
+        self.step = ttk.Progressbar(self, length=100, mode='determinate')
+        self.step.pack(pady=5)
 
         self.task_label = tkinter.Label(self, text="Task Progress", font=FONT)
         self.task_label.pack(pady=5)
         self.task = ttk.Progressbar(self, length=100, mode='determinate')
         self.task.pack(pady=5)
 
-    def total_update(self, value, text="Total Progress"):
-        self.total_label["text"] = text
-        self.total["value"] = value
+    def group_update(self, value, text="Group Progress"):
+        self.group_label["text"] = text
+        self.group["value"] = value
+        self.update()
+
+    def step_update(self, value, text="Step Progress"):
+        self.step_label["text"] = text
+        self.step["value"] = value
         self.update()
 
     def task_update(self, value, text="Task Progress"):
