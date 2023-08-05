@@ -1,3 +1,8 @@
+1.8.5.1:
+- Analyze button now will analyze all Treatment/Group within selected Batch, instead of the selecting Treatment only.
+- Option to overwrite only 1 analyzed Treatment/Group (replacing the saved sheet in EndPoints.xlsx)
+- Updated PROGRESS BAR to display which Treatment/Group is being analyzed
+
 1.8.4.1:
 - Fixed display bug for treatments not copied to
 - Fixed bug of Add batch button
