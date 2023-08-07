@@ -125,6 +125,8 @@ class Measurer(tkinter.Toplevel):
     def __init__(self, master, save_path, **kwargs):
         super().__init__(master=master, **kwargs)
 
+        self.lift()
+
         self.MEASURED = False
         self.save_path = save_path
         self.pixel_values = {}
