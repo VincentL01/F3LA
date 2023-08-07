@@ -5,6 +5,7 @@ import json
 import os
 from PIL import Image, ImageTk
 from pathlib import Path
+import shutil
 
 from . import HISTORY_PATH, TEMPLATE_PATH
 from Libs.misc import calculate_distance, get_static_dir
@@ -967,6 +968,7 @@ class Parameters(customtkinter.CTkScrollableFrame):
 
         self.null_label = None
         self.hyp_name = "parameters.json"
+        self.ec_name = "essential_coords.json"
         self.UNITS = {
             "DURATION": "seconds",
             "FRAME RATE": "frames/second",
@@ -1048,10 +1050,11 @@ class Parameters(customtkinter.CTkScrollableFrame):
                                     treatment_char=treatment_char)
         
         hyp_path = static_dir / self.hyp_name
+        ec_path = static_dir / self.ec_name
 
         logger.debug(f"Retrieved hyp from {hyp_path}")
 
-        return hyp_path
+        return hyp_path, ec_path
         
     
     def get_current_entry_quantity(self):
@@ -1110,7 +1113,7 @@ class Parameters(customtkinter.CTkScrollableFrame):
         if project_dir == "":
             self.hyp_path = TEMPLATE_PATH / 'static' / self.hyp_name
         else:
-            self.hyp_path = self.get_hyp_path(project_dir, batch_num, treatment_char)
+            self.hyp_path, self.ec_path = self.get_hyp_path(project_dir, batch_num, treatment_char)
 
         try:
             logger.debug("Trying to load parameters from json file")
@@ -1222,7 +1225,7 @@ class Parameters(customtkinter.CTkScrollableFrame):
             tkinter.messagebox.showerror("Warning", "No project selected. No save was made.")
             return 
         else:
-            self.hyp_path = self.get_hyp_path(project_dir, batch_num, treatment_char)
+            self.hyp_path, self.ec_path = self.get_hyp_path(project_dir, batch_num, treatment_char)
 
         # Get the values from the entries
         updated_values = get_entry(self.entries)
@@ -1250,10 +1253,15 @@ class Parameters(customtkinter.CTkScrollableFrame):
         
         if save_target != "self":
             for target_char in save_target:
-                target_hyp_path = self.get_hyp_path(project_dir, batch_num, target_char)
+                target_hyp_path, target_ec_path = self.get_hyp_path(project_dir, batch_num, target_char)
+                # Dump data to target_hyp_path
                 with open(target_hyp_path, "w") as file:
                     json.dump(parameters_data, file, indent=4)
                     logger.debug(f"Parameters from {treatment_char} saved to {target_char}.")
+                
+                # Copy essential_coords.json from self.ec_path to target_ec_path
+                shutil.copy(self.ec_path, target_ec_path)
+                logger.debug(f"Essential coords from {treatment_char} saved to {target_char}.")
 
 
 
