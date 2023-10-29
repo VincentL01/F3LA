@@ -10,7 +10,7 @@ from scipy.optimize import linear_sum_assignment
 from scipy.stats import pearsonr
 
 from Libs.misc import *
-from . import ALLOWED_DECIMALS, TEMPLATE_PATH, FISH_KEY_FORMAT, SAVED_TRAJECTORY_FORMAT, CHARS, NEG_INF
+from . import ALLOWED_DECIMALS, TEMPLATE_PATH, FISH_KEY_FORMAT, SAVED_TRAJECTORY_FORMAT, CHARS, NEG_INF, POS_INF
 
 import logging
 
@@ -253,13 +253,24 @@ class TrajectoriesLoader():
         self.TOTAL_FRAMES = TOTAL_FRAMES
         self.NORMALIZE_RATIO = NORMALIZE_RATIO
 
-        self.tj_SV, self.tanks_list_SV = self.RawLoader(self.trajectories_SV_path)
-        self.tj_TV, self.tanks_list_TV = self.RawLoader(self.trajectories_TV_path)
+        # self.tj_SV, self.tanks_list_SV, removed_rows_SV = self.RawLoader(self.trajectories_SV_path)
+        # self.tj_TV, self.tanks_list_TV, removed_rows_TV = self.RawLoader(self.trajectories_TV_path)
+
+        # if removed_rows_SV > removed_rows_TV:
+        #     # Remove the difference from self.tj_SV
+        #     self.tj_SV = self.tj_SV.iloc[removed_rows_SV-removed_rows_TV:]
+        #     logger.debug("Balancing 2 trajectories files: Removed {} rows from SideView".format(removed_rows_SV-removed_rows_TV))
+        # elif removed_rows_SV < removed_rows_TV:
+        #     # Remove the difference from self.tj_TV
+        #     self.tj_TV = self.tj_TV.iloc[removed_rows_TV-removed_rows_SV:]
+        #     logger.debug("Balancing 2 trajectories files: Removed {} rows from TopView".format(removed_rows_TV-removed_rows_SV))
+
+        self.tj_SV, self.tj_TV, self.tanks_list_SV, self.tanks_list_TV = self.CoupleRawLoader()
 
         self.FISH_NUM = len(self.tanks_list_TV)
 
-        self.tj_SV = self.tj_SV[:self.TOTAL_FRAMES]
-        self.tj_TV = self.tj_TV[:self.TOTAL_FRAMES]
+        # self.tj_SV = self.tj_SV[:self.TOTAL_FRAMES]
+        # self.tj_TV = self.tj_TV[:self.TOTAL_FRAMES]
 
         self.Plot_Y_and_Save("pre-arranged")
         
@@ -274,22 +285,50 @@ class TrajectoriesLoader():
         self.SaveTrajectories()
 
 
-    def RawLoader(self, given_path):
 
+    def CoupleRawLoader(self):
         try:
-            trajectories, tank_list = load_raw_df(given_path)
+            trajectories_SV, tank_list_SV = load_raw_df(self.trajectories_SV_path)
         except Exception as e:
-            logger.error("Failed to load trajectories from {}".format(given_path))
+            logger.error("Failed to load trajectories from {}".format(self.trajectories_SV_path))
             logger.error(e)
-            raise ValueError("Failed to load trajectories from {}".format(given_path))
+            raise ValueError("Failed to load trajectories from {}".format(self.trajectories_SV_path))
         
-        trajectories = clean_df(trajectories, fill=True, limitation=self.TOTAL_FRAMES)
-        trajectories = trajectories.astype(float)
+        try:
+            trajectories_TV, tank_list_TV = load_raw_df(self.trajectories_TV_path)
+        except Exception as e:
+            logger.error("Failed to load trajectories from {}".format(self.trajectories_TV_path))
+            logger.error(e)
+            raise ValueError("Failed to load trajectories from {}".format(self.trajectories_TV_path))
+        
+        trajectories_SV, trajectories_TV = couple_df_cleaner(input_df1 = trajectories_SV, 
+                                                             input_df2 = trajectories_TV,
+                                                             limitation = self.TOTAL_FRAMES)
+        
+        trajectories_SV = trajectories_SV.astype(float)
+        trajectories_TV = trajectories_TV.astype(float)
 
-        return trajectories, tank_list
-    
-    
+        # Double-check the balance of 2 trajectories
+        if len(trajectories_SV) != len(trajectories_TV):
+            logger.error("Number of rows in Side View and Top View are not the same, please check your input.")
+            raise ValueError("Number of rows in Side View and Top View are not the same, please check your input.")
 
+        return trajectories_SV, trajectories_TV, tank_list_SV, tank_list_TV
+
+    # def RawLoader(self, given_path):
+
+    #     try:
+    #         trajectories, tank_list = load_raw_df(given_path)
+    #     except Exception as e:
+    #         logger.error("Failed to load trajectories from {}".format(given_path))
+    #         logger.error(e)
+    #         raise ValueError("Failed to load trajectories from {}".format(given_path))
+        
+    #     trajectories, removed_rows = clean_df(trajectories, fill=True, limitation=self.TOTAL_FRAMES)
+    #     trajectories = trajectories.astype(float)
+
+    #     return trajectories, tank_list, removed_rows
+    
     def converter(self, fishes):
         for i in range(1, self.FISH_NUM+1):
             # Normalize the Z axis of FISHES[f"Y{i}"]
@@ -304,42 +343,6 @@ class TrajectoriesLoader():
         score_df = pd.DataFrame(columns=columns)
         score_df['TopView'] = [f"TV Y{i}" for i in range(1,7)]
 
-        # highest_scores = {}
-        # best_matches = {}
-
-        # MATCHED_KEYS = []
-
-        # # Match based on pearson correlation
-        # for i in range(1, self.FISH_NUM+1):
-        #     TV_list = self.tj_TV[f'Y{i}'].tolist()
-        #     highest_scores[f"TV Y{i}"] = NEG_INF
-        #     best_matches[f"TV Y{i}"] = ""
-        #     for j in range(1, self.FISH_NUM+1):
-        #         SV_list = self.tj_SV[f'Y{j}'].tolist()
-        #         pearson_coeff = pearson_corr(TV_list, SV_list)
-        #         print(f'P_coeff between {f"TV Y{i}"} and {f"SV Y{j}"}: {pearson_coeff}')
-        #         print(f"TV_list:")
-        #         print(TV_list)
-        #         print(f"SV_list")
-        #         print(SV_list)
-        #         if pearson_coeff > highest_scores[f"TV Y{i}"]:
-        #             highest_scores[f"TV Y{i}"] = pearson_coeff
-        #             best_matches[f"TV Y{i}"] = f"SV Y{j}"
-        #         # In score_df, at row that SideView is SV Y1, at column that TopView is TV Y{i}, put pearson_coeff
-        #         score_df.loc[score_df['TopView'] == f"TV Y{i}", f"SV Y{j}"] = pearson_coeff
-        #     print("TV Y{} best match is {} with score {}".format(i, best_matches[f"TV Y{i}"], highest_scores[f"TV Y{i}"]))
-
-
-        # # Rearrange the columns of TopView dataframe
-        # new_tj_SV = pd.DataFrame(columns = self.tj_SV.columns)
-        # for key, value in best_matches.items():
-        #     new_col_num = key.split(" Y")[1]
-        #     old_col_num = value.split(" Y")[1]
-        #     new_tj_SV[f"X{new_col_num}"] = self.tj_SV[f"X{old_col_num}"]
-        #     new_tj_SV[f"Y{new_col_num}"] = self.tj_SV[f"Y{old_col_num}"]
-
-        # self.tj_SV = new_tj_SV
-
         # Prepare an empty cost matrix
         cost_matrix = np.empty((self.FISH_NUM, self.FISH_NUM))
 
@@ -349,11 +352,21 @@ class TrajectoriesLoader():
             for j in range(self.FISH_NUM):
                 SV_list = self.tj_SV[f'Y{j+1}'].tolist()
                 pearson_coeff = pearson_corr(TV_list, SV_list)
-                cost_matrix[i, j] = -pearson_coeff  # we minimize, hence the '-'
+                if pearson_coeff is np.nan:
+                    logger.warning(f"pearson_coeff of Fish {i+1} and Fish {j+1} is NaN, set to negative infinity")
+                    pearson_coeff = NEG_INF
+                    cost_matrix[i, j] = POS_INF
+                else:
+                    cost_matrix[i, j] = -pearson_coeff  # we minimize, hence the '-'
 
         # Use the linear_sum_assignment function from scipy which implements the Hungarian algorithm
-        row_ind, col_ind = linear_sum_assignment(cost_matrix)
-
+        try:
+            row_ind, col_ind = linear_sum_assignment(cost_matrix)
+        except ValueError:
+            logger.error("Failed to rearrange trajectories, please check your input.")
+            logger.debug(f"{cost_matrix=}")
+            raise ValueError("Failed to rearrange trajectories, please check your input.")
+        
         # Rearrange the columns of TopView dataframe based on optimal assignment
         new_tj_SV = pd.DataFrame(columns=self.tj_SV.columns)
         for i, j in zip(row_ind, col_ind):

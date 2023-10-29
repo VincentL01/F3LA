@@ -448,21 +448,23 @@ def load_raw_df(txt_path, sep = "\t"):
 
 def remove_first_row_if_nan(input_df, limitation):
     # if the first row of the dataframe has nan values, remove the entire first row
+    removed_rows = 0
     while len(input_df) > limitation:
         row_0 = input_df.iloc[0, :]
         if row_0.isnull().values.any():
             input_df = input_df.iloc[1:, :]
+            removed_rows += 1
             # reset index
             input_df = input_df.reset_index(drop=True)
         else:
             break
-    return input_df
+    return input_df, removed_rows
 
-def clean_df(input_df, fill = False, frames = 0, DEBUG = False, remove_nan = True, limitation = 15000): 
+def clean_df(input_df, fill = False, frames = 0, remove_nan = True, limitation = 15000): 
 
     # Remove the initial rows with nan values
     if remove_nan:
-        input_df = remove_first_row_if_nan(input_df, limitation)
+        input_df, removed_rows = remove_first_row_if_nan(input_df, limitation)
 
     # Only take the first frames rows
     if frames == 0:
@@ -477,7 +479,87 @@ def clean_df(input_df, fill = False, frames = 0, DEBUG = False, remove_nan = Tru
     output_df = input_df.fillna(method='ffill')
     output_df = output_df.fillna(method='bfill')
 
-    return output_df
+    return output_df, removed_rows
+
+def couple_nan_remover(input_df1, input_df2, limitation = 15000):
+    # Balance 2 dataframes
+    
+    length_diff = len(input_df1) - len(input_df2)
+    # Remove the last length_diff rows of the longer dataframe
+    if length_diff > 0:
+        input_df1 = input_df1.iloc[:-length_diff, :]
+        logger.debug(f"Removed {length_diff} rows from the end of input_df1")
+    elif length_diff < 0:
+        input_df2 = input_df2.iloc[:length_diff, :]
+        logger.debug(f"Removed {length_diff} rows from the end of input_df2")
+
+    remove_window = len(input_df1) - limitation
+    origin_length = len(input_df1)
+    drop_rows = []
+
+    for row_num in range(origin_length):
+        try:
+            df1_row = input_df1.iloc[row_num, :]
+            df2_row = input_df2.iloc[row_num, :]
+        except:
+            break
+
+        if df1_row.isnull().values.any() or df2_row.isnull().values.any():
+            drop_rows.append(row_num)
+            remove_window -= 1
+
+            # reset index
+            input_df1 = input_df1.reset_index(drop=True)
+            input_df2 = input_df2.reset_index(drop=True)
+
+        if remove_window <= 0:
+            break
+
+    # Remove the row in drop_rows from the dataframe:
+    input_df1.drop(drop_rows)
+    logger.debug(f"Removed {len(drop_rows)} nan-containing rows from first dataframe")
+    input_df2.drop(drop_rows)
+    logger.debug(f"Removed {len(drop_rows)} nan-containing rows from second dataframe")
+
+    if len(input_df1) > limitation:
+        logger.debug(f"Dataframe have {len(input_df1)=} rows, only take the first {limitation} rows")
+        input_df1 = input_df1.iloc[:limitation, :]
+        input_df2 = input_df2.iloc[:limitation, :]
+
+    return input_df1, input_df2
+
+
+def couple_df_cleaner(input_df1, input_df2, fill = True, remove_nan = True, limitation = 15000):
+    # Remove the initial rows with nan values
+    if remove_nan:
+        logger.info("Removing nans from the beginning of two given trajectories dataframes")
+        input_df1, input_df2 = couple_nan_remover(input_df1, input_df2, limitation)
+
+    if fill == False:
+        return input_df1, input_df2
+    
+    # Fill the nan values using forward fill and backward fill
+    output_df1 = input_df1.fillna(method='ffill')
+    output_df1 = output_df1.fillna(method='bfill')
+
+    output_df2 = input_df2.fillna(method='ffill')
+    output_df2 = output_df2.fillna(method='bfill')
+
+    # Double check if output_df1 has nan values
+    if output_df1.isnull().values.any():
+        logger.warning("First dataframe still has nan values")
+        raise ValueError("First dataframe still has nan values")
+    else:
+        logger.info("First dataframe is clean of nan values")
+
+    # Double check if output_df2 has nan values
+    if output_df2.isnull().values.any():
+        logger.warning("Second dataframe still has nan values")
+        raise ValueError("Second dataframe still has nan values")
+    else:
+        logger.info("First dataframe is clean of nan values")
+
+    return output_df1, output_df2
 
 def append_df_to_excel(filename, df, sheet_name='Sheet1', startcol=None, startrow=None, col_sep = 0, row_sep = 0,
                        truncate_sheet=False, DISPLAY = False,

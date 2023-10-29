@@ -133,10 +133,10 @@ class Measurer(tkinter.Toplevel):
         self.pixel_values = {}
         self.lines = ["A", "B", "C", "D"]
         self.tooltips = {
-            "A": "In FrontView part (left side), draw a line from the left inner edge to the right inner edge of the tank",
-            "B": "In FrontView part (left side), draw a line from the top inner edge to the bottom inner edge of the tank",
-            "C": "In TopView part (right side), draw a line, following the water surface, from the top inner edge to the bottom inner edge of the tank",
-            "D": "In TopView part (right side), draw a line from the water surface to the right inner edge of the tank"
+            "A": "In FrontView part, draw a line from the left inner edge\n to the right inner edge of the tank",
+            "B": "In FrontView part, draw a line from the top inner edge\n to the bottom inner edge of the tank",
+            "C": "In TopView part, draw a line, following the water surface,\n from the top inner edge to the bottom inner edge of the tank",
+            "D": "In TopView part, draw a line from the water surface\n to the right inner edge of the tank"
         }
         for key in self.tooltips.keys():
             self.tooltips[key] += "\nPress 'Enter' to confirm drawing\nPress 'Esc' to cancel drawing"

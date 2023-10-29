@@ -57,21 +57,25 @@ class GeneralAnalysis(Loader):
 
         SPEED_THRESHOLD = 50
         speed_list = []
+        replace_count = 0
         for i in range(len(distance_list)):
             # Speed = Distance/Time
             speed = distance_list[i]/(1/self.PARAMS["FRAME RATE"])
             if speed >= SPEED_THRESHOLD:
-                logger.debug(f"Speed of {speed} cm/s detected at frame {i} (index {i+1})")
+                # logger.debug(f"Speed of {speed} cm/s detected at frame {i} (index {i+1})")
                 # Find the nearest frame with speed < SPEED_THRESHOLD
                 for j in range(i-1, 0, -1):
                     if speed_list[j] < SPEED_THRESHOLD:
                         # Replace the speed with the nearest frame
                         speed = speed_list[j]
-                        logger.debug(f"Speed replaced with {speed} cm/s at frame {j} (index {j+1})")
+                        # logger.debug(f"Speed replaced with {speed} cm/s at frame {j} (index {j+1})")
+                        replace_count += 1
                         break
             
             speed_list.append(speed)
             # UNIT: cm/s
+
+        logger.debug(f"Speed replaced {replace_count} times due to speed > {SPEED_THRESHOLD} cm/s")
 
         self.speed = Speed(speed_list = speed_list,
                            total_frames=self.TOTAL_FRAMES)
@@ -138,6 +142,10 @@ class GeneralAnalysis(Loader):
                 logger.debug("set travel_in_TOP_dict to {-1}:-1, so that the program can continue.")
             else:
                 raise Exception("There were something wrong with the position counting step. Please check the code.")
+            
+        if len(travel_in_TOP_dict) == 0:
+            travel_in_TOP_dict = {"-1" : -1}
+            logger.debug("Empty travel_in_TOP_dict, set travel_in_TOP_dict to {-1}:-1, so that the program can continue.")
 
         self.travel_in_TOP = Events(event_dict = travel_in_TOP_dict, duration=self.PARAMS["DURATION"])
 

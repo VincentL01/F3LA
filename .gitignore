@@ -10,6 +10,7 @@ test*
 Archive/*
 Bin/projects.json
 Log/log.txt
+Local/*
 
 # C extensions
 *.so
