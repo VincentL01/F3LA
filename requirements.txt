@@ -2,6 +2,8 @@ Pillow
 pandas
 numpy
 matplotlib
+# scikit-learn
+scipy
 tk
 openpyxl
 tqdm
@@ -9,5 +11,3 @@ opencv-python
 pathlib
 customtkinter
 colorlog
-scikit-learn
-scipy
