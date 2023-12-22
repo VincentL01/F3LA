@@ -20,7 +20,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 1. Download ```.zip``` file of the whole repository by click on ```Code``` button and select ```Download ZIP```
 
-    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/download_button.png" alt="image" width="300" height="auto">
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/download_button.png" alt="image" width="450" height="auto">
 
     <!-- ![download_button](https://github.com/ThangLC304/F3LA/blob/main/Bin/support/download_button.png) -->
 
@@ -30,7 +30,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 ## APP NAVIGATION
 
-<img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen_with_num.png" alt="image" width="300" height="auto">
+<img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen_with_num.png" alt="image" width="450" height="auto">
 
 <!-- ![App_Screen](https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen_with_num.png) -->
 
@@ -38,7 +38,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 1. Create new Project from scratch using ```Create Project``` button
 
 
-    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/create_project.png" alt="image" width="600" height="auto">
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/create_project.png" alt="image" width="450" height="auto">
 
 
 2. Select Project from available ones within the Project List -> ```Load Project```
@@ -72,7 +72,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 5. Display Shoaling Formation in 3D space
 
-    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/shoaling_plot.png" alt="image" width="600" height="auto">
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/shoaling_plot.png" alt="image" width="450" height="auto">
 
     **LEFT SIDE** is Shoaling formation in 3D space <br>
 
