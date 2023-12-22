@@ -93,5 +93,5 @@ If you changed the name of the directory and then you created a new directory wi
 
 2. When I want to update the program, do I have to go to your GitHub Repository to download new version and replace the old one?
 
-**A:** Fortunately no, you can use the ```updater.bat``` to check to update the app.
+**A:** Fortunately no, you can use the ```updater.bat``` to check to update the app. Then check the Libs/\_\_about__.json to see if your version is up-to-date!
 
