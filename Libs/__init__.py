@@ -25,3 +25,4 @@ CHARS = [chr(i) for i in range(65, 65+26)]
 
 FISH_KEY_FORMAT = "Fish {}"
 SAVED_TRAJECTORY_FORMAT = "Fish {}.csv"
+
