@@ -38,7 +38,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 1. Create new Project from scratch using ```Create Project``` button
 
 
-    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/create_project.png" alt="image" width="300" height="auto">
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/create_project.png" alt="image" width="600" height="auto">
 
 
 2. Select Project from available ones within the Project List -> ```Load Project```
@@ -72,7 +72,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 5. Display Shoaling Formation in 3D space
 
-    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/shoaling_plot.png" alt="image" width="300" height="auto">
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/shoaling_plot.png" alt="image" width="600" height="auto">
 
     **LEFT SIDE** is Shoaling formation in 3D space <br>
 
