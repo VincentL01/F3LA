@@ -1146,32 +1146,6 @@ class App(customtkinter.CTk):
 
         return EPA_path, static_path
 
-        # # Create notification box to show analysis complete
-        # if EPA_path != None:
-        #     logger.debug("EPA_path is not None")
-        #     if EPA_path.exists():
-        #         logger.debug("EPA_path exists")
-        #         open_path = EPA_path.parent
-        #         _ = CustomDialog(self, title = "Analysis Complete",
-        #                             message =  "Click GO button to go to the saved directory of EndPoints.xlsx", 
-        #                             button_text = "GO",
-        #                             button_command = lambda : open_explorer(path=open_path))
-        #         logger.info("Analysis complete")
-        #     else:
-        #         logger.debug("EPA_path does not exist")
-        #         message = "Something went wrong during the analysis, no exported EndPoints.xlsx found"
-        #         tkinter.messagebox.showerror("Error", message)
-        #         logger.info(message)
-        # else:
-        #     logger.debug("EPA_path is None")
-        #     open_path = get_static_dir(project_dir, batch_num, treatment_char)
-        #     _ = CustomDialog(self, title = "Trajectories Exported",
-        #                           message =  "All 3D trajectories, normalized to pixel and cm are exported.\nClick GO button to go to the saved directory", 
-        #                           button_text = "GO",
-        #                           button_command = lambda : open_explorer(path=open_path))
-        #     logger.info("Analysis skipped, only trajectories are loaded and saved")
-
-
     def analyze_project(self):
 
         PROGRESS_WINDOW = ProgressWindow(self)
