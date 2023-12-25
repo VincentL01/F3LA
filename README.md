@@ -30,23 +30,50 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 ## APP NAVIGATION
 
-<img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen_with_num.png" alt="image" width="450" height="auto">
+<img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen.png" alt="image" width="450" height="auto">
 
 <!-- ![App_Screen](https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen_with_num.png) -->
 
 
 1. Create new Project from scratch using ```Create Project``` button
 
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step01.png" alt="image" width="450" height="auto">
+
+    <br>
+    Example of a project detail
+    <br>
 
     <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/create_project.png" alt="image" width="450" height="auto">
 
 
-2. Select Project from available ones within the Project List -> ```Load Project```
+2. Copy recorded video files to desired locations for further analysis using tracker (in this example we used idTracker)
 
-3. Run analysis on the Data of the current Day (all treatments within it) using ```Analyze``` button
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step02.png" alt="image" width="450" height="auto">
 
-    The result will be saved as "EndPoints.xlsx" at the Batch directory (e.g., [project_name]/Batch 1/EndPoints.xlsx) <br>
-    The following EndPoints will be included: <br>
+
+3. Select Project from available ones within the Project List -> ```Load Project```
+
+    If a new project is loaded **[1]** (or Re-measure button **[2]** is pressed), you will be redirected to a Measurer window **[3]** to measure the core coordinates, which subsequently help the program to calculate the required parameters.
+
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step03.png" alt="image" width="450" height="auto">
+
+
+4. Within the Measurer window, load the image (as first frame of the video, you can create a reference image manually or select the video itself and the program will automatically extract the first frame of the video as reference image)
+
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step04.png" alt="image" width="450" height="auto">
+
+
+5. The loaded project is now fully equipped with functional parameters **[3]**. Run analysis on the Data of the current Batch (all treatments within it) using ```Analyze``` button **[4]**. The analysis process is displayed on the progress bars **[5]**.
+
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step05.png" alt="image" width="450" height="auto">
+
+
+6. The result will be saved as "EndPoints.xlsx" at the Batch directory (e.g., [project_name]/Batch 1/EndPoints.xlsx) <br>
+
+    <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step06.png" alt="image" width="450" height="auto">
+
+
+    The following end-points are included: <br>
 
     - Total Distance (cm) <br>
     - Average Speed (cm/s) <br>
@@ -64,13 +91,8 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
     - Shoaling Area (cm<sup>2</sup>) <br>
     - Shoaling Volume (cm<sup>3</sup>) <br>
 
-4. Import existed legacy-formatted Projects using ```Import Trajectories``` button
 
-    After clicking the Import Trajectories button, <br>
-    First, you will be asked to Select the Folder of the Legacy Project you want to import. <br>
-    Then, another window pop up asking you to Select the Folder where the Interpreted project will be stored (only the .csv files are transfered so you don't have to worry about having video files in the Legacy Project) <br>
-
-5. Display Shoaling Formation in 3D space
+7. Display Shoaling Formation in 3D space
 
     <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/shoaling_plot.png" alt="image" width="450" height="auto">
 

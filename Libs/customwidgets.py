@@ -133,10 +133,10 @@ class Measurer(tkinter.Toplevel):
         self.pixel_values = {}
         self.lines = ["A", "B", "C", "D"]
         self.tooltips = {
-            "A": "In FrontView part, draw a line from the left inner edge\n to the right inner edge of the tank",
-            "B": "In FrontView part, draw a line from the top inner edge\n to the bottom inner edge of the tank",
-            "C": "In TopView part, draw a line, following the water surface,\n from the top inner edge to the bottom inner edge of the tank",
-            "D": "In TopView part, draw a line from the water surface\n to the right inner edge of the tank"
+            "A": "In TopView part, draw a line from the left inner edge\n to the right inner edge of the tank",
+            "B": "In TopView part, draw a line from the top inner edge\n to the bottom inner edge of the tank",
+            "C": "In FrontView part, draw a line, following the water surface,\n from the top inner edge to the bottom inner edge of the tank",
+            "D": "In FrontView part, draw a line from the water surface\n to the right inner edge of the tank"
         }
         for key in self.tooltips.keys():
             self.tooltips[key] += "\nPress 'Enter' to confirm drawing\nPress 'Esc' to cancel drawing"
@@ -216,6 +216,10 @@ class Measurer(tkinter.Toplevel):
         # ratio = min(1024 / image.width, 768 / image.height)
         # image = image.resize((int(image.width * ratio), int(image.height * ratio)), Image.ANTIALIAS)
         self.tk_image = ImageTk.PhotoImage(image)
+
+        # Lift and center the window
+        self.lift()
+        self.geometry("+%d+%d" % (self.winfo_screenwidth() / 2 - self.winfo_width() / 2, self.winfo_screenheight() / 2 - self.winfo_height() / 2))
 
         self.canvas = tkinter.Canvas(self.ImageFrame, width=self.tk_image.width(), height=self.tk_image.height())
         self.canvas.create_image(0, 0, anchor='nw', image=self.tk_image)
