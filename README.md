@@ -35,7 +35,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 <!-- ![App_Screen](https://github.com/ThangLC304/F3LA/blob/main/Bin/support/app_screen_with_num.png) -->
 
 
-1. Create new Project from scratch using ```Create Project``` button
+1. Create new Project from scratch using ```Create Project```  
 
     <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step01.png" alt="image" width="450" height="auto">
 
@@ -53,7 +53,7 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 3. Select Project from available ones within the Project List -> ```Load Project```
 
-    If a new project is loaded **[1]** (or Re-measure button **[2]** is pressed), you will be redirected to a Measurer window **[3]** to measure the core coordinates, which subsequently help the program to calculate the required parameters.
+    If a new project is loaded **[1]** (or ```Re-measure```</ins> **[2]** is pressed), you will be redirected to a Measurer window **[3]** to measure the core coordinates, which subsequently help the program to calculate the required parameters.
 
     <img src="https://github.com/ThangLC304/F3LA/blob/main/Bin/support/step03.png" alt="image" width="450" height="auto">
 
