@@ -9,6 +9,7 @@ from scipy.spatial import ConvexHull
 import numpy as np
 import openpyxl
 import subprocess
+import cv2 
 
 import logging
 
@@ -950,4 +951,11 @@ def initiator():
 
         logger.info("No history file found! Creating new history file...")
 
-    
+
+def get_first_frame(video_path):
+    cap = cv2.VideoCapture(video_path)
+    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    ret, frame = cap.read()
+    cap.release()
+    return frame
+

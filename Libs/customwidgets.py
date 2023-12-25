@@ -6,9 +6,10 @@ import os
 from PIL import Image, ImageTk
 from pathlib import Path
 import shutil
+import cv2
 
 from . import HISTORY_PATH, TEMPLATE_PATH
-from Libs.misc import calculate_distance, get_static_dir
+from Libs.misc import calculate_distance, get_static_dir, get_first_frame
 from Libs.general import ParamsCalculator
 
 import logging
@@ -122,6 +123,64 @@ class CustomDialog(tkinter.Toplevel):
 
 ############################################### MEASURER CLASS ################################################
 
+class RefFrameSelector(tkinter.Toplevel):
+    def __init__(self, video_path, parent=None):
+        super().__init__(parent)
+
+        self.video_path = video_path
+        self.cap = cv2.VideoCapture(video_path)
+        self.current_frame = None
+        self.returned_image = None
+
+        self.init_ui()
+
+    def init_ui(self):
+        # Video Frame
+        self.video_frame = tkinter.Label(self)
+        self.video_frame.pack()
+
+        # Slider
+        self.slider = tkinter.Scale(self, from_=0, to=int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT)), orient=tkinter.HORIZONTAL, command=self.update_frame)
+        self.slider.pack()
+
+        # Buttons
+        use_frame_button = tkinter.Button(self, text="Use current selected frame", command=self.use_frame)
+        use_frame_button.pack()
+
+        cancel_button = tkinter.Button(self, text="Cancel", command=self.cancel)
+        cancel_button.pack()
+
+    def update_frame(self, value):
+        self.cap.set(cv2.CAP_PROP_POS_FRAMES, int(value))
+        ret, frame = self.cap.read()
+        if ret:
+            self.current_frame = frame
+            self.show_frame()
+
+    def show_frame(self):
+        cv_image = cv2.cvtColor(self.current_frame, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(cv_image)
+        tk_image = ImageTk.PhotoImage(image=pil_image)
+        self.video_frame.configure(image=tk_image)
+        self.video_frame.image = tk_image
+
+    def use_frame(self):
+        self.returned_image = self.current_frame
+        self.close()
+
+    def cancel(self):
+        self.returned_image = None
+        self.close()
+
+    def close(self):
+        self.cap.release()
+        self.destroy()
+
+    def get_image(self):
+        self.wait_window()
+        return self.returned_image
+
+
 class Measurer(tkinter.Toplevel):
     def __init__(self, master, save_path, **kwargs):
         super().__init__(master=master, **kwargs)
@@ -203,18 +262,43 @@ class Measurer(tkinter.Toplevel):
         self.ImageFrame.pack(side=tkinter.LEFT, expand=True, fill=tkinter.BOTH)
         self.Panel.pack(side=tkinter.RIGHT, expand=True, fill=tkinter.BOTH)
 
+
     def load_image(self):
         file_path = tkinter.filedialog.askopenfilename()
-        if file_path:
+
+        if not file_path:
+            logger.debug("No file selected")
+            return
+
+        file_ext = os.path.splitext(file_path)[1].lower()
+        if file_ext in ['.mp4', '.avi', '.mov']:  # Add other video formats as needed
+            # ref_frame_selector = RefFrameSelector(file_path, self)
+            # image = ref_frame_selector.get_image()
+            # [TODO] Add a function to get frame from chosen part of the video
+            image = get_first_frame(file_path)
+            if image is None:
+                logger.debug("No frame selected")
+                return
+            # currently image is a numpy array, need to convert to PIL Image
+            image = Image.fromarray(image)
+
+        else:
             image = Image.open(file_path)
             logger.debug(f"Image loaded: {file_path}")
             logger.debug(f"Image size: {image.size}")
-        else:
-            logger.debug("No image selected")
-            return
+
+        # if file_path:
+        #     image = Image.open(file_path)
+        #     logger.debug(f"Image loaded: {file_path}")
+        #     logger.debug(f"Image size: {image.size}")
+        # else:
+        #     logger.debug("No image selected")
+        #     return
+            
         # Resize the image
         # ratio = min(1024 / image.width, 768 / image.height)
         # image = image.resize((int(image.width * ratio), int(image.height * ratio)), Image.ANTIALIAS)
+            
         self.tk_image = ImageTk.PhotoImage(image)
 
         # Lift and center the window
