@@ -107,13 +107,15 @@ F3LA is the new software we build to accelerate the analysis process of our 3D L
 
 ## Regular questions:
 
-1. What if I have changed the name of the directory name at the new location?
+
+**Q:** What if I have changed the name of the directory name at the new location? <br>
 
 **A:** If there is no other folder with the name exactly like the old name of the project, when you use the ```Load Project``` button, the App will ask you to select the new location of the project so it can update within its memory. <br>
+If you changed the name of the directory and then you created a new directory with the same exact name, the App will recognize the new empty folder as the valid path for the Project, hence not asking you for relocation -> Mismatching issue. <br>
+
 <br>
-If you changed the name of the directory and then you created a new directory with the same exact name, the App will recognize the new empty folder as the valid path for the Project, hence not asking you for relocation -> Mismatching issue.
 
-2. When I want to update the program, do I have to go to your GitHub Repository to download new version and replace the old one?
+**Q:** When I want to update the program, do I have to go to your GitHub Repository to download new version and replace the old one? <br>
 
-**A:** Fortunately no, you can use the ```updater.bat``` to check to update the app. Then check the Libs/\_\_about__.json to see if your version is up-to-date!
+**A:** Fortunately no, you can use the ```updater.bat``` to check to update the app. Then check the Libs/\_\_about__.json to see if your version is up-to-date! <br>
 
