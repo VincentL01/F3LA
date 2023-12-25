@@ -12,6 +12,16 @@ Luong Cao Thang
 PhD candidate, I-Shou University, Kaohsiung, Taiwan.  
 Email: [thang.luongcao@gmail.com](mailto:thang.luongcao@gmail.com)  
 
+## __Correspondence:__
+
+Prof. Chih-Hsin Hung  
+Laboratory of Biotechnology, I-Shou University, Kaohsiung, Taiwan.  
+Email: [chhung@isu.edu.tw](mailto:chhung@isu.edu.tw)  
+
+Prof. Chung-Der Hsiao  
+Laboratory of Biotechnology, ChungYuan Christian University, Taoyuan, Taiwan.  
+Email: [cdhsiao@cycu.edu.tw](mailto:cdhsiao@cycu.edu.tw) 
+
 
 # Fish Locomotion Assay downstream analyzing application
 F3LA is the new software we build to accelerate the analysis process of our 3D Locomotion Assay for zebrafish. It was designed to streamline and automate the arduous data management and organize the processes associated with raw data.
