@@ -22,19 +22,20 @@ class GilbertFileReader():
             self.BATCH_MATCHER = given_matcher
         else:
             self.BATCH_MATCHER = {
-            "1": ["A5", "P10"],
-            "2": ["A12", "P17"],
-            "3": ["A19", "P24"],
-            "4": ["A26", "P31"],
-            "5": ["A33", "P38"],
-            "6": ["A40", "P45"],
+            "1": ["B5", "P10"],
+            "2": ["B12", "P17"],
+            "3": ["B19", "P24"],
+            "4": ["B26", "P31"],
+            "5": ["B33", "P38"],
+            "6": ["B40", "P45"],
             }
 
     def get_column_names(self, sheet_num, columns = ["C", "P"], row = [1, 2]):
         print(f"Getting column names from {sheet_num=} {columns=} {row=}")
         sheet_name = self.sheet_names[sheet_num]
         ws = self.wb[sheet_name]
-        column_names = ['Fish']
+        # column_names = ['Fish']
+        column_names = []
         # iterate from columns[0] to columns[1]
         columns = [chr(ord(columns[0]) + i) for i in range(ord(columns[1]) - ord(columns[0]) + 1)]
         for col in columns:
@@ -46,6 +47,9 @@ class GilbertFileReader():
             _name = _name.strip()
             if len(_name) > 0:
                 column_names.append(_name)
+        
+        print("Column names: ", column_names)
+
         return column_names
     
     def get_data(self, sheet_num, Corner1, Corner2):
@@ -59,7 +63,7 @@ class GilbertFileReader():
         # return transposed dataframe
         transposed_df = df.T
         # remove index
-        transposed_df.reset_index(drop=True, inplace=True)
+        # transposed_df.reset_index(drop=True, inplace=True)
         # set column names
         new_column_names = self.get_column_names(sheet_num, columns = [Corner1[0], Corner2[0]])
 
