@@ -11,6 +11,7 @@ Archive/*
 Bin/projects.json
 Log/log.txt
 Local/*
+cost_matrices/*
 
 # C extensions
 *.so
