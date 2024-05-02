@@ -1041,7 +1041,7 @@ class InputWindow(tkinter.Toplevel):
         return self.CURRENT_PROJECT, self.PROJECT_CREATED
     
 
-class Parameters(customtkinter.CTkScrollableFrame):
+class WidgetParameters(customtkinter.CTkScrollableFrame):
 
     def __init__(self, master, project_dir=None, *args, **kwargs):
         
@@ -1070,12 +1070,14 @@ class Parameters(customtkinter.CTkScrollableFrame):
             "UPPER": "",
             "LOWER": "",
             "CENTER Z": "",
-            "Z POSITION": ""
+            "Z POSITION": "",
+            "CORR TYPE": ""
         }
 
         self.null_label_check()
 
         self.DATA_ZERO = {k: 0 for k in list(self.UNITS.keys())}
+        self.DATA_ZERO['CORR TYPE'] = "pearson"
 
         if self.project_name == "":
             self.null_label = customtkinter.CTkLabel(self, text="No project selected")
@@ -1257,6 +1259,10 @@ class Parameters(customtkinter.CTkScrollableFrame):
 
         
         display_dict = {k: v for k, v in ori_dict.items() if not isinstance(v, (dict, list))}
+
+        if 'CORR TYPE' not in display_dict:
+            display_dict['CORR TYPE'] = "pearson"
+
         headers = ["Parameter", "Value", "Unit"]
         
         example_key = list(display_dict.keys())[0]
@@ -1298,8 +1304,11 @@ class Parameters(customtkinter.CTkScrollableFrame):
                 try:
                     if isinstance(value, list):
                         v = [float(value[0].get()), float(value[1].get())]
-                    else:
+                    # check if the value is a string or a float
+                    elif str(value).isdigit():
                         v = float(value.get())
+                    else:
+                        v = value.get()
                 except AttributeError:
                     logger.warning(f"During saving parameters for {Path(project_dir).name}.Batch {batch_num}.Treatment {treatment_char}")
                     logger.warning(f"AttributeError: {key} is not a tkinter entry")

@@ -1,15 +1,21 @@
 import pandas as pd
 import numpy as np
 import os
+import time
 import math
 from pathlib import Path
 import json
 from statistics import mean
 import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy.optimize import linear_sum_assignment
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, spearmanr, kendalltau
+# from dcor import distance_correlation
+# from minepy import MINE
 
 from Libs.misc import *
+from Libs.XtendedCorrel import hoeffding
+
 from . import ALLOWED_DECIMALS, TEMPLATE_PATH, FISH_KEY_FORMAT, SAVED_TRAJECTORY_FORMAT, CHARS, NEG_INF, POS_INF
 
 import logging
@@ -235,7 +241,13 @@ class ParamsCalculator():
 
 class TrajectoriesLoader():
 
-    def __init__(self, project_dir=None, batch_num = 1, treatment_char="A", TOTAL_FRAMES = 15000, NORMALIZE_RATIO = 1):
+    def __init__(self, 
+                 project_dir=None, 
+                 batch_num = 1, 
+                 treatment_char="A", 
+                 TOTAL_FRAMES = 15000, 
+                 NORMALIZE_RATIO = 1,
+                 corr_type='pearson'):
 
         if project_dir == None:
             self.project_dir = TEMPLATE_PATH
@@ -265,6 +277,8 @@ class TrajectoriesLoader():
         #     self.tj_TV = self.tj_TV.iloc[removed_rows_TV-removed_rows_SV:]
         #     logger.debug("Balancing 2 trajectories files: Removed {} rows from TopView".format(removed_rows_TV-removed_rows_SV))
 
+        
+
         self.tj_SV, self.tj_TV, self.tanks_list_SV, self.tanks_list_TV = self.CoupleRawLoader()
 
         self.FISH_NUM = len(self.tanks_list_TV)
@@ -276,6 +290,8 @@ class TrajectoriesLoader():
         
         self.check_integrity()
 
+        self.set_coorelation_type(corr_type)
+
         self.FISHES = self.rearranger()
 
         self.Plot_Y_and_Save("post-arranged")
@@ -284,9 +300,74 @@ class TrajectoriesLoader():
 
         self.SaveTrajectories()
 
+    def set_coorelation_type(self, corr_type):
+
+        assert corr_type in ['pearson', 'spearman', 'kendalltau', 'hoeffd', 'dCor', 'MIC'], "corr_type must be either 'pearson', 'spearman', 'kendalltau', 'hoeffd', 'dCor', 'MIC'"
+
+        self.correlation_type = corr_type
+
+        logger.info(f"Correlation type set to {corr_type}")
+
+
+    def correlation_calculation(self, list1, list2):
+        """
+            hoeffding algorithm is loaded from : https://github.com/PaulVanDev/HoeffdingD/blob/master/XtendedCorrel.py
+        """
+        try: 
+            corr_type = self.correlation_type
+        except:
+            corr_type = 'pearsonr'
+
+        # print(f"Calculating correlation using {corr_type}")
+
+        arr1 = np.array(list1)
+        arr2 = np.array(list2)
+        if not len(arr1) == len(arr2):
+            return "The lists have different lengths!"
+        
+        if corr_type == 'pearson':
+            t0 = time.time()
+            logger.debug(f"Calculating using {corr_type} correlation")
+            coeff = pearsonr(arr1, arr2).statistic
+            logger.debug(f"Took {time.time() - t0} seconds to calculate Pearson correlation coefficient")
+            return coeff
+        elif corr_type == 'spearman':
+            logger.debug(f"Calculating using {corr_type} correlation")
+            return spearmanr(arr1, arr2).correlation
+        elif corr_type == 'kendalltau':
+            logger.debug(f"Calculating using {corr_type} correlation")
+            return kendalltau(arr1, arr2).correlation
+        elif corr_type == 'hoeffd':
+            t0 = time.time()
+            logger.debug(f"Calculating using {corr_type} correlation")
+            coeff = hoeffding(arr1, arr2)
+            logger.debug(f"Took {time.time() - t0} seconds to calculate HoeffD correlation coefficient")
+            return coeff
+        elif corr_type == 'dCor':
+            t0 = time.time()
+            from dcor import distance_correlation
+            logger.debug(f"Took {time.time() - t0} seconds to load dcor")
+            t0 = time.time()
+            logger.debug(f"Calculating using {corr_type} correlation")
+            coeff = distance_correlation(arr1, arr2)
+            logger.debug(f"Took {time.time() - t0} seconds to calculate dCor coefficient")
+            return coeff
+        elif corr_type == 'MIC':
+            t0 = time.time()
+            from minepy import MINE
+            logger.debug(f"Took {time.time() - t0} seconds to load minepy")
+            t0 = time.time()
+            logger.debug(f"Calculating using {corr_type} correlation")
+            mine = MINE()
+            mine.compute_score(arr1, arr2)
+            logger.debug(f"Took {time.time() - t0} seconds to calculate MIC coefficient")
+            return mine.mic()
 
 
     def CoupleRawLoader(self):
+        """
+            Load raw data from 2 files, clean them and couple them together 
+        """
         try:
             trajectories_SV, tank_list_SV = load_raw_df(self.trajectories_SV_path)
         except Exception as e:
@@ -315,21 +396,11 @@ class TrajectoriesLoader():
 
         return trajectories_SV, trajectories_TV, tank_list_SV, tank_list_TV
 
-    # def RawLoader(self, given_path):
-
-    #     try:
-    #         trajectories, tank_list = load_raw_df(given_path)
-    #     except Exception as e:
-    #         logger.error("Failed to load trajectories from {}".format(given_path))
-    #         logger.error(e)
-    #         raise ValueError("Failed to load trajectories from {}".format(given_path))
-        
-    #     trajectories, removed_rows = clean_df(trajectories, fill=True, limitation=self.TOTAL_FRAMES)
-    #     trajectories = trajectories.astype(float)
-
-    #     return trajectories, tank_list, removed_rows
-    
+       
     def converter(self, fishes):
+        """
+            Convert the Z axis of each fish from Side View scale to Top View scale
+        """
         for i in range(1, self.FISH_NUM+1):
             # Normalize the Z axis of FISHES[f"Y{i}"]
             fishes[f"Fish {i}"]["Z_SV"] = fishes[f"Fish {i}"]["Z"]
@@ -338,57 +409,63 @@ class TrajectoriesLoader():
 
 
     def rearranger(self):
-        columns = ["TopView"]
-        columns.extend([f"SV Y{i}" for i in range(1,7)])
+        """
+            Rearrange the trajectories based on the correlation of Y coordinates between Side View and Top View
+        """
+        columns = ["TopView"] + [f"SV Y{i}" for i in range(1, 7)]
         score_df = pd.DataFrame(columns=columns)
-        score_df['TopView'] = [f"TV Y{i}" for i in range(1,7)]
+        score_df['TopView'] = [f"TV Y{i}" for i in range(1, 7)]
 
         # Prepare an empty cost matrix
         cost_matrix = np.empty((self.FISH_NUM, self.FISH_NUM))
 
-        # Compute pearson correlation for each pair and fill the cost matrix
+        # Compute Pearson correlation for each pair and fill the cost matrix
         for i in range(self.FISH_NUM):
             TV_list = self.tj_TV[f'Y{i+1}'].tolist()
             for j in range(self.FISH_NUM):
                 SV_list = self.tj_SV[f'Y{j+1}'].tolist()
-                pearson_coeff = pearson_corr(TV_list, SV_list)
-                if pearson_coeff is np.nan:
-                    logger.warning(f"pearson_coeff of Fish {i+1} and Fish {j+1} is NaN, set to negative infinity")
-                    pearson_coeff = NEG_INF
+                correlation_coeff = self.correlation_calculation(TV_list, SV_list)
+                if np.isnan(correlation_coeff):
+                    logger.warning(f"correlation_coeff of Fish {i+1} and Fish {j+1} is NaN, set to negative infinity")
                     cost_matrix[i, j] = POS_INF
                 else:
-                    cost_matrix[i, j] = -pearson_coeff  # we minimize, hence the '-'
+                    cost_matrix[i, j] = 1 - correlation_coeff  # Using 1 - correlation as the cost
 
-        # Use the linear_sum_assignment function from scipy which implements the Hungarian algorithm
+        self.cost_matrix = cost_matrix
+
+        # Use the Hungarian algorithm to find the best assignment
         try:
             row_ind, col_ind = linear_sum_assignment(cost_matrix)
-        except ValueError:
+        except ValueError as e:
             logger.error("Failed to rearrange trajectories, please check your input.")
             logger.debug(f"{cost_matrix=}")
-            raise ValueError("Failed to rearrange trajectories, please check your input.")
+            raise ValueError("Failed to rearrange trajectories, please check your input.") from e
         
         # Rearrange the columns of TopView dataframe based on optimal assignment
         new_tj_SV = pd.DataFrame(columns=self.tj_SV.columns)
+        self.arranged_fish_list_SV = [j+1 for j in col_ind]  # Fix the off-by-one error
         for i, j in zip(row_ind, col_ind):
             new_tj_SV[f"X{i+1}"] = self.tj_SV[f"X{j+1}"]
             new_tj_SV[f"Y{i+1}"] = self.tj_SV[f"Y{j+1}"]
 
         self.tj_SV = new_tj_SV
 
-
-        # Create X,Y,Z data for each fish
+        # Create X, Y, Z data for each fish
         FISHES = {}
-
         for i in range(1, self.FISH_NUM+1):
-            FISHES[f"Fish {i}"] = pd.DataFrame(columns = ["X", "Y", "Z"])
-            FISHES[f"Fish {i}"]["X"] = self.tj_TV[f"X{i}"]
-            FISHES[f"Fish {i}"]["Y"] = self.tj_TV[f"Y{i}"]
-            FISHES[f"Fish {i}"]["Z"] = self.tj_SV[f"X{i}"]
+            FISHES[f"Fish {i}"] = pd.DataFrame({
+                "X": self.tj_TV[f"X{i}"],
+                "Y": self.tj_TV[f"Y{i}"],
+                "Z": self.tj_SV[f"X{i}"]  # Assuming you meant SV X as Z
+            })
 
         return FISHES # Each fish would have a dataframe with X,Y,Z columns
 
 
-    def check_integrity(self):   
+    def check_integrity(self):
+        """
+            Check if the number of tanks in Side View and Top View are the same 
+        """   
         if len(self.tanks_list_SV) != len(self.tanks_list_TV):
             logger.error("Number of tanks in Side View and Top View are not the same, please check your input.")
             raise ValueError("Number of tanks in Side View and Top View are not the same, please check your input.")
@@ -396,11 +473,10 @@ class TrajectoriesLoader():
             logger.info("Number of tanks in Side View and Top View are the same, continue.")
     
 
-    
-    
-
     def SaveTrajectories(self, save_dict = None, save_dir = None):
-
+        """
+            Save the rearranged trajectories to .csv files 
+        """
         if save_dir == None:
             save_dir = self.trajectories_dir
         if save_dict == None:
@@ -418,9 +494,23 @@ class TrajectoriesLoader():
         else:
             logger.info("All trajectories saved to {}".format(save_dir))
 
+    def visualize_cost_matrix(self, title, save_path=None):
+        plt.figure()
+
+        sns.heatmap(cost_matrix, annot=True, fmt='.2f', cmap='Blues')
+        # set font for number inside heatmap
+        # plt.rcParams['font.size'] = 24
+        # save fig
+        plt.title(title)
+
+        if save_path != None:
+            plt.savefig(save_path)
+        plt.show()
 
     def Plot_Y_and_Save(self, file_name):
-
+        """
+            Plot the Y coordinates of Side View and Top View and save to .png file 
+        """
         save_dir = self.trajectories_dir
         save_dir.mkdir(parents=True, exist_ok=True)
 
@@ -430,14 +520,6 @@ class TrajectoriesLoader():
             fig, axs = plt.subplots(len(tanks_list), 2, figsize=(10, 10))
 
             for i, tank in enumerate(tanks_list):
-                #plot Y1 on subplot(0,0), Y2 on subplot(0,1), Y3 on subplot(1,0), Y4 on subplot(1,1), Y5 on subplot(2,0), Y6 on subplot(2,1)
-                # x-axis is the frame number
-                # y-axis is the pixel value
-
-                # axs[i].plot(input_df_1[f"Y{tank}"])
-                # axs[i].set_title(tank)
-                # axs[i].set_xlabel("Frame Number")
-                # axs[i].set_ylabel("Pixel Value")
 
                 axs[i, 0].plot(input_df_1[f"Y{tank}"])
                 axs[i, 0].set_title(tank)
@@ -460,8 +542,6 @@ class TrajectoriesLoader():
                 print(f"Trajectories {file_name} saved to {save_path}")
             except:
                 print(f"Failed to save trajectories {file_name} to {save_path}")
-
-            # plt.show()
 
         plot_trajectories(self.tj_TV, self.tj_SV, self.tanks_list_TV, file_name)
 
@@ -529,6 +609,8 @@ class Parameters():
         
         # Convert all values to float
         for key, value in data.items():
+            if key == "CORR TYPE":
+                continue
             data[key] = float(value)
 
         return data
@@ -646,7 +728,6 @@ class Loader():
         
         return normalized_df
         
-
 
     def distance_to(self, TARGET="CENTER"):
 

@@ -235,26 +235,64 @@ class App(customtkinter.CTk):
         SIDEBAR_ROW += 1
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.configure(**LABEL_CONFIG)
-        self.appearance_mode_label.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 0))
+        self.appearance_mode_label.grid(row=SIDEBAR_ROW, 
+                                        column=0, 
+                                        # columnspan=2, 
+                                        padx=20, 
+                                        pady=(10, 0))
         
-        SIDEBAR_ROW += 1
+        # SIDEBAR_ROW += 1
         self.appearance_mode_optionmenu = customtkinter.CTkOptionMenu(self.sidebar_frame, 
                                                                        values=["Light", "Dark", "System"],
                                                                        command=self.change_appearance_mode_event)
         self.appearance_mode_optionmenu.configure(**OPTION_MENU_CONFIG)
-        self.appearance_mode_optionmenu.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 10))
+        self.appearance_mode_optionmenu.grid(row=SIDEBAR_ROW, 
+                                             column=1,
+                                            #  column=0, 
+                                            #  columnspan=2, 
+                                             padx=20, 
+                                             pady=(10, 10))
+        
+        SIDEBAR_ROW += 1
+        self.corr_type_label = customtkinter.CTkLabel(self.sidebar_frame, text="Correlation Type:", anchor="w")
+        self.corr_type_label.configure(**LABEL_CONFIG)
+        self.corr_type_label.grid(row=SIDEBAR_ROW,
+                                    column=0,
+                                    padx=20,
+                                    pady=(10, 0))
+        
+        self.corr_type = "pearson"
+        self.corr_type_optionmenu = customtkinter.CTkOptionMenu(self.sidebar_frame,
+                                                                values=['pearson', 
+                                                                        'dCor', 
+                                                                        'MIC'],
+                                                                command=self.change_corr_type)
+        self.corr_type_optionmenu.configure(**OPTION_MENU_CONFIG)
+        self.corr_type_optionmenu.grid(row=SIDEBAR_ROW,
+                                        column=1,
+                                        padx=20,
+                                        pady=(10, 10))
         
         SIDEBAR_ROW += 1
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
         self.scaling_label.configure(**LABEL_CONFIG)
-        self.scaling_label.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 0))
+        self.scaling_label.grid(row=SIDEBAR_ROW, 
+                                column=0, 
+                                # columnspan=2, 
+                                padx=20, 
+                                pady=(10, 0))
 
-        SIDEBAR_ROW += 1
+        # SIDEBAR_ROW += 1
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, 
                                                                values=["80%", "90%", "100%", "110%", "120%"],
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.configure(**OPTION_MENU_CONFIG)
-        self.scaling_optionemenu.grid(row=SIDEBAR_ROW, column=0, columnspan=2, padx=20, pady=(10, 20))
+        self.scaling_optionemenu.grid(row=SIDEBAR_ROW, 
+                                      column=1,
+                                    #   column=0, 
+                                    #   columnspan=2, 
+                                      padx=20, 
+                                      pady=(10, 20))
 
         ## COLUMN 1 ###
 
@@ -364,7 +402,7 @@ class App(customtkinter.CTk):
 
         project_dir = THE_HISTORY.get_project_dir(self.CURRENT_PROJECT)
 
-        self.parameters_frame = Parameters(self.container_2_bot, project_dir, height = 500, width = 400)
+        self.parameters_frame = WidgetParameters(self.container_2_bot, project_dir, height = 500, width = 400)
         self.parameters_frame.grid(row=0, columnspan=3, padx=20, pady=20, sticky="nsew")
 
         # Config
@@ -495,6 +533,11 @@ class App(customtkinter.CTk):
             logger.error("Invalid command type")
             raise Exception("Invalid command type")
         
+
+    def change_corr_type(self, new_corr_type: str):
+        self.corr_type = new_corr_type
+        logger.debug(f"Correlation type changed to {self.corr_type=}")
+
 
     def params_remeasure(self):
 
@@ -781,6 +824,10 @@ class App(customtkinter.CTk):
         logger.debug(f"Set PREVIOUS_BATCH to {batch_num}")
         self.PREVIOUS_TREATMENT = treatment_char
         logger.debug(f"Set PREVIOUS_TREATMENT to {treatment_char}")
+
+        # # Set corr_type_optionmenu value to self.parameters_frame.entries['CORR TYPE']
+        # self.corr_type_optionmenu.set(self.parameters_frame.entries['CORR TYPE'].get())
+        # logger.debug(f"Set corr_type_optionmenu to {self.parameters_frame.entries['CORR TYPE'].get()}")
 
 
     def update_param_display(self, event=None, load_type="not_first_load"):
@@ -1108,7 +1155,7 @@ class App(customtkinter.CTk):
 
         PROGRESS_WINDOW.step_update(30, text = "Loading trajectories...")
 
-        EXECUTOR.TRAJECTORIES_LOADING()
+        EXECUTOR.TRAJECTORIES_LOADING(corr_type = self.corr_type)
 
         logger.debug("Trajectories loaded successfully")
 
@@ -1125,6 +1172,13 @@ class App(customtkinter.CTk):
             REPORT, EPA_path = EXECUTOR.ENDPOINTS_ANALYSIS(OVERWRITE=OVERWRITE, AV_interval=50)
             if REPORT == "Completed":
                 logger.debug("Analysis completed successfully")
+
+                # replace the current value of self.parameters_frame.entries['CORR TYPE'] with self.corr_type_optionmenu.get()
+                self.parameters_frame.entries['CORR TYPE'].delete(0, 'end')
+                self.parameters_frame.entries['CORR TYPE'].insert(0, self.corr_type_optionmenu.get())
+                # save the current parameters
+                self.save_parameters(mode='current')
+                
                 break
             elif REPORT == "Existed":
                 choice = tkinter.messagebox.askyesno("Error",  f"Sheet name {treatment_char} existed.\nDo you want to overwrite? Y/N?")
@@ -1162,6 +1216,13 @@ class App(customtkinter.CTk):
             _progress = (i+1) / len(TREATMENT_LIST_CHAR) * 100
             PROGRESS_WINDOW.group_update(_progress, text = _message)
             logger.info(_message)
+
+            # set TreatmentOptions to the analyzing treatment
+            self.TreatmentOptions.set(self.TREATMENTLIST[i])
+            # apply changes to the parameters
+            self.refresh()
+
+            # ANALYZE TREATMENT
             EPA_path, _ = self.analyze_treatment(PROGRESS_WINDOW, treatment_char=treatment_char)
 
             time_for_treatment[treatment_char] = time.time() - time0
@@ -1177,6 +1238,10 @@ class App(customtkinter.CTk):
             _message += f"\n  {treatment_char}: {round(time_for_treatment[treatment_char], 2)} seconds"
         tkinter.messagebox.showinfo("Completion time", _message)
 
+        # # set value of self.parameters_frame.entries['CORR TYPE'] to corr_type_optionmenu
+        # self.parameters_frame.entries['CORR TYPE'].insert(0, self.corr_type_optionmenu.get())
+        # # save the current parameters
+        # self.save_parameters(mode='current')
 
         logger.debug("EPA_path is not None")
         if EPA_path.exists():

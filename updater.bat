@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set "my_repo=https://github.com/ThangLC304/LA3D"
+set "my_repo=https://github.com/VincentL01/F3LA"
 @REM set my_dir at parent directory/temp_update
 set "parent_dir=%~dp0.."
 set "my_dir=%parent_dir%\temp_update"
@@ -72,6 +72,10 @@ echo Copying Libs/*.* ...
 xcopy /y /q /e "%my_dir%\Libs" "%cd%\Libs"
 echo Copying main.py ...
 xcopy /y /q /e "%my_dir%\main.py" "%cd%\main.py"
+echo Copying updater.bat ...
+xcopy /y /q /e "%my_dir%\updater.bat" "%cd%\updater.bat"
+echo Copying requirements.txt ...
+xcopy /y /q /e "%my_dir%\requirements.txt" "%cd%\requirements.txt"
 
 @REM Remove temp_update folder
 echo Removing temp_update folder...

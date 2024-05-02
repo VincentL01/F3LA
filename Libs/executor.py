@@ -195,7 +195,7 @@ class Executor():
         self.PARAMS = Parameters(project_dir = self.project_dir, 
                                  batch_num = self.batch_num, 
                                  treatment_char = self.treatment_char)
-
+        
         try:
             self.TOTAL_FRAMES = int(self.PARAMS["DURATION"] * self.PARAMS["FRAME RATE"])
         except:
@@ -210,7 +210,7 @@ class Executor():
         return None
 
 
-    def TRAJECTORIES_LOADING(self):
+    def TRAJECTORIES_LOADING(self, corr_type='pearson'):
         # THIRD CHECK
         _starttime = time.time()
 
@@ -235,7 +235,8 @@ class Executor():
                                    batch_num = self.batch_num, 
                                    treatment_char=self.treatment_char,
                                    TOTAL_FRAMES = self.TOTAL_FRAMES, 
-                                   NORMALIZE_RATIO = self.NORMALIZE_RATIO)
+                                   NORMALIZE_RATIO = self.NORMALIZE_RATIO,
+                                   corr_type = corr_type)
         
         self.timing["Trajectories loading"] = time.time() - _starttime
 
